@@ -12,11 +12,23 @@ export const createOne = <T>(Model: Model<T>) => {
   };
 };
 
-export const getAll = <T>(Model: Model<T>) => {
+export const getAll = <T>(
+  Model: Model<T>,
+  config: generateRoutesConfigTypes["getAll"]
+) => {
   return async (req: Request, res: Response) => {
     try {
-      const docs = await Model.find();
-      res.status(200).json(docs);
+      let data;
+      if (typeof config === "function") {
+        data = await config(req);
+      } else {
+        let query = {};
+        if (config.query) {
+          query = config.query(req);
+        }
+        data = await Model.find(query);
+      }
+      res.status(200).json(data);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -71,9 +83,37 @@ export const deleteOne = <T>(Model: Model<T>) => {
   };
 };
 
-export const generateRoutes = <T>(router: Router, Model: Model<T>) => {
+type generateRoutesConfigTypes = {
+  /**
+   * 配置 `getAll` 接口的行为，支持两种配置方式：
+   * 1. **对象形式**：可通过 `query` 函数生成查询条件。
+   * 2. **函数形式**：直接返回一个 `Promise`，该 `Promise` 解析为查询结果。
+   */
+  getAll:
+    | {
+        /**
+         * 可选的查询函数，根据请求对象生成查询条件。
+         * @param {Request} req - Express 请求对象，包含请求的相关信息。
+         * @returns {Object} - 返回一个对象，用于作为 Mongoose 查询的条件。
+         */
+        query?: (req: Request) => Object;
+      }
+    | {
+        /**
+         * 函数形式配置 `getAll`，直接返回查询结果的 `Promise`。
+         * @param {Request} req - Express 请求对象，包含请求的相关信息。
+         * @returns {Promise<Object>} - 返回一个 `Promise`，解析为查询结果数据。
+         */
+        (req: Request): Promise<Object>;
+      };
+};
+export const generateRoutes = <T>(
+  router: Router,
+  Model: Model<T>,
+  config: generateRoutesConfigTypes
+) => {
   router.post("/", createOne(Model));
-  router.get("/", getAll(Model));
+  router.get("/", getAll(Model, config.getAll));
   router.get("/:id", getOne(Model));
   router.put("/:id", updateOne(Model));
   router.delete("/:id", deleteOne(Model));

@@ -12,6 +12,21 @@ const router = Router();
 // router.put("/:id", ShopControlles.updateShop);
 
 // 封装curd 实现上面5个
-const curdRouter = generateRoutes(router, Shop);
+const curdRouter = generateRoutes(router, Shop, {
+  // getAll: {
+  //   query: (req) => {
+  //     const query = req.query as ShopTypes;
+  //     return {
+  //       name: { $regex: query.name || "", $options: "i" },
+  //     };
+  //   },
+  // },
+  async getAll(req) {
+    let data = await Shop.find({
+      name: { $regex: req.query.name || "", $options: "i" },
+    });
+    return data;
+  },
+});
 
 export default router;
