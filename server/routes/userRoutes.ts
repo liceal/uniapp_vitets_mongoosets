@@ -1,0 +1,16 @@
+import { Router } from "express";
+import UserControlles from "@server/controllers/user";
+import CaptchaControlles from "@server/controllers/captcha";
+
+const router = Router();
+
+router.post("/create", UserControlles.create);
+router.post("/login", UserControlles.login);
+
+router.get("/captcha_cache", UserControlles.captcha_cache);
+router.get("/captcha_cache/list", UserControlles.captchaList_chache);
+
+router.get("/captcha", CaptchaControlles.createCaptcha);
+router.get("/captcha/list", CaptchaControlles.captchaList);
+
+export default router;

@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:7200/api/user
+
+### 注册
+POST {{baseUrl}}/create
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "email":"admin@qq.com",
+  "password": "123456"
+}
+
+### 登录
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456",
+  "captchaKey":"682035e9480ccc68f5492767",
+  "captchaText": "CNBx"
+}
+
+### 创建验证码
+GET {{baseUrl}}/captcha
+
+### 获取验证码列表
+GET {{baseUrl}}/captcha/list
+
+### 创建验证码
+GET {{baseUrl}}/captcha_cache
+
+### 获取验证码列表
+GET {{baseUrl}}/captcha_cache/list

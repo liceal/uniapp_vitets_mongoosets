@@ -1,0 +1,28 @@
+@baseUrl = http://localhost:7200/api/shop
+
+# 创建店铺
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "示例店铺",
+  "pictureUrl": "店铺图片"
+}
+
+### 获取所有店铺
+GET {{baseUrl}}
+
+### 获取单个店铺
+GET {{baseUrl}}/68205670f337a242a0000180
+
+### 更新店铺
+PUT {{baseUrl}}/68205670f337a242a0000180
+Content-Type: application/json
+
+{
+  "name": "更新后的店铺名称",
+  "description": "更新后的店铺描述"
+}
+
+### 删除店铺
+DELETE {{baseUrl}}/6820566ef337a242a000017e
