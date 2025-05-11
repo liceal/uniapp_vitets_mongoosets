@@ -13,10 +13,10 @@ Content-Type: application/json
 GET {{baseUrl}}
 
 ### 获取单个店铺
-GET {{baseUrl}}/68205670f337a242a0000180
+GET {{baseUrl}}/68205a6635afe21b74784ced
 
 ### 更新店铺
-PUT {{baseUrl}}/68205670f337a242a0000180
+PUT {{baseUrl}}/68205a6635afe21b74784ced
 Content-Type: application/json
 
 {
