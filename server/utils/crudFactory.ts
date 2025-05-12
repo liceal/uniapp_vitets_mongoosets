@@ -14,19 +14,23 @@ export const createOne = <T>(Model: Model<T>) => {
 
 export const getAll = <T>(
   Model: Model<T>,
-  config: generateRoutesConfigTypes["getAll"]
+  _getAll?: generateRoutesConfigTypes["getAll"]
 ) => {
   return async (req: Request, res: Response) => {
     try {
       let data;
-      if (typeof config === "function") {
-        data = await config(req);
-      } else {
-        let query = {};
-        if (config.query) {
-          query = config.query(req);
+      if (_getAll) {
+        if (typeof _getAll === "function") {
+          data = await _getAll(req);
+        } else {
+          let query = {};
+          if (_getAll.query) {
+            query = _getAll.query(req);
+          }
+          data = await Model.find(query);
         }
-        data = await Model.find(query);
+      } else {
+        data = await Model.find();
       }
       res.status(200).json(data);
     } catch (error: any) {
@@ -35,10 +39,18 @@ export const getAll = <T>(
   };
 };
 
-export const getOne = <T>(Model: Model<T>) => {
+export const getOne = <T>(
+  Model: Model<T>,
+  _getOne: generateRoutesConfigTypes["getOne"]
+) => {
   return async (req: Request, res: Response) => {
     try {
-      const doc = await Model.findById(req.params.id);
+      let doc;
+      if (typeof _getOne === "function") {
+        doc = await _getOne(req);
+      } else {
+        doc = await Model.findById(req.params.id);
+      }
       if (!doc) {
         res.status(404).json({ message: "未找到对应记录" });
         return;
@@ -89,7 +101,7 @@ type generateRoutesConfigTypes = {
    * 1. **对象形式**：可通过 `query` 函数生成查询条件。
    * 2. **函数形式**：直接返回一个 `Promise`，该 `Promise` 解析为查询结果。
    */
-  getAll:
+  getAll?:
     | {
         /**
          * 可选的查询函数，根据请求对象生成查询条件。
@@ -106,15 +118,23 @@ type generateRoutesConfigTypes = {
          */
         (req: Request): Promise<Object>;
       };
+  /**
+   * 重写getOne 查询单个记录 get接口 参数id
+   *
+   * 例子：baseurl/:id
+   */
+  getOne?: {
+    (req: Request): Promise<Object | null>;
+  };
 };
 export const generateRoutes = <T>(
   router: Router,
   Model: Model<T>,
-  config: generateRoutesConfigTypes
+  config?: generateRoutesConfigTypes
 ) => {
   router.post("/", createOne(Model));
-  router.get("/", getAll(Model, config.getAll));
-  router.get("/:id", getOne(Model));
+  router.get("/", getAll(Model, config?.getAll));
+  router.get("/:id", getOne(Model, config?.getOne));
   router.put("/:id", updateOne(Model));
   router.delete("/:id", deleteOne(Model));
   return router;

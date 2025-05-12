@@ -29,9 +29,11 @@ const shopSchema = new mongoose.Schema<ShopDocument>(
     },
   },
   {
+    versionKey: false,
     timestamps: true,
     toJSON: { getters: true },
     toObject: { getters: true },
+    id: false,
   }
 );
 

@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:7200/api/goods
+
+# 创建商品
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "示例商品",
+  "price": 42.99,
+  "pictureUrl": "商品图片",
+  "shopId":"68205a6635afe21b74784ced"
+}
+
+### 获取所有商品
+GET {{baseUrl}}
+
+### 获取单个商品
+GET {{baseUrl}}/6821b277fc07204c9ec4b01c
+
+### 更新商品
+PUT {{baseUrl}}/68205a6635afe21b74784ced
+Content-Type: application/json
+
+{
+  "name": "更新后的商品名称",
+  "description": "更新后的商品描述"
+}
+
+### 删除商品
+DELETE {{baseUrl}}/6820566ef337a242a000017e
+
+### 获取索引
+GET {{baseUrl}}/getIndexes
