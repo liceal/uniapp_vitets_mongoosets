@@ -35,4 +35,12 @@ const goodsSchema = new MySchema<GoodsDocument>(
   }
 );
 
+// 定义虚拟字段 查询详情
+goodsSchema.virtual("shopDetail", {
+  ref: "shops",
+  localField: "shopId",
+  foreignField: "_id",
+  justOne: true,
+});
+
 export const Goods = mongoose.model<GoodsDocument>("Goods", goodsSchema);

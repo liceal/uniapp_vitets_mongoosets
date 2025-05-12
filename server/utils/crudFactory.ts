@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { Document, Model } from "mongoose";
+import { Aggregate, Document, Model, PipelineStage } from "mongoose";
 
 export const createOne = <T>(Model: Model<T>) => {
   return async (req: Request, res: Response) => {
@@ -7,7 +7,8 @@ export const createOne = <T>(Model: Model<T>) => {
       const doc = await Model.create(req.body);
       res.status(201).json(doc);
     } catch (error: any) {
-      res.status(400).json({ message: error.message });
+      console.error(error);
+      res.status(400).json({ message: "创建商品失败", error: error.message });
     }
   };
 };
@@ -95,6 +96,93 @@ export const deleteOne = <T>(Model: Model<T>) => {
   };
 };
 
+// post 分页列表
+export interface postListOptions {
+  $lookup: PipelineStage.Lookup["$lookup"];
+}
+export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
+  return async (req: Request, res: Response) => {
+    try {
+      const body = req.body;
+      const page = body.page || 1;
+      const limit = body.limit || 10;
+      const skip = (page - 1) * limit;
+
+      // 生成关于连表的配置
+      let $lookupOps: Array<PipelineStage.Lookup | PipelineStage.AddFields> =
+        [];
+      if (options?.$lookup) {
+        $lookupOps.push({
+          $lookup: options.$lookup,
+        });
+        // 自动生成取这个关联数据的第一条 并且没数据默认空对象
+        $lookupOps.push({
+          $addFields: {
+            [options.$lookup.as]: {
+              $ifNull: [
+                { $arrayElemAt: [`$${options.$lookup.as}`, 0] }, // 取数组第一个元素
+                {}, // 如果数组为空则设为{}
+              ],
+            },
+          },
+        });
+      }
+
+      // aggregate是直接操作数据库的 速度会快很多
+      const docs = await Model.aggregate([
+        {
+          $facet: {
+            data: [
+              // 调整顺序，先 skip 再 limit
+              { $skip: skip },
+              { $limit: limit },
+              ...$lookupOps,
+
+              // {
+              //   $lookup: { //链表查询
+              //     from: "shops",
+              //     localField: "shopId",
+              //     foreignField: "_id",
+              //     as: "shopDetail",
+              //   },
+              // },
+              // {
+              //   $addFields: {//这个方法生成虚拟字段 然后取数组第一个 如果空则给空对象
+              //     shopDetail: {
+              //       $ifNull: [
+              //         { $arrayElemAt: ["$shopDetail", 0] }, // 取数组第一个元素
+              //         {}, // 如果数组为空则设为null
+              //       ],
+              //     },
+              //   },
+              // },
+              // {
+              //   $unwind: {//这个方法出来的array会被结构成对象 但是如果查不出来 那键也不会有
+              //     path: "$shopDetails",
+              //     preserveNullAndEmptyArrays: true,
+              //   },
+              // },
+            ],
+            total: [{ $count: "count" }],
+          },
+        },
+        {
+          $project: {
+            data: 1,
+            total: { $arrayElemAt: ["$total.count", 0] },
+            page: { $literal: page },
+            pageSize: { $literal: limit },
+          },
+        },
+      ]);
+      res.status(200).json(docs);
+    } catch (error: any) {
+      console.error(error);
+      res.status(400).json({ message: error.message });
+    }
+  };
+};
+
 type generateRoutesConfigTypes = {
   /**
    * 配置 `getAll` 接口的行为，支持两种配置方式：
@@ -126,6 +214,7 @@ type generateRoutesConfigTypes = {
   getOne?: {
     (req: Request): Promise<Object | null>;
   };
+  postList?: postListOptions;
 };
 export const generateRoutes = <T>(
   router: Router,
@@ -137,5 +226,6 @@ export const generateRoutes = <T>(
   router.get("/:id", getOne(Model, config?.getOne));
   router.put("/:id", updateOne(Model));
   router.delete("/:id", deleteOne(Model));
+  router.post("/list", postList(Model, config?.postList));
   return router;
 };

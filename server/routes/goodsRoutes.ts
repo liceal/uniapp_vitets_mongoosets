@@ -12,10 +12,25 @@ router.get("/getIndexes", async (req, res) => {
 // 封装curd 实现上面5个
 const curdRouter = generateRoutes(router, Goods, {
   getOne(req) {
-    return Goods.findById(req.params.id).populate(
-      "shopId",
-      "_id name pictureUrl"
+    return (
+      Goods.findById(req.params.id)
+        // .populate({
+        //   path: "shopId",
+        //   select: "_id name pictureUrl",
+        // })
+        .populate({
+          path: "shopDetail",
+          select: "-__v",
+        })
     );
+  },
+  postList: {
+    $lookup: {
+      from: "shops",
+      localField: "shopId",
+      foreignField: "_id",
+      as: "shopDetail",
+    },
   },
 });
 

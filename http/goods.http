@@ -8,14 +8,23 @@ Content-Type: application/json
   "name": "示例商品",
   "price": 42.99,
   "pictureUrl": "商品图片",
-  "shopId":"68205a6635afe21b74784ced"
+  "shopId":"6820a8626a5dcca93c98bc21"
 }
 
 ### 获取所有商品
 GET {{baseUrl}}
 
+### 获取所有商品 分页
+POST {{baseUrl}}/list
+Content-Type: application/json
+
+{
+  "page": 2,
+  "limit":3
+}
+
 ### 获取单个商品
-GET {{baseUrl}}/6821b277fc07204c9ec4b01c
+GET {{baseUrl}}/6821f2f95abb5505df62252d
 
 ### 更新商品
 PUT {{baseUrl}}/68205a6635afe21b74784ced

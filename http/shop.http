@@ -5,12 +5,12 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "name": "示例店铺",
+  "name": "示例店铺222",
   "pictureUrl": "店铺图片"
 }
 
 ### 获取所有店铺
-GET {{baseUrl}}
+GET {{baseUrl}}?name=11
 
 ### 获取单个店铺
 GET {{baseUrl}}/68205a6635afe21b74784ced
