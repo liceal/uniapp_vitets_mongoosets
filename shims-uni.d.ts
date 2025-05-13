@@ -7,6 +7,8 @@ declare module "@vue/runtime-core" {
   interface ComponentCustomOptions extends Hooks {}
 }
 
+declare module "vk-uview-ui";
+
 import { UserDocument } from "@server/models/user";
 declare global {
   namespace Express {
