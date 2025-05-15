@@ -1,0 +1,9 @@
+// u-tabbar有使用这个样式
+.safe-area-inset-bottom{
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-container{
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}

@@ -4,10 +4,36 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "uni-app"
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的"
+        // "navigationStyle": "custom"
       }
     }
   ],
+  "tabBar": {
+    "custom": true, //针对微信小程序，是否使用自定义tabbar，默认false，使用系统tabbar
+    // 定义了这里的tabBar 对页面有缓存效果
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+        // "iconPath": "home"
+        // "selectedIconPath": "home"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+        // "iconPath": "static/tabbar/mine.png",
+        // "selectedIconPath": "static/tabbar/mine-active.png"
+      }
+    ]
+  },
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",

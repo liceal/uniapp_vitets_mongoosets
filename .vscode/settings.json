@@ -1,0 +1,4 @@
+{
+  "json.schemas": [],
+  "json.validate": false // 关闭json文件的校验
+}
