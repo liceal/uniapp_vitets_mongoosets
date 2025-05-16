@@ -1,6 +1,6 @@
 <template>
   <view class="safe-container">
-    <LNav />
+    <Search />
 
     <u-button type="primary">123</u-button>
     <u-input />
@@ -12,6 +12,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import LNav from '@/components/LNav.vue';
+import Search from '@/components/search.vue';
 
 const title = ref('Hello')
 </script>
