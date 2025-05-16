@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import LNav from '@/components/LNav.vue';
-import Search from '@/components/search.vue';
+import Search from '@/components/Search.vue';
 
 const title = ref('Hello')
 </script>
