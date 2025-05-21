@@ -1,16 +1,16 @@
 <template>
   <view class="goods_list">
     <view v-for="goods in goodsList" :key="goods.id">
-      <Goods />
+      <Goods v-bind="goods" />
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
 import { reactive } from 'vue';
-import Goods from './goods.vue';
+import Goods, { type wGoodsType } from './goods.vue';
 
-const goodsList = reactive([
+const goodsList = reactive<wGoodsType[]>([
   {
     id: 1,
     name: "商品名称1",

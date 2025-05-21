@@ -36,6 +36,7 @@ $wxTopButtonHeight: 33px;
 $wxTopButtonWidth: 100px;
 
 .search-container {
+  background-color: white;
   padding: .2rem;
 
   // #ifdef MP-WEIXIN
