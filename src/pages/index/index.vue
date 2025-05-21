@@ -1,20 +1,25 @@
 <template>
-  <view class="safe-container">
+  <view :style="safeContainer">
     <Search />
 
-    <u-button type="primary">123</u-button>
-    <u-input />
+    <GoodsList />
 
     <l-tabbar />
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import LNav from '@/components/LNav.vue';
 import Search from '@/components/Search.vue';
+import { useSafeDistanceStore } from '@/stores/safeDistance';
+import GoodsList from '@/components/GoodsList/index.vue'
 
-const title = ref('Hello')
+const safeDistanceStore = useSafeDistanceStore();
+const safeContainer = computed(() => ({
+  paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
+  paddingBottom: `env(safe-area-inset-bottom)`,
+}))
 </script>
 
-<style></style>
+<style lang="scss" scpoed></style>

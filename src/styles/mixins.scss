@@ -1,0 +1,25 @@
+// .test{
+//   background-color: red;
+//   color: green;
+// }
+
+
+/*
+  使用方法
+  <view data-theme="yellow"/>
+
+  <style lang="scss" scpoed>
+  @include theme();
+  </style>
+*/
+
+$my-bg-gray: #f4f4f4;
+
+@mixin theme() {
+  [data-theme = "yellow"] {
+    background-color: yellow !important;
+  }
+  [data-theme = "gray"] {
+    background-color: $my-bg-gray !important;
+  }
+}
