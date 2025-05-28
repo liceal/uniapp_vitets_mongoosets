@@ -10,7 +10,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import LNav from '@/components/LNav.vue';
 import Search from '@/components/Search.vue';
 import { useSafeDistanceStore } from '@/stores/safeDistance';
 import GoodsList from '@/components/GoodsList/index.vue'

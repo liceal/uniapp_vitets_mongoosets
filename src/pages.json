@@ -9,10 +9,17 @@
       }
     },
     {
-      "path": "pages/mine/mine",
+      "path": "pages/mine/index",
       "style": {
         "navigationBarTitleText": "我的"
         // "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/search/index",
+      "style": {
+        "navigationBarTitleText": "搜索",
+        "navigationStyle": "custom"
       }
     }
   ],
