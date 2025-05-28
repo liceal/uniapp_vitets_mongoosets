@@ -31,6 +31,16 @@ const curdRouter = generateRoutes(router, Goods, {
       foreignField: "_id",
       as: "shopDetail",
     },
+    $addFields: {
+      sales_str: {
+        $concat: [
+          "$name",
+          { $literal: "只要" },
+          { $toString: "$price" },
+          { $literal: "元~" },
+        ],
+      },
+    },
   },
 });
 

@@ -23,16 +23,10 @@
 </template>
 
 <script lang='ts' setup>
-export type wGoodsType = {
-  id: number,//id
-  name: string,//名称
-  price: number,//价格
-  sales_str: string,//售价字符串
-  price_type: 0 | 1,//0无 1券后
-  sales_type: 0 | 1,//0无 1总售
-}
+import { GoodsTypes } from '@server/models/goods';
+
 // 使用 withDefaults 简化 defineProps
-const props = withDefaults(defineProps<wGoodsType>(), {
+const props = withDefaults(defineProps<GoodsTypes>(), {
   id: 0,
   name: '',
   price: 0,

@@ -115,9 +115,9 @@ export class MySchema<T = unknown> extends mongoose.Schema<T> {
   private registerGlobalHooks() {
     // 文档保存前的通用逻辑
     this.pre("save", function (next) {
-      const doc = this as mongoose.Document;
+      // const doc = this as mongoose.Document;
 
-      console.log("调用了mySchema的pre方法", this);
+      // console.log("调用了mySchema的pre方法", this);
 
       // 示例：自动设置 slug（可根据需要修改）
       // if (doc.isModified('name') && !doc.slug) {

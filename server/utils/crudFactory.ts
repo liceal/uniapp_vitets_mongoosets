@@ -20,6 +20,11 @@ export const getAll = <T>(
   return async (req: Request, res: Response) => {
     try {
       let data;
+
+      // 增加了分页功能 查询时间比通道多了一倍 待优化 或者去掉
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
       if (_getAll) {
         if (typeof _getAll === "function") {
           data = await _getAll(req);
@@ -28,12 +33,19 @@ export const getAll = <T>(
           if (_getAll.query) {
             query = _getAll.query(req);
           }
-          data = await Model.find(query);
+          data = await Model.find(query).skip(skip).limit(limit).exec();
         }
       } else {
-        data = await Model.find();
+        data = await Model.find().skip(skip).limit(limit).exec();
       }
-      res.status(200).json(data);
+
+      const total = await Model.countDocuments();
+      res.status(200).json({
+        data,
+        total,
+        page,
+        pageSize: limit,
+      });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -99,6 +111,7 @@ export const deleteOne = <T>(Model: Model<T>) => {
 // post 分页列表
 export interface postListOptions {
   $lookup: PipelineStage.Lookup["$lookup"];
+  $addFields?: PipelineStage.AddFields["$addFields"];
 }
 export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
   return async (req: Request, res: Response) => {
@@ -128,6 +141,13 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
         });
       }
 
+      let $addFieldsOps: Array<PipelineStage.AddFields> = [];
+      if (options?.$addFields) {
+        $addFieldsOps.push({
+          $addFields: options.$addFields,
+        });
+      }
+
       // aggregate是直接操作数据库的 速度会快很多
       const docs = await Model.aggregate([
         {
@@ -137,7 +157,7 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
               { $skip: skip },
               { $limit: limit },
               ...$lookupOps,
-
+              ...$addFieldsOps,
               // {
               //   $lookup: { //链表查询
               //     from: "shops",
