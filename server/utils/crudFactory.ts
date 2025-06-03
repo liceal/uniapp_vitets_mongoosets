@@ -116,7 +116,7 @@ export interface postListOptions {
 export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
   return async (req: Request, res: Response) => {
     try {
-      const body = req.body;
+      const body = req.body || {};
       const page = body.page || 1;
       const limit = body.limit || 10;
       const skip = (page - 1) * limit;
@@ -149,7 +149,7 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
       }
 
       // aggregate是直接操作数据库的 速度会快很多
-      const docs = await Model.aggregate([
+      const docsArray = await Model.aggregate([
         {
           $facet: {
             data: [
@@ -158,30 +158,6 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
               { $limit: limit },
               ...$lookupOps,
               ...$addFieldsOps,
-              // {
-              //   $lookup: { //链表查询
-              //     from: "shops",
-              //     localField: "shopId",
-              //     foreignField: "_id",
-              //     as: "shopDetail",
-              //   },
-              // },
-              // {
-              //   $addFields: {//这个方法生成虚拟字段 然后取数组第一个 如果空则给空对象
-              //     shopDetail: {
-              //       $ifNull: [
-              //         { $arrayElemAt: ["$shopDetail", 0] }, // 取数组第一个元素
-              //         {}, // 如果数组为空则设为null
-              //       ],
-              //     },
-              //   },
-              // },
-              // {
-              //   $unwind: {//这个方法出来的array会被结构成对象 但是如果查不出来 那键也不会有
-              //     path: "$shopDetails",
-              //     preserveNullAndEmptyArrays: true,
-              //   },
-              // },
             ],
             total: [{ $count: "count" }],
           },
@@ -195,6 +171,7 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
           },
         },
       ]);
+      const docs = docsArray[0] || {};
       res.status(200).json(docs);
     } catch (error: any) {
       console.error(error);

@@ -23,10 +23,18 @@
 </template>
 
 <script lang='ts' setup>
-import { GoodsTypes } from '@server/models/goods';
+
+export interface GoodsPropsTypes {
+  id: number;
+  name: string;
+  price: number;
+  sales_str: string;
+  price_type: number; // 0无 1券后
+  sales_type: number; // 0无 1总售
+}
 
 // 使用 withDefaults 简化 defineProps
-const props = withDefaults(defineProps<GoodsTypes>(), {
+const props = withDefaults(defineProps<GoodsPropsTypes>(), {
   id: 0,
   name: '',
   price: 0,
@@ -34,6 +42,7 @@ const props = withDefaults(defineProps<GoodsTypes>(), {
   price_type: 0,
   sales_type: 0,
 });
+
 </script>
 
 <style lang="scss" scoped>

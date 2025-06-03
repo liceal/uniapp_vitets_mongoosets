@@ -9,7 +9,7 @@ import { goodsRoutes } from "./routes/goodsRoutes";
 dotenv.config();
 
 const app = express();
-const PORT = 7200;
+const PORT = process.env.PORT_SERVER;
 
 // 连接数据库
 const MONGODB_URI = process.env.MONGODB_URL!;
