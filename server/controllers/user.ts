@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { jwtMsg, User } from "../models/user";
 import svgCaptcha from "svg-captcha";
 import NodeCache from "node-cache";
-import { Captcha } from "@server/models/captcha";
+import { Captcha } from "#/models/captcha";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 const create = async (req: Request, res: Response) => {

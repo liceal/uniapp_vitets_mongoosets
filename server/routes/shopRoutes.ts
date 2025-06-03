@@ -1,7 +1,7 @@
 import { Router } from "express";
-import ShopControlles from "@server/controllers/shop";
-import { generateRoutes } from "@server/utils/crudFactory";
-import { Shop } from "@server/models/shop";
+import ShopControlles from "#/controllers/shop";
+import { generateRoutes } from "#/utils/crudFactory";
+import { Shop } from "#/models/shop";
 
 const router = Router();
 

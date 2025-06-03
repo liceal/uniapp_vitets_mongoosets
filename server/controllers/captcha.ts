@@ -1,4 +1,4 @@
-import { Captcha } from "@server/models/captcha";
+import { Captcha } from "#/models/captcha";
 import { Request, Response } from "express";
 
 // 创建验证码

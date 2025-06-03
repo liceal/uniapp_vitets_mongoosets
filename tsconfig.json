@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@server/*": ["./server/*"]
+      "#/*": ["./server/*"],
+      "types/*": ["./types/*"]
     },
     "lib": ["esnext", "dom"],
     "types": ["@dcloudio/types"],

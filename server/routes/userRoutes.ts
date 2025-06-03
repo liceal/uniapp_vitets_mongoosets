@@ -1,6 +1,6 @@
 import { Router } from "express";
-import UserControlles from "@server/controllers/user";
-import CaptchaControlles from "@server/controllers/captcha";
+import UserControlles from "#/controllers/user";
+import CaptchaControlles from "#/controllers/captcha";
 
 const router = Router();
 

@@ -2,7 +2,7 @@
   商品表
 */
 
-import { MySchema } from "@server/utils/mySchema";
+import { MySchema } from "#/utils/mySchema";
 import moment from "moment";
 import mongoose, { SchemaTimestampsConfig } from "mongoose";
 

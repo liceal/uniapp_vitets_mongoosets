@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { generateRoutes } from "@server/utils/crudFactory";
-import { Goods } from "@server/models/goods";
+import { generateRoutes } from "#/utils/crudFactory";
+import { Goods } from "#/models/goods";
 
 const router = Router();
 
