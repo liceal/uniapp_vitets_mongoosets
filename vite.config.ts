@@ -1,10 +1,23 @@
 import { defineConfig } from "vite";
 import uni from "@dcloudio/vite-plugin-uni";
-import { HttpProxy } from "vite";
+/** 此路径根据自己项目路径修改；默认为 uniapp 插件市场导入路径；*/
+import viteVueUnocss, { unocss } from "./js_sdk/a-hua-unocss";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [uni()],
+  plugins: [
+    uni(),
+    viteVueUnocss({
+      /** 预设数组；默认[unocss()] */
+      presets: [
+        /**
+         * 默认预设；
+         * text-24、uno-text-24、xx-text-24
+         */
+        unocss(),
+      ],
+    }),
+  ],
   // css: {
   // preprocessorOptions: {
   //   scss: {
