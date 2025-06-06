@@ -1,8 +1,20 @@
 import axios from "axios"; // InternalAxiosRequestConfig, // AxiosError, // AxiosResponse,
+import { UniAdapter } from "uniapp-axios-adapter";
+
+var baseURL;
+
+// #ifdef MP-WEIXIN
+baseURL = "http://localhost:7200/api";
+// #endif
+
+// #ifdef WEB
+baseURL = "/api";
+// #endif
 
 const http = axios.create({
-  baseURL: process.env.VITE_API_BASE_URL || "/api",
+  baseURL,
   timeout: 10000,
+  adapter: UniAdapter, // 指定适配器
 });
 
 // 请求拦截器

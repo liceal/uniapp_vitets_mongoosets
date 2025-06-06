@@ -22,6 +22,13 @@
         "navigationStyle": "custom"
       }
     }
+    {
+      "path": "pages/goodsDetail/index",
+      "style": {
+        "navigationBarTitleText": "商品详情",
+        "navigationStyle": "custom"
+      }
+    }
   ],
   "tabBar": {
     "custom": true, //针对微信小程序，是否使用自定义tabbar，默认false，使用系统tabbar
@@ -34,7 +41,7 @@
         // "selectedIconPath": "home"
       },
       {
-        "pagePath": "pages/mine/mine",
+        "pagePath": "pages/mine/index",
         "text": "我的"
         // "iconPath": "static/tabbar/mine.png",
         // "selectedIconPath": "static/tabbar/mine-active.png"

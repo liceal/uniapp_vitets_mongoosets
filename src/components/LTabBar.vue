@@ -1,6 +1,6 @@
 <template>
   <view>
-    <u-tabbar v-model="activeTabbar" :list="pageList" @change="tabbarChange" active-color="red" />
+    <u-tabbar v-model="activeTabbar" :list="pageList" @change="tabbarChange" active-color="red" class="tabbar" />
   </view>
 </template>
 <script setup lang="ts">
@@ -20,7 +20,7 @@ const pageList = reactive([
     text: "我的",
     iconPath: 'account',
     selectedIconPath: 'account-fill',
-    pagePath: "/pages/mine/mine",
+    pagePath: "/pages/mine/index",
   }
 ])
 
@@ -43,4 +43,19 @@ const tabbarChange = (index: number) => {
   })
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.tabbar {
+
+  // 去除超出的部分 保持高度50px
+  :deep(.u-tabbar__content) {
+    .u-tabbar__content__item {
+      box-sizing: border-box;
+      padding: 0px;
+
+      .u-tabbar__content__item__button {
+        top: 0;
+      }
+    }
+  }
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
   <view class="goods_list">
     <view v-for="goods in goodsList" :key="goods.id">
-      <Goods v-bind="goods" />
+      <Goods v-bind="goods" @click="toDetail" />
     </view>
   </view>
 </template>
@@ -11,32 +11,7 @@ import { onMounted, reactive, ref } from 'vue';
 import Goods, { type GoodsPropsTypes } from './goods.vue';
 import goods from '@/api/goods';
 
-const goodsList = ref<GoodsPropsTypes[]>([
-  // {
-  //   id: 1,
-  //   name: "商品名称1",
-  //   price: 7628,
-  //   sales_str: '总售200万+件',//售量
-  //   price_type: 1,//0无 1券后
-  //   sales_type: 1,//0无 1总售
-  // },
-  // {
-  //   id: 2,
-  //   name: "商品名称2",
-  //   price: 6.4,
-  //   sales_str: '已抢24.7万+支',//售量
-  //   price_type: 1,//0无 1券后
-  //   sales_type: 1,//0无 1总售
-  // },
-  // {
-  //   id: 3,
-  //   name: "商品名称3",
-  //   price: 46.8,
-  //   sales_str: '全店已拼40万+件',//售量
-  //   price_type: 1,//0无 1券后
-  //   sales_type: 1,//0无 1总售
-  // },
-])
+const goodsList = ref<GoodsPropsTypes[]>([])
 
 function getGoodsList() {
   goods.goodsList
@@ -45,6 +20,12 @@ function getGoodsList() {
       console.log(res);
       goodsList.value = res.data
     })
+}
+
+function toDetail() {
+  uni.navigateTo({
+    url: '/pages/goodsDetail/index'
+  })
 }
 
 onMounted(() => {
@@ -59,5 +40,7 @@ onMounted(() => {
   grid-template-columns: repeat(2, 1fr);
   gap: .2rem;
   padding: .2rem;
+  // 预留空间
+  padding-bottom: 2rem;
 }
 </style>

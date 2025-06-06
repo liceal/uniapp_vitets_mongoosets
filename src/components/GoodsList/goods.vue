@@ -23,6 +23,7 @@
 
 <script lang="ts" setup>
 export interface GoodsPropsTypes {
+  id: string; //商品ID
   name: string; //商品名称
   price: number; //商品价格
   pictureUrl: string; //商品图片
@@ -36,13 +37,15 @@ export interface GoodsPropsTypes {
 
 // 使用 withDefaults 简化 defineProps
 const props = withDefaults(defineProps<GoodsPropsTypes>(), {
-  id: 0,
+  id: "",
   name: "",
   price: 0,
   sales_str: "",
   price_type: 0,
   sales_type: 0,
+  pictureUrl: "",
 });
+console.log(props);
 </script>
 
 <style lang="scss" scoped>

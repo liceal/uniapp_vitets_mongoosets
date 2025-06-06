@@ -1,13 +1,14 @@
 import { createSSRApp } from "vue";
 import App from "./App.vue";
 import uView from "vk-uview-ui";
-import CustomTabBar from "./components/LTabBar.vue";
+import LTabBar from "./components/LTabBar.vue";
 import pinia from "./stores";
+import "animate.css";
 export function createApp() {
   const app = createSSRApp(App);
   app.use(uView);
   app.use(pinia);
-  app.component("l-tabbar", CustomTabBar);
+  app.component("l-tabbar", LTabBar);
   return {
     app,
   };
