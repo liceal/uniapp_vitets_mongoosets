@@ -1,4 +1,9 @@
 {
   "json.schemas": [],
-  "json.validate": false // 关闭json文件的校验
+  "json.validate": false, // 关闭json文件的校验
+  "unocss.root": "src",
+  "unocss.include": ["**/*.vue", "**/*.ts", "**/*.tsx"],
+  "editor.quickSuggestions": {
+    "strings": true
+  }
 }

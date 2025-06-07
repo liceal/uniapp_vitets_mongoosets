@@ -4,6 +4,7 @@ import uView from "vk-uview-ui";
 import LTabBar from "./components/LTabBar.vue";
 import pinia from "./stores";
 import "animate.css";
+import "virtual:uno.css";
 export function createApp() {
   const app = createSSRApp(App);
   app.use(uView);
