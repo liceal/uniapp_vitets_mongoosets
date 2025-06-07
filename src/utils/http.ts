@@ -4,11 +4,15 @@ import { UniAdapter } from "uniapp-axios-adapter";
 var baseURL;
 
 // #ifdef MP-WEIXIN
-baseURL = "http://localhost:7200/api";
+baseURL = import.meta.env.VITE_GEN_PROXY_PATH;
+// #endif
+
+// #ifdef APP-PLUS
+baseURL = "http://192.168.123.62:7200/api";
 // #endif
 
 // #ifdef WEB
-baseURL = "/api";
+baseURL = import.meta.env.VITE_APP_BASE_API;
 // #endif
 
 const http = axios.create({
@@ -24,6 +28,7 @@ http.interceptors.request.use(
     return config;
   },
   (error: any) => {
+    console.log("请求错误", error);
     return Promise.reject(error);
   }
 );
@@ -34,6 +39,7 @@ http.interceptors.response.use(
     return response.data;
   },
   (error: any) => {
+    console.log("响应错误", error);
     return Promise.reject(error);
   }
 );

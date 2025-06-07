@@ -1,6 +1,7 @@
 <template>
   <view class="goods">
-    <u-image class="image" :src="props.pictureUrl" />
+    <u-image class="image" :src="props.pictureUrl" height="200px" mode="aspectFit" />
+    <!-- <image src="https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg" /> -->
     <view>
       <view>
         {{ props.name }}
@@ -45,7 +46,6 @@ const props = withDefaults(defineProps<GoodsPropsTypes>(), {
   sales_type: 0,
   pictureUrl: "",
 });
-console.log(props);
 </script>
 
 <style lang="scss" scoped>

@@ -14,6 +14,7 @@ import goods from '@/api/goods';
 const goodsList = ref<GoodsPropsTypes[]>([])
 
 function getGoodsList() {
+  console.log('请求')
   goods.goodsList
     .post()
     .then(res => {
