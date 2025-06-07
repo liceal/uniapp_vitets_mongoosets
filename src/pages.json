@@ -21,7 +21,7 @@
         "navigationBarTitleText": "搜索",
         "navigationStyle": "custom"
       }
-    }
+    },
     {
       "path": "pages/goodsDetail/index",
       "style": {
