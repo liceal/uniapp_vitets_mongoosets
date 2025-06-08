@@ -1,13 +1,13 @@
 <!-- 包含头中低的布局 -->
 <template>
-  <view class="container">
-    <view class="header" :style="cpHeader">
+  <view class="layout-container">
+    <view class="layout-header" :style="cpHeader">
       <slot name="header" />
     </view>
-    <view class="body">
+    <view class="layout-body">
       <slot name="body" />
     </view>
-    <view class="footer" v-if="props.showTabBar">
+    <view class="layout-footer" v-if="props.showTabBar">
       <LTabBar />
     </view>
   </view>
@@ -34,21 +34,21 @@ const cpHeader = computed<CSSProperties>(() => {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.layout-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
 
-  .header {
+  .layout-header {
     background-color: white;
   }
 
-  .body {
+  .layout-body {
     flex: 1;
     overflow: auto;
   }
 
-  .footer {
+  .layout-footer {
     height: 50px;
   }
 }

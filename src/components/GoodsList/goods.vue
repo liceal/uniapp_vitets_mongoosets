@@ -1,7 +1,6 @@
 <template>
   <view class="goods">
-    <u-image class="image" :src="props.pictureUrl" height="200px" mode="aspectFit" />
-    <!-- <image src="https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg" /> -->
+    <u-image class="image" :src="props.pictureUrl" height="200px" mode="aspectFill" />
     <view>
       <view>
         {{ props.name }}
@@ -53,7 +52,6 @@ const props = withDefaults(defineProps<GoodsPropsTypes>(), {
   background-color: white;
 
   .image {
-    aspect-ratio: 1/1;
     width: 100%;
     display: flex;
   }
