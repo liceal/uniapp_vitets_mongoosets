@@ -37,7 +37,14 @@ const pageScroll = (e: any) => {
 };
 
 function back() {
-  uni.navigateBack();
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack();
+  } else {
+    uni.switchTab({
+      url: '/pages/index/index'
+    });
+  }
 }
 
 //todo 根据滚动条改变颜色

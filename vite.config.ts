@@ -48,7 +48,7 @@ export default defineConfig(async ({ mode }) => {
           rewrite: function (path) {
             console.log(`请求地址：${this.target}${path}`);
 
-            return path.replace(/^\/api/, "/api");
+            return path.replace(/^\/api/, "");
           }, // 重写路径
         },
       },

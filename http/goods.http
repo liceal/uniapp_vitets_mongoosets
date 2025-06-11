@@ -19,8 +19,8 @@ POST {{baseUrl}}/list
 Content-Type: application/json
 
 {
-  "page": 1,
-  "limit":3
+  "page": 10,
+  "limit":10
 }
 
 ### 获取单个商品

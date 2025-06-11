@@ -8,36 +8,29 @@
     <l-tabbar />
   </SafeView> -->
   <!-- </view> -->
-  <Layout>
+  <Layout @bodyScrollToLower="bodyScrollToLower">
     <template #header>
       <Search />
     </template>
     <template #body>
-      <GoodsList />
+      <GoodsList ref="goodsListRef" />
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue'
+import { computed, ref, type CSSProperties } from 'vue'
 import Search from "@/components/Search.vue";
 // import { useSafeDistanceStore } from "@/stores/safeDistance";
 import GoodsList from "@/components/GoodsList.vue";
 import SafeView from "@/components/SafeView.vue"
 import Layout from '@/components/layout/index.vue';
 
-// const safeDistanceStore = useSafeDistanceStore();
-// // const safeContainer = computed<CSSProperties>(() => ({
-// //   // paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
-// //   paddingBottom: `env(safe-area-inset-bottom)`,
-// // }));
-
-// const safeSearch = computed<CSSProperties>(() => ({
-//   paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
-//   // #ifdef MP-WEIXIN
-//   paddingRight:'6rem'
-//   // #endif
-// }));
+const goodsListRef = ref<InstanceType<typeof GoodsList>>()
+function bodyScrollToLower(e: any) {
+  console.log('index 到底了', e);
+  goodsListRef.value?.lowerBottom(e)
+}
 </script>
 
 <style lang="scss" scpoed>

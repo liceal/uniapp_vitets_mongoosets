@@ -8,7 +8,7 @@ baseURL = import.meta.env.VITE_GEN_PROXY_PATH;
 // #endif
 
 // #ifdef APP-PLUS
-baseURL = "http://192.168.123.62:7200/api";
+baseURL = import.meta.env.VITE_GEN_PROXY_PATH;
 // #endif
 
 // #ifdef WEB

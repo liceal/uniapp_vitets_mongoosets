@@ -30,7 +30,6 @@ onShow(() => {
   // 可以获取pageJson进行设置上面的路由
   // console.log(pagesJson.tabBar);
   const pages = getCurrentPages();
-  console.log(pages, 2);
   const currentPage = pages[pages.length - 1]?.route;
   const currentIndex = pageList.findIndex(item => item.pagePath === `/${currentPage}`);
   console.log(currentIndex);
@@ -38,9 +37,9 @@ onShow(() => {
 })
 
 const tabbarChange = (index: number) => {
-  uni.switchTab({
-    url: pageList[index].pagePath
-  })
+  // uni.switchTab({
+  //   url: pageList[index].pagePath
+  // })
 }
 </script>
 <style lang="scss" scoped>

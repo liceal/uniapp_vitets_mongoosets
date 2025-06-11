@@ -5,5 +5,8 @@
   "unocss.include": ["**/*.vue", "**/*.ts", "**/*.tsx"],
   "editor.quickSuggestions": {
     "strings": true
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

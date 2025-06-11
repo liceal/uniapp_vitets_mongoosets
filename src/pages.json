@@ -31,7 +31,7 @@
     }
   ],
   "tabBar": {
-    "custom": true, //针对微信小程序，是否使用自定义tabbar，默认false，使用系统tabbar
+    // "custom": true, //针对微信小程序，是否使用自定义tabbar，默认false，使用系统tabbar
     // 定义了这里的tabBar 对页面有缓存效果
     "list": [
       {

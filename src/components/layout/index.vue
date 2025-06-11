@@ -1,13 +1,13 @@
 <!-- 包含头中低的布局 -->
 <template>
-  <view class="layout-container">
-    <view class="layout-header" :style="cpHeader">
+  <view class="layout-container" :style="cpHeader">
+    <view :class="{ 'bg-white': !props.topTransparent }">
       <slot name="header" />
     </view>
-    <view class="layout-body">
+    <scroll-view @scrolltolower="onScrolltolower" scroll-y class="layout-body">
       <slot name="body" />
-    </view>
-    <view class="layout-footer" v-if="props.showTabBar">
+    </scroll-view>
+    <view class="layout-footer" v-if="!props.hideTabbar">
       <LTabBar />
     </view>
   </view>
@@ -18,10 +18,21 @@ import LTabBar from '@/components/LTabBar.vue';
 import { useSafeDistanceStore } from '@/stores/safeDistance';
 import { computed, type CSSProperties } from 'vue';
 
+const emits = defineEmits(['bodyScrollToLower'])
+
+function onScrolltolower(e: any) {
+  // console.log('layout 到底了', e);
+  emits('bodyScrollToLower', e)
+}
+
 const props = defineProps({
-  showTabBar: {
+  hideTabbar: {
     type: Boolean,
-    default: true
+    default: false
+  },
+  topTransparent: {
+    type: Boolean,
+    default: false
   }
 })
 
