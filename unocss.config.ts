@@ -13,5 +13,7 @@ export default defineConfig({
   // 快捷方式
   shortcuts: {
     btn: "py-2 px-4 rounded bg-blue-500 text-white",
+    "border-top-ef":
+      "border-t-[0.5em] border-solid border-[#efefef] border-b-0 border-l-0 border-r-0",
   },
 });

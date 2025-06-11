@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
-import Goods, { type GoodsPropsTypes } from './goods.vue';
+import Goods, { type GoodsPropsTypes } from '@/components/Goods.vue';
 import goods from '@/api/goods';
 
 const goodsList = ref<GoodsPropsTypes[]>([])
@@ -28,6 +28,8 @@ function toDetail() {
     url: '/pages/goodsDetail/index'
   })
 }
+
+
 
 onMounted(() => {
   getGoodsList();

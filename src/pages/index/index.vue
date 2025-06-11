@@ -22,7 +22,7 @@
 import { computed, type CSSProperties } from 'vue'
 import Search from "@/components/Search.vue";
 // import { useSafeDistanceStore } from "@/stores/safeDistance";
-import GoodsList from "@/components/GoodsList/index.vue";
+import GoodsList from "@/components/GoodsList.vue";
 import SafeView from "@/components/SafeView.vue"
 import Layout from '@/components/layout/index.vue';
 
