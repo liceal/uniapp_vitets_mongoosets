@@ -1,5 +1,5 @@
 <template>
-  <Layout hide-tabbar topTransparent>
+  <Layout>
     <template #body>
 
       <!-- 顶部操作 -->
@@ -34,25 +34,23 @@
           全场包邮 | 满50元减5元 | 满100元减10元 | 满50元减5元 | 满100元减10元 | 满50元减5元 | 满100元减10元 | 满50元减5元 | 满100元减10元
         </text>
         <u-icon name="arrow-right" />
-
-
-        <u-popup v-model="popupVisible" mode="bottom" safe-area-inset-bottom>
-          <view class="relative flex p-1 justify-center items-center" style="border-bottom: 1px solid #efefef;">
-            服务说明
-            <u-icon name="close" class="float-right text-gray absolute right-4" @click="() => popupVisible = false" />
-          </view>
-          <view class="h-40vh p-1">
-            <view v-for="item in 5" :key="item" class="mt-1">
-              <view class="text-dark">
-                全场包邮
-              </view>
-              <view class="text-sm text-gray">
-                所有商品包邮
-              </view>
+      </view>
+      <u-popup v-model="popupVisible" mode="bottom" safe-area-inset-bottom>
+        <view class="relative flex p-1 justify-center items-center" style="border-bottom: 1px solid #efefef;">
+          服务说明
+          <u-icon name="close" class="float-right text-gray absolute right-4" @click="() => popupVisible = false" />
+        </view>
+        <view class="h-40vh p-1">
+          <view v-for="item in 5" :key="item" class="mt-1">
+            <view class="text-dark">
+              全场包邮
+            </view>
+            <view class="text-sm text-gray">
+              所有商品包邮
             </view>
           </view>
-        </u-popup>
-      </view>
+        </view>
+      </u-popup>
 
       <!-- 评价 -->
       <view style="border-top: .5rem solid #efefef;">

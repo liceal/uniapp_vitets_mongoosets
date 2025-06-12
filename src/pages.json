@@ -28,6 +28,13 @@
         "navigationBarTitleText": "商品详情",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/order/index",
+      "style": {
+        "navigationBarTitleText": "订单",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {
