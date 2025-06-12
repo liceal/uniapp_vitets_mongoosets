@@ -40,7 +40,6 @@ const curdRouter = generateRoutes(router, Goods, {
           { $literal: "元~" },
         ],
       },
-      id: "$_id",
     },
   },
 });

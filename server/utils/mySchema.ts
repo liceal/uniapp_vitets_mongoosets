@@ -41,13 +41,13 @@ export interface MySchemaOptions extends mongoose.SchemaOptions<any> {
  */
 export class MySchema<T = unknown> extends mongoose.Schema<T> {
   constructor(
-    definition: mongoose.SchemaDefinition,
+    definition: mongoose.SchemaDefinition<T>, //继承上面的类型
     options: MySchemaOptions = {}
   ) {
     // 合并默认选项
     const mergedOptions: MySchemaOptions = {
       versionKey: false,
-      id: false,
+      id: true,
       timestamps: !options.disableTimestamps,
       // JSON 序列化配置
       toJSON: {

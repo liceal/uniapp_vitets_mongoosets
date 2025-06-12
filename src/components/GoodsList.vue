@@ -2,7 +2,7 @@
   <scroll-view @scrolltolower="lowerBottom" scroll-y>
     <view class="grid grid-cols-2 gap-1 p-1 box-border">
       <view v-for="goods in goodsList" :key="goods.id" @click="toDetail">
-        <Goods v-bind="goods"  />
+        <Goods v-bind="goods" />
       </view>
     </view>
   </scroll-view>
@@ -10,16 +10,18 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
-import Goods, { type GoodsPropsTypes } from '@/components/Goods.vue';
+import Goods from '@/components/Goods.vue';
 import goods from '@/api/goods';
+import type { GoodsTypes } from 'types/server';
 
-const goodsList = ref<GoodsPropsTypes[]>([])
+const goodsList = ref<GoodsTypes[]>([])
 
 const page = ref(1)
 const isFetch = ref(false)
 async function getGoodsList() {
   const res = await goods.goodsList
     .post({ page: page.value })
+
   if (isFetch.value) {
     // 如果没数据则回滚页数
     if (!res.data.length) {

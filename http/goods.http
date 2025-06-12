@@ -1,14 +1,14 @@
 @baseUrl = http://localhost:7200/api/goods
 
-# 创建商品
+### 创建商品
 POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "name": "小米鱼缸",
+  "name": "【旗舰店】摩可纳咖啡美式静电速溶冻干粉黑咖啡100g+拿铁嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻",
   "price": 42.99,
-  "pictureUrl": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-  "shopId":"6820a8626a5dcca93c98bc21"
+  "pictureUrl": "https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80",
+  "shopId":"684a861ffd173eae470c4f1b"
 }
 
 ### 获取所有商品
@@ -19,20 +19,19 @@ POST {{baseUrl}}/list
 Content-Type: application/json
 
 {
-  "page": 10,
+  "page": 1,
   "limit":10
 }
 
 ### 获取单个商品
-GET {{baseUrl}}/6821f2f95abb5505df62252d
+GET {{baseUrl}}/68491a1e28e4aebec24032c4
 
 ### 更新商品
-PUT {{baseUrl}}/68205a6635afe21b74784ced
+PUT {{baseUrl}}/684a862afd173eae470c4f1d
 Content-Type: application/json
 
 {
-  "name": "更新后的商品名称",
-  "description": "更新后的商品描述"
+  "name": "【摩可纳】咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊"
 }
 
 ### 删除商品

@@ -1,14 +1,22 @@
 import { Request, Response, Router } from "express";
 import { Aggregate, Document, Model, PipelineStage } from "mongoose";
 
-export const createOne = <T>(Model: Model<T>) => {
+export const createOne = <T>(
+  Model: Model<T>,
+  _createOne?: generateRoutesConfigTypes["createOne"]
+) => {
   return async (req: Request, res: Response) => {
     try {
-      const doc = await Model.create(req.body);
+      let doc;
+      if (_createOne) {
+        doc = await _createOne(req);
+      } else {
+        doc = await Model.create(req.body);
+      }
       res.status(201).json(doc);
     } catch (error: any) {
       console.error(error);
-      res.status(400).json({ message: "创建商品失败", error: error.message });
+      res.status(400).json({ message: "创建失败", error: error.message });
     }
   };
 };
@@ -110,7 +118,8 @@ export const deleteOne = <T>(Model: Model<T>) => {
 
 // post 分页列表
 export interface postListOptions {
-  $lookup: PipelineStage.Lookup["$lookup"];
+  $match?: (req: Request) => PipelineStage.Match["$match"];
+  $lookup?: PipelineStage.Lookup["$lookup"];
   $addFields?: PipelineStage.AddFields["$addFields"];
 }
 export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
@@ -120,6 +129,14 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
       const page = body.page || 1;
       const limit = body.limit || 10;
       const skip = (page - 1) * limit;
+
+      const pipeline: PipelineStage[] = [];
+
+      // 过滤条件
+      if (options?.$match) {
+        let $match = options?.$match(req);
+        pipeline.push({ $match: $match });
+      }
 
       // 生成关于连表的配置
       let $lookupOps: Array<PipelineStage.Lookup | PipelineStage.AddFields> =
@@ -141,15 +158,20 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
         });
       }
 
+      // 生成虚拟字段
       let $addFieldsOps: Array<PipelineStage.AddFields> = [];
       if (options?.$addFields) {
         $addFieldsOps.push({
-          $addFields: options.$addFields,
+          $addFields: {
+            ...options.$addFields,
+            id: "$_id", //默认带id过去
+          },
         });
       }
 
       // aggregate是直接操作数据库的 速度会快很多
       const docsArray = await Model.aggregate([
+        ...pipeline,
         {
           $facet: {
             data: [
@@ -211,14 +233,28 @@ type generateRoutesConfigTypes = {
   getOne?: {
     (req: Request): Promise<Object | null>;
   };
+  /**
+   * 通道分页查询，增加配置
+   */
   postList?: postListOptions;
+  /**
+   * 重写创建单个
+   * post /
+   */
+  createOne?: {
+    (req: Request): Promise<Object | null>;
+  };
 };
+
+/*
+  自动生成curd 分页列表
+*/
 export const generateRoutes = <T>(
   router: Router,
   Model: Model<T>,
   config?: generateRoutesConfigTypes
 ) => {
-  router.post("/", createOne(Model));
+  router.post("/", createOne(Model, config?.createOne));
   router.get("/", getAll(Model, config?.getAll));
   router.get("/:id", getOne(Model, config?.getOne));
   router.put("/:id", updateOne(Model));

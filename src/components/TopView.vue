@@ -11,6 +11,7 @@
 
 <script setup lang='ts'>
 import { useSafeDistanceStore } from '@/stores/safeDistance';
+import { back } from '@/utils';
 import { onPageScroll } from '@dcloudio/uni-app';
 import { computed, onMounted, onUnmounted, ref, type CSSProperties } from 'vue';
 
@@ -35,17 +36,6 @@ const cpHeader = computed<CSSProperties>(() => {
 const pageScroll = (e: any) => {
   scrollTop.value = e.scrollTop;
 };
-
-function back() {
-  const pages = getCurrentPages();
-  if (pages.length > 1) {
-    uni.navigateBack();
-  } else {
-    uni.switchTab({
-      url: '/pages/index/index'
-    });
-  }
-}
 
 //todo 根据滚动条改变颜色
 onMounted(() => {

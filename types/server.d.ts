@@ -1,0 +1,50 @@
+import { ObjectId } from "mongoose";
+
+// 分页参数
+
+// 店铺
+export interface ShopTypes {
+  id: any; //主键
+  name: string; //店铺名字
+  pictureUrl: string; //店铺图片
+}
+
+// 商品属性
+interface GoodsAttrs {
+  shippingFee: boolean; // 是否包运费
+  noReason7d: boolean; //7天无理由
+  useFirst: boolean; //先用后付
+}
+
+// 商品
+export interface GoodsTypes extends GoodsAttrs {
+  id: any; //主键
+  name: string; //商品名称
+  price: number; //商品价格
+  pictureUrl: string; //商品图片
+  shopId: ObjectId | any; //商品所属店铺
+  createdAt: string; //创建时间
+  updatedAt: string; //更新时间
+  sales_str: string; //价格描述 拼接的字段 例如：¥10.00 券后¥9.00 总售100件
+  price_type: 0 | 1; //0无 1券后
+  sales_type: 0 | 1; //0无 1总售
+  shopDetail?: ShopTypes;
+}
+
+export interface OrderTypes extends GoodsAttrs {
+  id: ObjectId | string; //主键
+  shopId: ObjectId | string; //订单id
+  goodsId: ObjectId | string; //商品id
+  createdAt: string; //创建时间
+  updatedAt: string; //更新时间
+  shopName: string; //店铺名称
+  shopImgUrl: string; //店铺图片
+  goodsName: string; //商品名称
+  goodsSkuStr: string; //商品sku字符串
+  goodsUnitPrice: number; //单价
+  goodsNumber: number; //商品数量
+  goodsTotalPrice: number; //总价
+  goodsImgUrl: string; //商品图片
+  status: 10 | 20 | 30 | 40 | 50; //状态 10待付款 20拼团中 30 打包中 40待收货 50已完成
+  statusName: "待付款" | "拼团中" | "打包中" | "待收货" | "已完成";
+}

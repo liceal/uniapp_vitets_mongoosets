@@ -1,10 +1,7 @@
 import moment from "moment";
 import mongoose, { SchemaTimestampsConfig } from "mongoose";
+import type { ShopTypes } from "types/server";
 
-type ShopTypes = {
-  name: string; //店铺名字
-  pictureUrl: string; //店铺图片
-};
 type ShopDocument = mongoose.Document & ShopTypes & SchemaTimestampsConfig;
 
 const shopSchema = new mongoose.Schema<ShopDocument>(
@@ -33,7 +30,7 @@ const shopSchema = new mongoose.Schema<ShopDocument>(
     timestamps: true,
     toJSON: { getters: true },
     toObject: { getters: true },
-    id: false,
+    id: true,
   }
 );
 

@@ -5,18 +5,7 @@
 import { MySchema } from "#/utils/mySchema";
 import moment from "moment";
 import mongoose, { SchemaTimestampsConfig } from "mongoose";
-
-export type GoodsTypes = {
-  name: string; //商品名称
-  price: number; //商品价格
-  pictureUrl: string; //商品图片
-  shopId: mongoose.Schema.Types.ObjectId; //商品所属店铺
-  createdAt: string; //创建时间
-  updatedAt: string; //更新时间
-  sales_str: string; //价格描述 拼接的字段 例如：¥10.00 券后¥9.00 总售100件
-  price_type: 0 | 1; //0无 1券后
-  sales_type: 0 | 1; //0无 1总售
-};
+import type { GoodsTypes } from "types/server";
 
 type GoodsDocument = mongoose.Document & GoodsTypes & SchemaTimestampsConfig;
 
@@ -34,6 +23,9 @@ const goodsSchema = new MySchema<GoodsDocument>(
       required: true,
       index: true,
     },
+    shippingFee: { type: Boolean, default: true },
+    noReason7d: { type: Boolean, default: true },
+    useFirst: { type: Boolean, default: true },
   },
   {
     softDelete: true,

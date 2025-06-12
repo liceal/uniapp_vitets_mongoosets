@@ -5,7 +5,7 @@
         <view class="absolute w-full text-center left-0">
           我的订单
         </view>
-        <u-icon name="arrow-left" />
+        <u-icon name="arrow-left" @click="back" />
         <u-icon name="search" />
       </view>
       <view>
@@ -16,10 +16,10 @@
     <template #body>
       <swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="h-full">
         <swiper-item v-for="(item, index) in 6" :key="index">
-          <scroll-view scroll-y class="h-full">
+          <scroll-view scroll-y class="h-full" @scrolltolower="lowerBottom">
             <view class="bg-gray-1 flex flex-col gap-1">
-              <view v-for="i in 20" :key="i" class="bg-white">
-                <Item />
+              <view v-for="i in orderList" :key="i.id as any" class="bg-white">
+                <Item v-bind="i" />
               </view>
             </view>
           </scroll-view>
@@ -31,8 +31,11 @@
 
 <script setup lang='ts'>
 import Layout from '@/components/layout/index.vue'
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Item from './item.vue'
+import { back } from '@/utils';
+import order from '@/api/order';
+import type { OrderTypes } from 'types/server';
 
 const list = ref([
   { name: '全部' },
@@ -61,6 +64,39 @@ function animationfinish(e: any) {
   swiperCurrent.value = current;
   current.value = current;
 }
+
+const orderList = ref<OrderTypes[]>([])
+const page = ref(1)
+const isFetch = ref(false)
+async function getOrderList() {
+
+  const res = await order.orderList
+    .post({ limit: 3, page: page.value })
+  if (isFetch.value) {
+    // 如果没数据则回滚页数
+    if (!res.data.length) {
+      page.value--;
+      return;
+    }
+    orderList.value = [...orderList.value, ...res.data]
+    return;
+  }
+  orderList.value = res.data
+}
+
+async function lowerBottom(e: any) {
+  console.log('到底了', e)
+  if (!isFetch.value) {
+    page.value++
+    isFetch.value = true
+    await getOrderList()
+    isFetch.value = false
+  }
+}
+
+onMounted(() => {
+  getOrderList()
+})
 
 
 </script>

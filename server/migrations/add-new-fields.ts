@@ -6,6 +6,7 @@
 import mongoose from "mongoose";
 import { Goods } from "#/models/goods";
 import dotenv from "dotenv";
+import { Order } from "#/models/order";
 
 dotenv.config();
 
@@ -74,4 +75,30 @@ async function runMigration() {
   }
 }
 
-runMigration();
+// runMigration();
+
+async function test() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URL as string);
+    const result = await Order.bulkWrite([
+      {
+        updateMany: {
+          filter: {
+            $or: [{ status: { $exists: false } }],
+          },
+          update: {
+            $set: {
+              status: 10,
+            },
+          },
+        },
+      },
+    ]);
+    console.log(`${result.modifiedCount} documents updated.`);
+    mongoose.connection.close();
+  } catch (error) {
+    console.error("Migration failed:", error);
+  }
+}
+
+test();
