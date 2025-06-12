@@ -1,5 +1,5 @@
 <template>
-  <Layout @bodyScrollToLower="bodyScrollToLower">
+  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar>
     <template #body>
 
       <!-- 登录 用户 -->
@@ -9,7 +9,8 @@
 
       <!-- 订单 -->
       <view class="grid grid-cols-3 gap-2 border-top-ef p-2">
-        <view v-for="(item, k) in orderItems" :key="k" class="flex flex-col justify-center items-center h-[5rem] gap-2">
+        <view v-for="(item, k) in orderItems" :key="k" class="flex flex-col justify-center items-center h-[5rem] gap-2"
+          @click="() => toOrder(item)">
           <!-- <u-icon name="order" size="60" />
           <uni-icons type="contact" size="30"></uni-icons> -->
           <text class="iconfont !text-[2rem]" :class="item.icon" />
@@ -119,6 +120,13 @@ const handleItems = ref([
     label: "设置"
   },
 ])
+
+function toOrder(item: { icon: string, label: string }) {
+  console.log(item)
+  uni.navigateTo({
+    url: '/pages/order/index'
+  })
+}
 </script>
 
 <style scoped></style>

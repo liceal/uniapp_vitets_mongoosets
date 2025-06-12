@@ -1,13 +1,13 @@
 <!-- 包含头中低的布局 -->
 <template>
   <view class="layout-container" :style="cpHeader">
-    <view :class="{ 'bg-white': !props.topTransparent }">
+    <view>
       <slot name="header" />
     </view>
     <scroll-view @scrolltolower="onScrolltolower" scroll-y class="layout-body">
       <slot name="body" />
     </scroll-view>
-    <view class="layout-footer" v-if="!props.hideTabbar">
+    <view class="layout-footer" v-if="props.showTabbar">
       <LTabBar />
     </view>
   </view>
@@ -26,14 +26,11 @@ function onScrolltolower(e: any) {
 }
 
 const props = defineProps({
-  hideTabbar: {
+  // 显示底部tabbar
+  showTabbar: {
     type: Boolean,
     default: false
   },
-  topTransparent: {
-    type: Boolean,
-    default: false
-  }
 })
 
 const safeDistanceStore = useSafeDistanceStore();

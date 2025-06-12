@@ -8,7 +8,7 @@
     <l-tabbar />
   </SafeView> -->
   <!-- </view> -->
-  <Layout @bodyScrollToLower="bodyScrollToLower">
+  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar>
     <template #header>
       <Search />
     </template>
