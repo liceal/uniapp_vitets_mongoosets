@@ -31,6 +31,8 @@ export interface GoodsTypes extends GoodsAttrs {
   shopDetail?: ShopTypes;
 }
 
+// 状态枚举 1全部 10拼团中 20打包中 30待收获 40已完成
+type OrderStatus = 1 | 10 | 20 | 30 | 40 | 50;
 export interface OrderTypes extends GoodsAttrs {
   id: any | ObjectId; //主键
   shopId: any | ObjectId; //订单id
@@ -45,6 +47,6 @@ export interface OrderTypes extends GoodsAttrs {
   goodsNumber: number; //商品数量
   goodsTotalPrice: number; //总价
   goodsImgUrl: string; //商品图片
-  status: 10 | 20 | 30 | 40 | 50; //状态 10待付款 20拼团中 30 打包中 40待收货 50已完成
+  status: OrderStatus; //状态
   statusName: "待付款" | "拼团中" | "打包中" | "待收货" | "已完成";
 }

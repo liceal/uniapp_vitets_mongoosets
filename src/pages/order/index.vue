@@ -15,14 +15,22 @@
     </template>
     <template #body>
       <swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="h-full">
-        <swiper-item v-for="(item, index) in 6" :key="index">
+        <swiper-item v-for="(item, k) in orderItems" :key="k">
           <scroll-view scroll-y class="h-full" @scrolltolower="lowerBottom">
             <view class="bg-gray-1 flex flex-col gap-1">
-              <view v-for="i in orderList" :key="i.id as any" class="bg-white">
-                <Item v-bind="i" />
+              <view v-for="i in item" :key="i.id as any" class="bg-white">
+                <OrderItem v-bind="i" />
               </view>
             </view>
+            <u-divider v-if="isFetch">
+              <view class="flex items-center gap-1">
+                加载中<u-loading mode="circle" size="20" />
+              </view>
+            </u-divider>
           </scroll-view>
+        </swiper-item>
+        <swiper-item>
+          评价
         </swiper-item>
       </swiper>
     </template>
@@ -32,10 +40,10 @@
 <script setup lang='ts'>
 import Layout from '@/components/layout/index.vue'
 import { onMounted, ref } from 'vue';
-import Item from './item.vue'
+import OrderItem from './orderItem.vue'
 import { back } from '@/utils';
 import order from '@/api/order';
-import type { OrderTypes } from 'types/server';
+import type { OrderStatus, OrderTypes } from 'types/server';
 
 const list = ref([
   { name: '全部' },
@@ -45,6 +53,19 @@ const list = ref([
   { name: '待收货' },
   { name: '评价' }
 ])
+
+// swiper每个对应的状态
+const swiperIndexToStatus: Record<number, OrderStatus> = [1, 10, 20, 30, 40]
+
+// 订单分类
+const orderItems = ref<Partial<Record<OrderStatus, OrderTypes[]>>>({
+  1: [],
+  10: [],
+  20: [],
+  30: [],
+  40: []
+})
+
 const current = ref(0)
 const swiperCurrent = ref(0)
 const tabsSwiper = ref()
@@ -59,29 +80,31 @@ function transition(e: any) {
 // 由于swiper的内部机制问题，快速切换swiper不会触发dx的连续变化，需要在结束时重置状态
 // swiper滑动结束，分别设置tabs和swiper的状态
 function animationfinish(e: any) {
-  let current = e.detail.current;
-  tabsSwiper.value.setFinishCurrent(current);
-  swiperCurrent.value = current;
-  current.value = current;
+  let _current = e.detail.current;
+  tabsSwiper.value.setFinishCurrent(_current);
+  swiperCurrent.value = _current;
+  current.value = _current;
 }
 
-const orderList = ref<OrderTypes[]>([])
+// 订单列表
+// const orderList = ref<OrderTypes[]>([])
 const page = ref(1)
 const isFetch = ref(false)
-async function getOrderList() {
-
+const nowStatus = ref<OrderStatus>(swiperIndexToStatus[swiperCurrent.value])
+async function getOrderList(_status: OrderStatus) {
   const res = await order.orderList
-    .post({ limit: 3, page: page.value })
+    .post({ limit: 3, page: page.value, status: _status })
   if (isFetch.value) {
     // 如果没数据则回滚页数
     if (!res.data.length) {
       page.value--;
       return;
     }
-    orderList.value = [...orderList.value, ...res.data]
+
+    orderItems.value[_status] = [...orderItems.value[_status] || [], ...res.data]
     return;
   }
-  orderList.value = res.data
+  orderItems.value[_status] = res.data
 }
 
 async function lowerBottom(e: any) {
@@ -89,13 +112,18 @@ async function lowerBottom(e: any) {
   if (!isFetch.value) {
     page.value++
     isFetch.value = true
-    await getOrderList()
+    await getOrderList(nowStatus.value)
     isFetch.value = false
   }
 }
 
 onMounted(() => {
-  getOrderList()
+  // 首次请求所有类型的
+  getOrderList(1)
+  getOrderList(10)
+  getOrderList(20)
+  getOrderList(30)
+  getOrderList(40)
 })
 
 

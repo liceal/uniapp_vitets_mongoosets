@@ -47,8 +47,8 @@ const curdRouter = generateRoutes(router, Order, {
   createOne: createOrder,
   postList: {
     $match: (req) => {
-      let { status } = req.body;
-      if (!status || status === -1) {
+      let { status } = req.body as OrderTypes;
+      if (!status || status === 1) {
         return {};
       }
       return {

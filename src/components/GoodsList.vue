@@ -5,6 +5,11 @@
         <Goods v-bind="goods" />
       </view>
     </view>
+    <u-divider v-if="isFetch">
+      <view class="flex items-center gap-1">
+        加载中<u-loading mode="circle" size="20" />
+      </view>
+    </u-divider>
   </scroll-view>
 </template>
 

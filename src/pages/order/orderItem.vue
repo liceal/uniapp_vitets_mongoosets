@@ -2,7 +2,7 @@
   <view class="py-1">
     <!-- 商家 -->
     <view class="flex justify-between items-center px-1">
-      <view class="flex gap-1">
+      <view class="flex gap-1 items-center">
         <u-image mode="aspectFill" :src="props.shopImgUrl" height="1.5rem" width="1.5rem" />
         <text>{{ props.shopName }}</text>
         <u-icon name="arrow-right" class="text-gray-4" />
