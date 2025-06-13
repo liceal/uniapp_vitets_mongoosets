@@ -46,6 +46,7 @@ const cpHeader = computed<CSSProperties>(() => {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  box-sizing: border-box;
 
   .layout-header {
     background-color: white;
@@ -57,7 +58,7 @@ const cpHeader = computed<CSSProperties>(() => {
   }
 
   .layout-footer {
-    height: 50px;
+    height: calc(50px + var(safe-area-inset-bottom));
   }
 }
 </style>
