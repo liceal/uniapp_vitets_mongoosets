@@ -4,7 +4,7 @@ import { ObjectId } from "mongoose";
 
 // 店铺
 export interface ShopTypes {
-  id: any; //主键
+  id: any | ObjectId; //主键
   name: string; //店铺名字
   pictureUrl: string; //店铺图片
 }
@@ -18,7 +18,7 @@ interface GoodsAttrs {
 
 // 商品
 export interface GoodsTypes extends GoodsAttrs {
-  id: any; //主键
+  id: any | ObjectId; //主键
   name: string; //商品名称
   price: number; //商品价格
   pictureUrl: string; //商品图片
@@ -32,9 +32,9 @@ export interface GoodsTypes extends GoodsAttrs {
 }
 
 export interface OrderTypes extends GoodsAttrs {
-  id: ObjectId | string; //主键
-  shopId: ObjectId | string; //订单id
-  goodsId: ObjectId | string; //商品id
+  id: any | ObjectId; //主键
+  shopId: any | ObjectId; //订单id
+  goodsId: any | ObjectId; //商品id
   createdAt: string; //创建时间
   updatedAt: string; //更新时间
   shopName: string; //店铺名称
