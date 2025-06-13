@@ -4,7 +4,9 @@ import { presetUni } from "@uni-helper/unocss-preset-uni";
 
 export default defineConfig({
   presets: [
-    presetUni(),
+    presetUni({
+      attributify: false,
+    }),
     presetWind3() as any, // 核心预设
   ],
   transformers: [
