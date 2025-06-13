@@ -66,8 +66,8 @@
         <view>
           <view v-for="item in 2" :key="item" class="px-1 py-2">
             <view class="flex items-center gap-x-1">
-              <image class="h-[2rem] w-[2rem] rounded-[50%]"
-                src="https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x" />
+              <u-avatar size="60"
+                src="https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x"></u-avatar>
               <text>
                 张三
               </text>
