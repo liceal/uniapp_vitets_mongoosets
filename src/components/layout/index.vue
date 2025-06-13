@@ -58,7 +58,11 @@ const cpHeader = computed<CSSProperties>(() => {
   }
 
   .layout-footer {
+    // #ifdef WEB
+    height: calc(50px);
+    // #else
     height: calc(50px + var(safe-area-inset-bottom));
+    // #endif
   }
 }
 </style>
