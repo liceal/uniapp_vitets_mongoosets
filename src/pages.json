@@ -35,6 +35,13 @@
         "navigationBarTitleText": "订单",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/setting/index",
+      "style": {
+        "navigationBarTitleText": "设置"
+        // "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {
@@ -66,5 +73,9 @@
     "custom": {
       "^u-(.*)": "vk-uview-ui/components/u-$1/u-$1.vue"
     }
+  },
+  "usingComponents": {
+    "login": "components/Login/index",
+    "userLogin": "components/Login/userLogin.vue"
   }
 }

@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-
-type UserTypes = {
-  username: string;
-  password: string;
-  email: string;
-};
+import type { UserTypes } from "types/server";
 
 type UserMethodsTypes = {
   generateAuthToken: () => string;
@@ -17,6 +12,7 @@ const userSchema = new mongoose.Schema<UserDocument>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  avatar: { type: String, required: true },
 });
 
 // 生成token方法

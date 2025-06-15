@@ -50,3 +50,31 @@ export interface OrderTypes extends GoodsAttrs {
   status: OrderStatus; //状态
   statusName: "待付款" | "拼团中" | "打包中" | "待收货" | "已完成";
 }
+
+// 用户
+export interface UserTypes {
+  username: string;
+  password: string;
+  email: string;
+  avatar: string;
+}
+
+// 创建验证码 返回
+export interface CaptchaCacheTypes {
+  captchaKey: string;
+  captchaBase64: string;
+}
+
+// 登录参数
+export interface UserLoginReqTypes {
+  username: string;
+  password: string;
+  captchaKey: string;
+  captchaText: string;
+}
+
+export interface UserLoginResTypes {
+  message: string;
+  data?: UserTypes;
+  token?: string;
+}

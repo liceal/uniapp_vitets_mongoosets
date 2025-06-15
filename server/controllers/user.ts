@@ -4,6 +4,11 @@ import svgCaptcha from "svg-captcha";
 import NodeCache from "node-cache";
 import { Captcha } from "#/models/captcha";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import type {
+  CaptchaCacheTypes,
+  UserLoginReqTypes,
+  UserLoginResTypes,
+} from "types/server";
 
 const create = async (req: Request, res: Response) => {
   try {
@@ -15,42 +20,37 @@ const create = async (req: Request, res: Response) => {
 };
 
 // 登录
-type LoginBodyTypes = {
-  username: string; // 用户名
-  password: string; // 密码
-  captchaKey: string; // 验证码的唯一码，用于验证
-  captchaText: string; // 验证码的文本
-};
 const login = async (req: Request, res: Response) => {
   try {
     // res.status(200).json({ message: "登录成功" });
     const { username, password, captchaKey, captchaText } =
-      req.body as LoginBodyTypes;
+      req.body as UserLoginReqTypes;
 
     // 验证验证码是否正确 验证缓存的
-    // const cachedCaptcha = captchaCache.get<catpchaCacheData>(captchaKey); // 从缓存中获取验证码
-    // if (!cachedCaptcha) {
-    //   res.status(400).json({ message: "验证码已过期" }); // 验证码过期
-    //   return;
-    // }
-    // if (cachedCaptcha.captchaText !== captchaText) {
-    //   res.status(400).json({ message: "验证码错误" }); // 验证码错误
-    //   return;
-    // }
-    // 验证成功 验证码删除
-    // captchaCache.del(captchaKey);
-
-    // 验证验证码是否正确
-    const captche = await Captcha.findById(captchaKey); // 从数据库中获取验证码
-    if (!captche) {
+    const cachedCaptcha = captchaCache.get<catpchaCacheData>(captchaKey); // 从缓存中获取验证码
+    if (!cachedCaptcha) {
       res.status(400).json({ message: "验证码已过期" }); // 验证码过期
       return;
     }
-    if (captche.code !== captchaText) {
-      // 验证码错误
+    if (
+      cachedCaptcha.captchaText.toLocaleLowerCase() !==
+      captchaText.toLocaleLowerCase()
+    ) {
       res.status(400).json({ message: "验证码错误" }); // 验证码错误
       return;
     }
+
+    // // 验证验证码是否正确
+    // const captche = await Captcha.findById(captchaKey); // 从数据库中获取验证码
+    // if (!captche) {
+    //   res.status(400).json({ message: "验证码已过期" }); // 验证码过期
+    //   return;
+    // }
+    // if (captche.code !== captchaText) {
+    //   // 验证码错误
+    //   res.status(400).json({ message: "验证码错误" }); // 验证码错误
+    //   return;
+    // }
 
     // 验证用户名和密码是否正确
     const user = await User.findOne({ username, password }); // 查找用户
@@ -58,6 +58,9 @@ const login = async (req: Request, res: Response) => {
       res.status(400).json({ message: "用户名或密码错误" }); // 用户不存在或密码错误
       return;
     }
+
+    // 验证成功 验证码删除
+    captchaCache.del(captchaKey);
 
     // 生成token
     const token = user.generateAuthToken(); // 生成token
@@ -68,7 +71,7 @@ const login = async (req: Request, res: Response) => {
       message: "登录成功",
       data: user,
       token,
-    });
+    } as UserLoginResTypes);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
@@ -98,10 +101,17 @@ const captcha_cache = async (req: Request, res: Response) => {
 
     // 设置响应头
     // res.setHeader("Content-Type", "image/svg+xml");
+    const encoded = Buffer.from(
+      unescape(encodeURIComponent(captcha.data)),
+      "binary"
+    ).toString("base64");
+    const captchaBase64 = `data:image/svg+xml;base64,${encoded}`;
+    console.log();
     res.status(200).json({
       captchaKey, // 验证码的唯一码，用于验证
-      captchaSvg: captcha.data, // 验证码的图片
-    });
+      // captchaSvg: captcha.data, // 验证码的图片
+      captchaBase64,
+    } as CaptchaCacheTypes);
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ error: "获取验证码失败" });
@@ -134,7 +144,8 @@ export const protect = async (
   try {
     let token = req.headers.authorization;
     if (!token) {
-      return res.status(401).json({ message: "未提供token，请先登录" });
+      res.status(401).json({ message: "未提供token，请先登录" });
+      return;
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload &
       jwtMsg;
@@ -148,7 +159,8 @@ export const protect = async (
       } else {
         const user = await User.findById(decoded.userId);
         if (!user) {
-          return res.status(401).json({ message: "token找不到用户" });
+          res.status(401).json({ message: "token找不到用户" });
+          return;
         }
         req.user = user;
         next();
@@ -156,10 +168,12 @@ export const protect = async (
     }
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
-      return res.status(401).json({ message: "token已过期，请重写登录" });
+      res.status(401).json({ message: "token已过期，请重写登录" });
+      return;
     }
-    return res.status(401).json({ message: "token校验失败" });
+    res.status(401).json({ message: "token校验失败" });
+    return;
   }
 };
 
-export default { create, captcha_cache, login, captchaList_chache };
+export default { create, captcha_cache, login, captchaList_chache, protect };

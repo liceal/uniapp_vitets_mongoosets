@@ -1,16 +1,25 @@
 <template>
-  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar>
+  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar ref="layoutRef">
     <template #body>
 
       <!-- 登录 用户 -->
-      <view class="p-2">
-        <u-button type="primary">登录</u-button>
-      </view>
+      <template v-if="userInfo.username">
+        <view class="bg-white p-2 flex items-center gap-2">
+          <u-avatar :src="userInfo.avatar" size="80" />
+          用户：{{ userInfo.username }}
+        </view>
+      </template>
+      <template v-else>
+        <view class="p-2 bg-white">
+          <u-button type="primary" @click="loginClick">登录</u-button>
+        </view>
+        <LoginPopup ref="loginPopupRef" />
+      </template>
 
       <!-- 订单 -->
-      <view class="grid grid-cols-3 gap-2 border-top-ef p-2">
+      <view class="grid grid-cols-3 gap-2 p-2 mt-2 bg-white">
         <view v-for="(item, k) in orderItems" :key="k" class="flex flex-col justify-center items-center h-[5rem] gap-2"
-          @click="() => toOrder(item)">
+          @click="() => toOrder(item, k)">
           <!-- <u-icon name="order" size="60" />
           <uni-icons type="contact" size="30"></uni-icons> -->
           <text class="iconfont !text-[2rem]" :class="item.icon" />
@@ -19,7 +28,7 @@
       </view>
 
       <!-- 商品 -->
-      <view class="grid grid-cols-3 gap-2 border-top-ef p-2">
+      <view class="grid grid-cols-3 gap-2 p-2 mt-2 bg-white">
         <view v-for="(item, k) in goodsItems" :key="k" class="flex flex-col justify-center items-center h-[5rem] gap-2">
           <!-- <u-icon name="coupon-fill" size="60" class="text-red-6" /> -->
           <text class="iconfont !text-[2rem]" :class="item.icon" />
@@ -28,8 +37,9 @@
       </view>
 
       <!-- 功能 -->
-      <view class="grid grid-cols-3 gap-2 border-top-ef p-2">
-        <view v-for="(item, k) in handleItems" :key="k" class="flex flex-col justify-center items-center h-[5rem]">
+      <view class="grid grid-cols-3 gap-2 p-2 mt-2 bg-white">
+        <view v-for="(item, k) in handleItems" :key="k" class="flex flex-col justify-center items-center h-[5rem]"
+          @click="item.click">
           <!-- <u-icon name="map" size="60" class="text-orange-4" /> -->
           <text class="iconfont !text-[2rem] text-orange-4" :class="item.icon" />
           <text>{{ item.label }}</text>
@@ -37,9 +47,13 @@
       </view>
 
       <!-- 推荐商品 -->
-      <view class="border-top-ef">
+      <view class="mt-2 bg-white">
         <GoodsList ref="goodsListRef" />
       </view>
+    </template>
+
+    <template #popup>
+      <Login @loginSuccess="loginSuccess" />
     </template>
   </Layout>
 </template>
@@ -47,10 +61,17 @@
 <script setup lang="ts">
 import Layout from '@/components/layout/index.vue'
 import GoodsList from '@/components/GoodsList.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { iconLoaded } from '@iconify/vue';
+import Login from '@/components/Login/index.vue'
+import { useUserStore } from '@/stores';
+import type { UserTypes } from 'types/server';
 
+const layoutRef = ref<InstanceType<typeof Layout>>()
 const goodsListRef = ref<InstanceType<typeof GoodsList>>()
+const userStore = useUserStore()
+
+
 function bodyScrollToLower(e: any) {
   console.log('mine到底了', e)
   goodsListRef.value?.lowerBottom(e)
@@ -59,27 +80,27 @@ function bodyScrollToLower(e: any) {
 const orderItems = ref([
   {
     icon: "icon-order",
-    label: '全部订单'
+    label: '全部订单',
   },
   {
     icon: "icon-pay",
-    label: '待付款'
+    label: '待付款',
   },
   {
     icon: "icon-share1",
-    label: '拼团中'
+    label: '拼团中',
   },
   {
     icon: "icon-time",
-    label: '打包中'
+    label: '打包中',
   },
   {
     icon: "icon-31daishouhuo",
-    label: '待收货'
+    label: '待收货',
   },
   {
     icon: "icon-pingjia",
-    label: '评价'
+    label: '评价',
   },
 ])
 
@@ -109,24 +130,43 @@ const goodsItems = ref([
 const handleItems = ref([
   {
     icon: 'icon-shouhuodizhi',
-    label: "收货地址"
+    label: "收货地址",
+    click: () => { }
   },
   {
     icon: 'icon-guanfangkefu',
-    label: "官方客服"
+    label: "官方客服",
+    click: () => { }
   },
   {
     icon: 'icon-shezhi',
-    label: "设置"
+    label: "设置",
+    click: () => {
+      uni.navigateTo({
+        url: '/pages/setting/index'
+      })
+    }
   },
 ])
 
-function toOrder(item: { icon: string, label: string }) {
-  console.log(item)
+const userInfo = computed<UserTypes>(() => {
+  return userStore.userInfo
+})
+
+function toOrder(item: any, index: number) {
   uni.navigateTo({
-    url: '/pages/order/index'
+    url: `/pages/order/index?type=${index}`
   })
 }
+
+function loginClick() {
+  layoutRef.value?.openPopup()
+}
+
+function loginSuccess() {
+  layoutRef.value?.closePopup()
+}
+
 </script>
 
 <style scoped></style>

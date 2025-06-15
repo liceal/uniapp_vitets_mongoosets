@@ -1,4 +1,7 @@
-import axios from "axios"; // InternalAxiosRequestConfig, // AxiosError, // AxiosResponse,
+import axios, {
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from "axios"; // InternalAxiosRequestConfig, // AxiosError, // AxiosResponse,
 import { UniAdapter } from "uniapp-axios-adapter";
 
 var baseURL;
@@ -23,7 +26,9 @@ const http = axios.create({
 
 // 请求拦截器
 http.interceptors.request.use(
-  (config: any) => {
+  (config: InternalAxiosRequestConfig) => {
+    config.headers["Content-Type"] = "application/json; charset=utf-8";
+
     // 可以在这里添加token等
     return config;
   },
@@ -35,7 +40,22 @@ http.interceptors.request.use(
 
 // 响应拦截器
 http.interceptors.response.use(
-  (response: any) => {
+  (response: AxiosResponse) => {
+    // console.log("http", response);
+    if (response.status === 400) {
+      uni.showModal({
+        title: "请求错误",
+        content: response.data.message,
+        showCancel: false,
+        confirmText: "确定",
+        success: (res) => {
+          if (res.confirm) {
+            console.log("用户点击确定");
+          }
+        },
+      });
+      return Promise.reject(response);
+    }
     return response.data;
   },
   (error: any) => {

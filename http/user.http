@@ -5,9 +5,10 @@ POST {{baseUrl}}/create
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "email":"admin@qq.com",
-  "password": "123456"
+  "username": "zs",
+  "email":"zs@qq.com",
+  "password": "123456",
+  "avatar":"https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80"
 }
 
 ### 登录
@@ -17,8 +18,8 @@ Content-Type: application/json
 {
   "username": "admin",
   "password": "123456",
-  "captchaKey":"682035e9480ccc68f5492767",
-  "captchaText": "CNBx"
+  "captchaKey":"1749968524391",
+  "captchaText": "goss"
 }
 
 ### 创建验证码
@@ -27,8 +28,12 @@ GET {{baseUrl}}/captcha
 ### 获取验证码列表
 GET {{baseUrl}}/captcha/list
 
-### 创建验证码
+### 创建验证码 token方式 放在缓存里
 GET {{baseUrl}}/captcha_cache
 
 ### 获取验证码列表
 GET {{baseUrl}}/captcha_cache/list
+
+### 验证是否登录
+GET {{baseUrl}}/validate
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODRlM2ZlNzliMWIzN2Y4M2Q3YmJhNmYiLCJpYXQiOjE3NDk5NTk2MDQsImV4cCI6MTc1MjU1MTYwNH0.HUnH715J5LASHPvw9jVF6VCh9x_7i9uYBPzjMjyrnuE

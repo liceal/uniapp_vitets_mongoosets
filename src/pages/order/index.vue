@@ -44,6 +44,7 @@ import OrderItem from './orderItem.vue'
 import { back } from '@/utils';
 import order from '@/api/order';
 import type { OrderStatus, OrderTypes } from 'types/server';
+import { onLoad } from '@dcloudio/uni-app';
 
 const list = ref([
   { name: '全部' },
@@ -74,6 +75,8 @@ function tabsChange(index: number) {
 }
 // swiper-item左右移动，通知tabs的滑块跟随移动
 function transition(e: any) {
+  console.log(e);
+
   let dx = e.detail.dx;
   tabsSwiper.value.setDx(dx);
 }
@@ -126,6 +129,14 @@ onMounted(() => {
   getOrderList(40)
 })
 
+onLoad((options) => {
+  console.log(options);
+  if (options?.type) {
+    current.value = options.type
+    swiperCurrent.value = current.value
+    nowStatus.value = swiperIndexToStatus[options.type]
+  }
+})
 
 </script>
 

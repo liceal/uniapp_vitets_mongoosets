@@ -13,4 +13,8 @@ router.get("/captcha_cache/list", UserControlles.captchaList_chache);
 router.get("/captcha", CaptchaControlles.createCaptcha);
 router.get("/captcha/list", CaptchaControlles.captchaList);
 
+router.get("/validate", UserControlles.protect, (req, res) => {
+  res.status(200).json("登录验证成功");
+});
+
 export default router;
