@@ -5,10 +5,12 @@ POST {{baseUrl}}/create
 Content-Type: application/json
 
 {
-  "username": "zs",
-  "email":"zs@qq.com",
+  "username": "zs1",
+  "email":"zs1@qq.com",
   "password": "123456",
-  "avatar":"https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80"
+  "avatar":"https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80",
+  "captchaKey":"1749978688282",
+  "captchaText": "J8j0"
 }
 
 ### 登录
@@ -31,7 +33,7 @@ GET {{baseUrl}}/captcha/list
 ### 创建验证码 token方式 放在缓存里
 GET {{baseUrl}}/captcha_cache
 
-### 获取验证码列表
+### 获取验证码列表 缓存的
 GET {{baseUrl}}/captcha_cache/list
 
 ### 验证是否登录

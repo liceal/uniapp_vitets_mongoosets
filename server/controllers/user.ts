@@ -5,7 +5,9 @@ import NodeCache from "node-cache";
 import { Captcha } from "#/models/captcha";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import type {
-  CaptchaCacheTypes,
+  CaptchaReqTypes,
+  CaptchaResTypes,
+  UserCreateReqTypes,
   UserLoginReqTypes,
   UserLoginResTypes,
 } from "types/server";
@@ -25,20 +27,6 @@ const login = async (req: Request, res: Response) => {
     // res.status(200).json({ message: "登录成功" });
     const { username, password, captchaKey, captchaText } =
       req.body as UserLoginReqTypes;
-
-    // 验证验证码是否正确 验证缓存的
-    const cachedCaptcha = captchaCache.get<catpchaCacheData>(captchaKey); // 从缓存中获取验证码
-    if (!cachedCaptcha) {
-      res.status(400).json({ message: "验证码已过期" }); // 验证码过期
-      return;
-    }
-    if (
-      cachedCaptcha.captchaText.toLocaleLowerCase() !==
-      captchaText.toLocaleLowerCase()
-    ) {
-      res.status(400).json({ message: "验证码错误" }); // 验证码错误
-      return;
-    }
 
     // // 验证验证码是否正确
     // const captche = await Captcha.findById(captchaKey); // 从数据库中获取验证码
@@ -111,7 +99,7 @@ const captcha_cache = async (req: Request, res: Response) => {
       captchaKey, // 验证码的唯一码，用于验证
       // captchaSvg: captcha.data, // 验证码的图片
       captchaBase64,
-    } as CaptchaCacheTypes);
+    } as CaptchaResTypes);
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ error: "获取验证码失败" });
@@ -176,4 +164,35 @@ export const protect = async (
   }
 };
 
-export default { create, captcha_cache, login, captchaList_chache, protect };
+export const captcha_validator = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const body = req.body as CaptchaReqTypes;
+  // 验证验证码是否正确 验证缓存的
+  console.log(captchaCache.keys());
+
+  const captcha = captchaCache.get<catpchaCacheData>(body.captchaKey); // 从缓存中获取验证码
+  if (!captcha) {
+    res.status(400).json({ message: "验证码已过期" }); // 验证码过期
+    return;
+  }
+  if (
+    captcha.captchaText.toLocaleLowerCase() !==
+    body.captchaText.toLocaleLowerCase()
+  ) {
+    res.status(400).json({ message: "验证码错误" }); // 验证码错误
+    return;
+  }
+  next();
+};
+
+export default {
+  create,
+  captcha_cache,
+  login,
+  captchaList_chache,
+  protect,
+  captcha_validator,
+};

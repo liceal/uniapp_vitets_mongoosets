@@ -4,8 +4,8 @@ import CaptchaControlles from "#/controllers/captcha";
 
 const router = Router();
 
-router.post("/create", UserControlles.create);
-router.post("/login", UserControlles.login);
+router.post("/create", UserControlles.captcha_validator, UserControlles.create);
+router.post("/login", UserControlles.captcha_validator, UserControlles.login);
 
 router.get("/captcha_cache", UserControlles.captcha_cache);
 router.get("/captcha_cache/list", UserControlles.captchaList_chache);

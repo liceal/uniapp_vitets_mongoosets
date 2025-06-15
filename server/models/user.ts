@@ -12,7 +12,12 @@ const userSchema = new mongoose.Schema<UserDocument>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  avatar: { type: String, required: true },
+  avatar: {
+    type: String,
+    required: true,
+    default:
+      "https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80",
+  },
 });
 
 // 生成token方法

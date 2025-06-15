@@ -1,6 +1,6 @@
 import http from "@/utils/http";
 import type {
-  CaptchaCacheTypes,
+  CaptchaResTypes,
   UserLoginReqTypes,
   UserLoginResTypes,
 } from "types/server";
@@ -9,7 +9,7 @@ export default {
   captchaCache: {
     url: "/user/captcha_cache",
     name: "创建验证码",
-    get: async function (): Promise<CaptchaCacheTypes> {
+    get: async function (): Promise<CaptchaResTypes> {
       return await http.get(this.url);
     },
   },

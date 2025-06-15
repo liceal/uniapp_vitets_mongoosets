@@ -1,3 +1,4 @@
+import { extend } from "@dcloudio/uni-app";
 import { ObjectId } from "mongoose";
 
 // 分页参数
@@ -59,22 +60,35 @@ export interface UserTypes {
   avatar: string;
 }
 
-// 创建验证码 返回
-export interface CaptchaCacheTypes {
-  captchaKey: string;
-  captchaBase64: string;
-}
-
-// 登录参数
-export interface UserLoginReqTypes {
-  username: string;
-  password: string;
+// 验证码入参
+export interface CaptchaReqTypes {
   captchaKey: string;
   captchaText: string;
 }
 
+// 创建验证码 返回
+export interface CaptchaResTypes {
+  captchaKey: string;
+  captchaBase64: string;
+}
+
+// 登录请求参数
+export interface UserLoginReqTypes extends CaptchaReqTypes {
+  username: string;
+  password: string;
+}
+
+// 登录返回参数
 export interface UserLoginResTypes {
   message: string;
   data?: UserTypes;
   token?: string;
+}
+
+// 创建账户参数
+export interface UserCreateReqTypes extends CaptchaReqTypes {
+  username: string;
+  email: string;
+  password: string;
+  avatar?: string;
 }
