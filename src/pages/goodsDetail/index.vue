@@ -40,8 +40,8 @@
           服务说明
           <u-icon name="close" class="float-right text-gray absolute right-4" @click="() => popupVisible = false" />
         </view>
-        <view class="h-40vh p-1">
-          <view v-for="item in 5" :key="item" class="mt-1">
+        <scroll-view class="h-40vh p-1" scroll-y>
+          <view v-for="item in 10" :key="item" class="mt-1">
             <view class="text-dark">
               全场包邮
             </view>
@@ -49,7 +49,7 @@
               所有商品包邮
             </view>
           </view>
-        </view>
+        </scroll-view>
       </u-popup>
 
       <!-- 评价 -->
@@ -113,11 +113,72 @@
         <GoodsList ref="goodsListRef" />
       </view>
     </template>
+    <template #footer>
+      <view class="bg-white flex">
+        <view class="flex gap-4 px-2 py-1">
+          <view class="flex flex-col justify-center items-center">
+            <u-icon name="home" size="40" />
+            <text class="leading-none">品牌</text>
+          </view>
+          <view class="flex flex-col justify-center items-center">
+            <u-icon name="heart" size="40" />
+            <text class="leading-none">收藏</text>
+          </view>
+          <view class="flex flex-col justify-center items-center">
+            <u-icon name="chat" size="40" />
+            <text class="leading-none">客服</text>
+          </view>
+        </view>
+        <view class="flex-1 bg-red-5 active:bg-red-6 flex justify-center items-center text-white" @click="clickPay">
+          购买
+        </view>
+      </view>
+
+      <!-- 规格选择 -->
+      <u-popup v-model="popupVisible_sku" mode="bottom" safe-area-inset-bottom>
+        <view class="flex p-1 justify-center items-center" style="border-bottom: 1px solid #efefef;">
+          确认款式
+          <u-icon name="close" class="float-right text-gray absolute right-4" @click="() => popupVisible_sku = false" />
+        </view>
+        <scroll-view scroll-y class="h-60vh">
+          <view class="p-2 box-border">
+            <!-- 商品 -->
+            <view class="flex gap-2 pb-2" style="border-bottom: 1px solid #efefef;">
+              <u-image width="7rem" height="7rem" mode="aspectFit"
+                src="https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80" />
+              <view class="flex flex-col gap-1">
+                <view>
+                  <text class="text-red">券后￥1</text>
+                  <text class="text-red text-xs">.95起</text>
+                  <text class="text-xs ml-1 text-gray-5">大促价￥2.29-3.78</text>
+                </view>
+                <view class="flex gap-1">
+                  <text class="border-red-5 border-1 border-solid text-red-5 px-1 bg-red-1">2件9.9折</text>
+                  <text class="border-red-5 border-1 border-solid text-red-5 px-1 bg-red-1">每满200减30</text>
+                </view>
+                <view class="h-2rem text-xs">{{ skuStr }}</view>
+                <u-number-box v-model="popupForm.number" :min="1" />
+              </view>
+            </view>
+            <!-- 规格 -->
+            <view v-for="item in 3" :key="item" class="py-2" style="border-bottom: 1px solid #efefef;">
+              <view>型号</view>
+              <view class="flex gap-1 mt-2 flex-wrap">
+                <text v-for="item1 in 5" :key="item1" class="py-1 px-2 rounded bg-gray-1"
+                  :class="{ 'bg-red': popupForm.skus.includes(`${item1}${item}`) }"
+                  @click="() => skuClick(`${item1}${item}`)">【专享优惠】1包</text>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+        <u-button type="primary">确认</u-button>
+      </u-popup>
+    </template>
   </Layout>
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import Layout from '@/components/layout/index.vue'
 import TopView from '@/components/TopView.vue';
 import { onPageScroll } from '@dcloudio/uni-app';
@@ -149,6 +210,35 @@ const scrollTop = ref(0);
 onPageScroll((e) => {
   scrollTop.value = e.scrollTop;
 })
+
+// 购买 点击弹出款式选择
+const popupVisible_sku = ref(false)
+const popupForm = ref({
+  number: 1,
+  skus: [] as string[]
+})
+const skuStr = computed(() => {
+  // 根据sku计算出str
+  if (popupForm.value.skus.length) {
+    return `已选择: ${popupForm.value.skus.join(',')}`
+  } else {
+    return `请选择: 型号 款式`
+  }
+})
+function clickPay() {
+  popupVisible_sku.value = true
+}
+function skuClick(sku: string) {
+  const index = popupForm.value.skus.indexOf(sku);
+  if (index > -1) {
+    // 如果已存在则删除
+    popupForm.value.skus.splice(index, 1);
+  } else {
+    // 如果不存在则添加
+    popupForm.value.skus.push(sku);
+  }
+}
+
 </script>
 
 <style lang='scss' scoped>
