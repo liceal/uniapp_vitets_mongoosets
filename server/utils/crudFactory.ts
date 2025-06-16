@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
 import { Aggregate, Document, Model, PipelineStage } from "mongoose";
+import { MySchema } from "./mySchema";
+import type { CommentClassTypes } from "types/server";
 
 export const createOne = <T>(
   Model: Model<T>,
@@ -28,6 +30,18 @@ export const getAll = <T>(
   return async (req: Request, res: Response) => {
     try {
       let data;
+
+      // 可以不分页
+      const noPage = req.query.noPage;
+      if (noPage) {
+        let params: Partial<CommentClassTypes> = {};
+        if (req.query.type) {
+          params.type = Number(req.query.type);
+        }
+        data = await Model.find(params);
+        res.status(200).json(data);
+        return;
+      }
 
       // 增加了分页功能 查询时间比通道多了一倍 待优化 或者去掉
       const page = parseInt(req.query.page as string) || 1;
@@ -129,7 +143,7 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
       const page = body.page || 1;
       const limit = body.limit || 10;
       const skip = (page - 1) * limit;
-
+      const noPage = body.noPage;
       const pipeline: PipelineStage[] = [];
 
       // 过滤条件
@@ -170,30 +184,52 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
       }
 
       // aggregate是直接操作数据库的 速度会快很多
-      const docsArray = await Model.aggregate([
-        ...pipeline,
-        {
-          $facet: {
-            data: [
-              // 调整顺序，先 skip 再 limit
-              { $skip: skip },
-              { $limit: limit },
-              ...$lookupOps,
-              ...$addFieldsOps,
-            ],
-            total: [{ $count: "count" }],
+
+      let docsArray;
+      if (noPage) {
+        let finalPipeline = [...pipeline, ...$lookupOps, ...$addFieldsOps];
+        if (!finalPipeline.length) {
+          finalPipeline = [{ $match: {} }];
+        }
+        docsArray = await Model.aggregate(finalPipeline);
+      } else {
+        docsArray = await Model.aggregate([
+          ...pipeline,
+          {
+            $facet: {
+              data: [
+                // 调整顺序，先 skip 再 limit
+                { $skip: skip },
+                { $limit: limit },
+                ...$lookupOps,
+                ...$addFieldsOps,
+              ],
+              total: [{ $count: "count" }],
+            },
           },
-        },
-        {
-          $project: {
-            data: 1,
-            total: { $arrayElemAt: ["$total.count", 0] },
-            page: { $literal: page },
-            pageSize: { $literal: limit },
+          {
+            $project: {
+              data: 1,
+              total: { $arrayElemAt: ["$total.count", 0] },
+              page: { $literal: page },
+              pageSize: { $literal: limit },
+            },
           },
-        },
-      ]);
+        ]);
+      }
       const docs = docsArray[0] || {};
+      // 格式化时间
+      if (docs.data) {
+        docs.data = docs.data.map((item: any) => {
+          if (item.createdAt) {
+            item.createdAt = MySchema.formatDate(item.createdAt);
+          }
+          if (item.updatedAt) {
+            item.updatedAt = MySchema.formatDate(item.updatedAt);
+          }
+          return item;
+        });
+      }
       res.status(200).json(docs);
     } catch (error: any) {
       console.error(error);

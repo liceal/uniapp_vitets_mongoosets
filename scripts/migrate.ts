@@ -3,7 +3,7 @@ const { exec } = require("child_process");
 const args = process.argv.slice(2); // 获取命令行参数
 
 if (!args[0]) {
-  console.error("请指定迁移文件名，例如：pnpm migrate your-file.ts");
+  console.error("请指定迁移文件名，例如：pnpm migrate your-file");
   process.exit(1);
 }
 

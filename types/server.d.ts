@@ -1,7 +1,19 @@
 import { extend } from "@dcloudio/uni-app";
 import { ObjectId } from "mongoose";
 
+// 时间参数 数据创建的更新和创建时间
+interface DateTypes {
+  createdAt: string; //创建时间
+  updatedAt: string; //更新时间
+}
+
 // 分页参数
+interface PageTypes<T> {
+  data: Array<T>;
+  total: number;
+  page: number;
+  pageSize: number;
+}
 
 // 店铺
 export interface ShopTypes {
@@ -91,4 +103,28 @@ export interface UserCreateReqTypes extends CaptchaReqTypes {
   email: string;
   password: string;
   avatar?: string;
+}
+
+// 评论
+export interface CommentTypes extends DateTypes {
+  _id: any | ObjectId;
+  user: any | ObjectId;
+  skuStr: string;
+  comment: string;
+  imgs: string[];
+  likeCount: number;
+  userDetail: UserTypes;
+}
+
+// 评论列表返回数据
+export interface CommentsListTypes extends PageTypes<CommentTypes> {}
+
+// 评论类别
+export interface CommentClassTypes extends DateTypes {
+  _id: any | ObjectId;
+  des: string;
+  number: number;
+  numberStr: string;
+  icon: string;
+  type: number | 1 | 2; //1好的评论 2不好的评论
 }

@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:7200/api/comments
+@classesUrl = http://localhost:7200/api/comments_classes
+
+### 创建评论
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "user": "684e3fe79b1b37f83d7bba6f",
+  "skuStr":"【随便填的】随便填写的sku描述sku描述sku描述sku描述",
+  "comment":"物流很快，敏感肌可用，孩子爱吃～值得购买！物流很快，敏感肌可用，孩子爱吃～值得购买！物流很快，敏感肌可用，孩子爱吃～值得购买！",
+  "imgs":["https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x","https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x","https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x"]
+}
+
+### 评论分页
+POST {{baseUrl}}/list
+Content-Type: application/json
+
+### 评论不分页
+GET {{baseUrl}}/?noPage=1
+
+
+### 评论类别 创建
+POST {{classesUrl}}
+Content-Type: application/json
+
+{
+  "des":"值得回购",
+  "number":127
+}
+
+### 评论列表 聚合查询 不分页
+POST {{classesUrl}}/list
+Content-Type: application/json
+
+{
+  "noPage":true
+}
+
+### 评论列表 普通查询 不分页
+GET {{classesUrl}}/?noPage=1&type=3

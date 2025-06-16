@@ -54,20 +54,22 @@
 
       <!-- 评价 -->
       <view style="border-top: .5rem solid #efefef;">
-        <view class="flex justify-between p-1" style="border-bottom: 1px solid #efefef;">
-          <text>
+        <!-- 查看更多 -->
+        <view class="flex justify-between p-1" style="border-bottom: 1px solid #efefef;" @click="commentClick">
+          <view>
             商家评价（80）
-          </text>
-          <text class="text-gray-4">
-            查看全部
+          </view>
+          <view class="text-gray-4">
+            <text>查看全部</text>
             <u-icon name="arrow-right" />
-          </text>
+          </view>
         </view>
+        <!-- 部分评价 -->
         <view>
           <view v-for="item in 2" :key="item" class="px-1 py-2">
             <view class="flex items-center gap-x-1">
-              <u-avatar size="60"
-                src="https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x"></u-avatar>
+              <u-avatar size="40"
+                src="https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x" />
               <text>
                 张三
               </text>
@@ -75,6 +77,39 @@
             <view class="line-clamp-2">物流很快，敏感肌可用，孩子爱吃～值得购买！物流很快，敏感肌可用，孩子爱吃～值得购买！物流很快，敏感肌可用，孩子爱吃～值得购买！</view>
           </view>
         </view>
+
+        <u-popup v-model="popupVisible_comment" mode="bottom" safe-area-inset-bottom>
+          <view class="flex p-1 justify-center items-center" style="border-bottom: 1px solid #efefef;">
+            商品评价(14,835)
+            <u-icon name="close" class="float-right text-gray absolute right-4" @click="popupVisible_comment = false" />
+          </view>
+          <scroll-view scroll-y class="h-80vh bg-[#efefef]" @scrolltolower="onScrolltolower_comments">
+            <!-- 评论分类 -->
+            <view class="p-1 box-border border-bottom-ef bg-white">
+              <view>
+                <view class="flex gap-1 flex-wrap" :class="commentClassIsMore ? '' : 'max-h-8rem overflow-hidden'">
+                  <view v-for="clas in commentClasses" :key="clas._id" class="px-2 py-1 bg-pink-1 text-gray-5 rounded"
+                    :class="{ '!bg-red-5 text-white': activeClas?._id === clas._id, '!bg-gray-2': clas.type === 2 }"
+                    @click="() => clasClick(clas)">
+                    <u-icon v-if="clas.icon" :name="clas.icon" />
+                    <text>{{ clas.des }}</text>
+                    <text v-if="clas.number">({{ clas.numberStr }})</text>
+                  </view>
+                </view>
+                <view @click="commentClassIsMore = !commentClassIsMore"
+                  class="w-full flex justify-center text-gray p-1">
+                  <u-icon :name="commentClassIsMore ? 'arrow-up' : 'arrow-down'" />
+                </view>
+              </view>
+            </view>
+            <!-- 每一条评论 -->
+            <view class="flex flex-col gap-2">
+              <Comment v-for="item in commentList" :key="item._id" v-bind="item" />
+            </view>
+            <u-loadmore v-show="isFetch_comment" status="loading" />
+          </scroll-view>
+        </u-popup>
+
       </view>
 
       <!-- 商品详情 -->
@@ -183,6 +218,9 @@ import Layout from '@/components/layout/index.vue'
 import TopView from '@/components/TopView.vue';
 import { onPageScroll } from '@dcloudio/uni-app';
 import GoodsList from '@/components/GoodsList.vue';
+import Comment from './comment.vue'
+import comments from '@/api/comments';
+import type { CommentClassTypes, CommentsListTypes } from 'types/server';
 
 const imgList = ref(
   [
@@ -211,7 +249,7 @@ onPageScroll((e) => {
   scrollTop.value = e.scrollTop;
 })
 
-// 购买 点击弹出款式选择
+// sku功能
 const popupVisible_sku = ref(false)
 const popupForm = ref({
   number: 1,
@@ -239,6 +277,65 @@ function skuClick(sku: string) {
   }
 }
 
+// 评论功能
+const popupVisible_comment = ref(false)
+const commentClassIsMore = ref(false)
+const commentPage = ref(1)
+const commentList = ref<CommentsListTypes["data"]>()
+const isFetch_comment = ref(false)
+const activeClas = ref<CommentClassTypes | null>()
+function commentClick() {
+  getCommentList()
+  getCommentClasses()
+  popupVisible_comment.value = true
+}
+function getCommentList(next?: boolean) {
+  if (isFetch_comment.value) {
+    return
+  }
+  // 获取数据
+  if (next) {
+    commentPage.value += 1
+  }
+  isFetch_comment.value = true
+  comments.list
+    .post({ page: commentPage.value, limit: 3 })
+    .then(res => {
+      if (next && !res.data.length) {
+        commentPage.value -= 1
+        return
+      }
+      commentList.value = res.data
+    })
+    .finally(() => {
+      isFetch_comment.value = false
+    })
+}
+// 评论到底加载更多
+function onScrolltolower_comments() {
+  getCommentList(true)
+}
+// 评论分类
+const commentClasses = ref<CommentClassTypes[]>()
+function getCommentClasses() {
+  comments.classes
+    .get({
+      noPage: 1,
+    })
+    .then(res => {
+      commentClasses.value = res
+    })
+}
+// 点击分类
+function clasClick(clas: CommentClassTypes | null) {
+  if (activeClas.value?._id === clas?._id) {
+    activeClas.value = null
+  } else {
+    activeClas.value = clas
+  }
+  commentPage.value = 1
+  getCommentList()
+}
 </script>
 
 <style lang='scss' scoped>
