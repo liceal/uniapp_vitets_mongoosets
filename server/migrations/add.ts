@@ -1,5 +1,5 @@
 /*
-  命令执行 npx tsx ./server/migrations/add-new-fields.ts
+  命令执行 npx tsx ./server/migrations/add.ts
   
 */
 
@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import { Goods } from "#/models/goods";
 import dotenv from "dotenv";
 import { Order } from "#/models/order";
+import { User } from "#/models/user";
 
 dotenv.config();
 
@@ -80,15 +81,16 @@ async function runMigration() {
 async function test() {
   try {
     await mongoose.connect(process.env.MONGODB_URL as string);
-    const result = await Order.bulkWrite([
+    const result = await User.bulkWrite([
       {
         updateMany: {
           filter: {
-            $or: [{ status: { $exists: false } }],
+            $or: [{ avatar: { $exists: false } }],
           },
           update: {
             $set: {
-              status: 10,
+              avatar:
+                "https://avatar3-2.pddpic.com/a/Q0xhc1Y2QnZHYVZybHNSN0JwUUU1WFROa1RZTHRFNi93QT09djA0-1738393838?imageMogr2/thumbnail/100x",
             },
           },
         },
