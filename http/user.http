@@ -39,3 +39,6 @@ GET {{baseUrl}}/captcha_cache/list
 ### 验证是否登录
 GET {{baseUrl}}/validate
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODRlM2ZlNzliMWIzN2Y4M2Q3YmJhNmYiLCJpYXQiOjE3NDk5NTk2MDQsImV4cCI6MTc1MjU1MTYwNH0.HUnH715J5LASHPvw9jVF6VCh9x_7i9uYBPzjMjyrnuE
+
+### 用户列表
+POST {{baseUrl}}/list
