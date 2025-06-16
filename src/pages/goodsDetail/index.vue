@@ -301,11 +301,16 @@ function getCommentList(next?: boolean) {
   comments.list
     .post({ page: commentPage.value, limit: 3 })
     .then(res => {
-      if (next && !res.data.length) {
-        commentPage.value -= 1
-        return
+      if (next) {
+        if (!res.data.length) {
+          commentPage.value -= 1
+          return
+        } else {
+          commentList.value = { ...commentList.value, ...res.data }
+        }
+      } else {
+        commentList.value = res.data
       }
-      commentList.value = res.data
     })
     .finally(() => {
       isFetch_comment.value = false
