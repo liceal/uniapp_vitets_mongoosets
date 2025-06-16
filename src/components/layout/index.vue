@@ -7,7 +7,10 @@
     <scroll-view @scrolltolower="onScrolltolower" scroll-y class="layout-body">
       <slot name="body" />
     </scroll-view>
-    <view class="layout-footer" v-if="props.showTabbar">
+    <view class="layout-footer safe-area-inset-bottom">
+      <slot name="footer" />
+    </view>
+    <view class="layout-tabbar" v-if="props.showTabbar">
       <LTabBar />
     </view>
 
@@ -81,6 +84,7 @@ defineExpose({
   height: 100vh;
   box-sizing: border-box;
 
+
   .layout-header {
     background-color: white;
   }
@@ -90,13 +94,17 @@ defineExpose({
     overflow: auto;
   }
 
-  .layout-footer {
+  .layout-tabbar {
     z-index: 99 !important;
     // #ifdef WEB
     height: calc(50px);
     // #else
-    height: calc(50px + var(safe-area-inset-bottom));
+    height: calc(50px + env(safe-area-inset-bottom));
     // #endif
+  }
+
+  .layout-footer {
+    background-color: white;
   }
 }
 </style>
