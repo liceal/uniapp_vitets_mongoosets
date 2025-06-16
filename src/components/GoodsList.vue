@@ -47,7 +47,7 @@ function toDetail() {
 }
 
 async function lowerBottom(e: any) {
-  console.log('到底了', e)
+  console.log('goodslist 到底了', e)
   if (!isFetch.value) {
     page.value++
     isFetch.value = true
