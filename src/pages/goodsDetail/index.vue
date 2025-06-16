@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout :bgGray="false">
     <template #body>
 
       <!-- 顶部操作 -->
@@ -53,7 +53,7 @@
       </u-popup>
 
       <!-- 评价 -->
-      <view style="border-top: .5rem solid #efefef;">
+      <view style="border-top: .5rem solid #efefef;" class="bg-white">
         <!-- 查看更多 -->
         <view class="flex justify-between p-1" style="border-bottom: 1px solid #efefef;" @click="commentClick">
           <view>
@@ -113,7 +113,7 @@
       </view>
 
       <!-- 商品详情 -->
-      <view style="border-top: .5rem solid #efefef;">
+      <view style="border-top: .5rem solid #efefef;" class="bg-white">
         <view class="flex justify-between p-1" style="border-bottom: 1px solid #efefef;">
           <text>
             商品详情
@@ -306,7 +306,7 @@ function getCommentList(next?: boolean) {
           commentPage.value -= 1
           return
         } else {
-          commentList.value = { ...commentList.value, ...res.data }
+          commentList.value = commentList.value?.concat(res.data)
         }
       } else {
         commentList.value = res.data
