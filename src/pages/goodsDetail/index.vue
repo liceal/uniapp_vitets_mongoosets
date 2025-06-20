@@ -206,7 +206,7 @@
             </view>
           </view>
         </scroll-view>
-        <u-button type="primary">确认</u-button>
+        <u-button type="primary" @click="skuConfirm">确认</u-button>
       </u-popup>
     </template>
   </Layout>
@@ -340,6 +340,12 @@ function clasClick(clas: CommentClassTypes | null) {
   }
   commentPage.value = 1
   getCommentList()
+}
+
+// 款式确认进行购买
+function skuConfirm() {
+  // h5
+
 }
 </script>
 

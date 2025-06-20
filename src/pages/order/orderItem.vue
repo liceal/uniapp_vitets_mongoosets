@@ -13,7 +13,7 @@
     </view>
 
     <!-- 商品 -->
-    <view class="mt-2 flex justify-evenly border-b-gray-1 border-b-solid border-b-1 gap-1 pb-1 px-1">
+    <view class="mt-2 flex justify-evenly border-b-gray-1 border-b-solid border-b-1 gap-1 pb-1 px-1" @click="toDetail">
       <u-image mode="aspectFill" :src="props.goodsImgUrl" width="5rem" height="5rem" />
       <view class="flex flex-col justify-evenly flex-1">
         <text class="line-clamp-2 text-sm">{{ props.goodsName }}</text>
@@ -65,6 +65,12 @@ import type { OrderTypes } from 'types/server';
 
 const props = defineProps<OrderTypes>()
 
+
+function toDetail() {
+  uni.navigateTo({
+    url: `/pages/order/orderDetail?id=${props.id}`
+  })
+}
 </script>
 
 <style lang='scss' scoped></style>

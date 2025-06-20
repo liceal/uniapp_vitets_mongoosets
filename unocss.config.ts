@@ -19,8 +19,11 @@ export default defineConfig({
   // 快捷方式
   shortcuts: {
     btn: "py-2 px-4 rounded bg-blue-500 text-white",
+    "btn-info":
+      "inline-block p-1 flex justify-center items-center border-gray border-solid border-1 rounded",
     "border-top-ef":
       "border-t-[1px] border-solid border-[#efefef] border-b-0 border-l-0 border-r-0",
+    "flex-center": "flex justify-center items-center",
   },
   // postprocess(util) {
   //   // rem 转 rpx
