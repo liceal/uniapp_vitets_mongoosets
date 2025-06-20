@@ -96,7 +96,7 @@ const isFetch = ref(false)
 const nowStatus = ref<OrderStatus>(swiperIndexToStatus[swiperCurrent.value])
 async function getOrderList(_status: OrderStatus) {
   const res = await order.orderList
-    .post({ limit: 3, page: page.value, status: _status })
+    .post({ limit: 5, page: page.value, status: _status })
   if (isFetch.value) {
     // 如果没数据则回滚页数
     if (!res.data.length) {

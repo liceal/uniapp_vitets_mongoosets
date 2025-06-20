@@ -40,7 +40,7 @@
 
 <script lang='ts' setup>
 // import { useSafeDistanceStore } from '@/stores/safeDistance';
-import gsap from 'gsap';
+// import gsap from 'gsap';
 import { computed, type CSSProperties, onMounted, ref } from 'vue';
 
 // import { Icon } from '@iconify/vue';
@@ -114,12 +114,17 @@ function back() {
 }
 
 // const safeDistanceStore = useSafeDistanceStore();
-const safeStyle = computed<CSSProperties>(() => ({
-  // paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
-  // #ifdef MP-WEIXIN
-  paddingRight: '6rem'
-  // #endif
-}));
+const safeStyle = computed<CSSProperties>(() => {
+  if (!props.isSearch) {
+    return {
+      // paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
+      // #ifdef MP-WEIXIN
+      paddingRight: '6rem'
+      // #endif
+    }
+  }
+  return {}
+});
 </script>
 
 <style lang="scss" scoped>
@@ -227,7 +232,7 @@ const safeStyle = computed<CSSProperties>(() => ({
   flex-direction: column;
   background-color: white;
   z-index: 99;
-  padding: .2rem .5rem;
+  padding: 1rem;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
   left: -.5em;
   width: 2em;

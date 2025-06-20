@@ -128,3 +128,18 @@ export interface CommentClassTypes extends DateTypes {
   icon: string;
   type: number | 1 | 2; //1好的评论 2不好的评论
 }
+
+// 地址
+export interface AddressesTypes extends DateTypes {
+  _id: any | ObjectId;
+  province: string;
+  city: string;
+  area: string;
+  address: string;
+  address_full: string;
+  username: string;
+  phone: string;
+  order: number;
+  is_default: Boolean;
+  is_top: Boolean;
+}

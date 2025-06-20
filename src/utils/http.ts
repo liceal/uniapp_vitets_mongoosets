@@ -40,11 +40,39 @@ http.interceptors.request.use(
 
 // 响应拦截器
 http.interceptors.response.use(
-  (response: AxiosResponse) => {
+  (response: AxiosResponse): AxiosResponse["data"] => {
     // console.log("http", response);
     if (response.status === 400) {
       uni.showModal({
         title: "请求错误",
+        content: response.data.message,
+        showCancel: false,
+        confirmText: "确定",
+        success: (res) => {
+          if (res.confirm) {
+            console.log("用户点击确定");
+          }
+        },
+      });
+      return Promise.reject(response);
+    }
+    if (response.status === 404) {
+      uni.showModal({
+        title: "接口不存在",
+        content: response.data.message,
+        showCancel: false,
+        confirmText: "确定",
+        success: (res) => {
+          if (res.confirm) {
+            console.log("用户点击确定");
+          }
+        },
+      });
+      return Promise.reject(response);
+    }
+    if (response.status === 500) {
+      uni.showModal({
+        title: "服务器内部错误",
         content: response.data.message,
         showCancel: false,
         confirmText: "确定",

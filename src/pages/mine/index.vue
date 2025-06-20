@@ -1,5 +1,5 @@
 <template>
-  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar ref="layoutRef">
+  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar ref="layoutRef" isCustomNavBar>
     <template #body>
 
       <!-- 登录 用户 -->
@@ -131,7 +131,11 @@ const handleItems = ref([
   {
     icon: 'icon-shouhuodizhi',
     label: "收货地址",
-    click: () => { }
+    click: () => {
+      uni.navigateTo({
+        url: '/pages/address/index'
+      })
+    }
   },
   {
     icon: 'icon-guanfangkefu',

@@ -7,3 +7,12 @@
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+// 修复样式
+.u-flex-1 {
+  flex: 1;
+}
+
+.uni-mask {
+  z-index: 9999 !important;
+}

@@ -8,6 +8,7 @@ import { goodsRoutes } from "./routes/goodsRoutes";
 import { orderRoutes } from "./routes/orderRoutes";
 import { commentsRoutes } from "./routes/commentRoutes";
 import { commentsClassesRoutes } from "./routes/commentClassesRoutes";
+import { addressesRoutes } from "./routes/addressesRoutes";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use("/api/goods", goodsRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/comments", commentsRoutes);
 app.use("/api/comments_classes", commentsClassesRoutes);
+app.use("/api/addresses", addressesRoutes);
 
 // 启动服务器
 app.listen(PORT, () => {

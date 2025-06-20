@@ -1,9 +1,7 @@
 <template>
-  <Layout :show-tab-bar="false">
-    <template #header>
-      <Search is-search />
-    </template>
-  </Layout>
+  <view>
+    <Search is-search />
+  </view>
 </template>
 
 <script lang='ts' setup>

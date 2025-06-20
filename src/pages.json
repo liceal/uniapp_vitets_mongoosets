@@ -18,8 +18,8 @@
     {
       "path": "pages/search/index",
       "style": {
-        "navigationBarTitleText": "搜索",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "拼多多"
+        // "navigationStyle": "custom"
       }
     },
     {
@@ -40,6 +40,13 @@
       "path": "pages/setting/index",
       "style": {
         "navigationBarTitleText": "设置"
+        // "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/address/index",
+      "style": {
+        "navigationBarTitleText": "收货地址"
         // "navigationStyle": "custom"
       }
     }

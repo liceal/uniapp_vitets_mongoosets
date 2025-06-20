@@ -44,10 +44,10 @@
 
     <!-- 操作 -->
     <view class="flex justify-end items-center p-1 gap-1">
-      <text>更多</text>
-      <u-button class="m-0" size="mini" type="info">申请售后</u-button>
-      <u-button class="m-0" size="mini" type="info">查看物流</u-button>
-      <u-button class="m-0" size="mini" type="primary">确认收获</u-button>
+      <text class="mr-2">更多</text>
+      <u-button class="m-0" type="info">申请售后</u-button>
+      <u-button class="m-0" type="info">查看物流</u-button>
+      <u-button class="m-0" type="primary">确认收获</u-button>
     </view>
 
     <!-- 物流 -->

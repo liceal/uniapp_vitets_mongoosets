@@ -1,13 +1,13 @@
 <!-- 包含头中低的布局 -->
 <template>
-  <view class="layout-container" :style="cpHeader">
+  <view class="layout-container" :class="{ 'safe-area-inset-bottom': !props.showTabbar }" :style="cpHeader">
     <view>
       <slot name="header" />
     </view>
     <scroll-view @scrolltolower="onScrolltolower" scroll-y class="layout-body">
       <slot name="body" />
     </scroll-view>
-    <view class="layout-footer safe-area-inset-bottom">
+    <view class="layout-footer">
       <slot name="footer" />
     </view>
     <view class="layout-tabbar" v-if="props.showTabbar">
@@ -48,17 +48,29 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  // 灰色背景
   bgGray: {
     type: Boolean,
     default: true
+  },
+  // 是否自定义顶部
+  isCustomNavBar: {
+    type: Boolean,
+    default: false
   }
 })
 
 const safeDistanceStore = useSafeDistanceStore();
 const cpHeader = computed<CSSProperties>(() => {
-  return {
-    paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
-    background: props.bgGray ? '#efefef' : 'white'
+  if (props.isCustomNavBar) {
+    return {
+      paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
+      background: props.bgGray ? '#efefef' : 'white'
+    }
+  } else {
+    return {
+      background: props.bgGray ? '#efefef' : 'white'
+    }
   }
 })
 

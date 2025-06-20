@@ -1,5 +1,5 @@
 <template>
-  <Layout :bgGray="false">
+  <Layout :bgGray="false" isCustomNavBar>
     <template #body>
 
       <!-- 顶部操作 -->

@@ -1,0 +1,52 @@
+@baseUrl = http://localhost:7200/api/addresses
+
+### 创建
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "username":"张三3",
+  "phone":"13250894777",
+  "province":"浙江省",
+  "city":"杭州市",
+  "area":"钱塘区",
+  "address":"江东一路与青东一路交叉路口往西约200米"
+}
+
+### 编辑
+PUT {{baseUrl}}/6855084d91af37efd3822b9c
+Content-Type: application/json
+
+{
+  "username":"李四"
+}
+
+### 获取全部
+GET {{baseUrl}}/?noPage=1
+
+### 删除某一项
+DELETE {{baseUrl}}/6853cf8fce787f427c145930
+
+### 更新
+PUT {{baseUrl}}/6853b751ddcba910065c97b0
+Content-Type: application/json
+
+{
+  "username":"张三1"
+}
+
+### 置顶/取消置顶
+POST {{baseUrl}}/top
+Content-Type: application/json
+
+{
+  "id":"6853d57f5c3c92c7714f0e7f"
+}
+
+### 设置默认
+POST {{baseUrl}}/set_default
+Content-Type: application/json
+
+{
+  "id":"6853d57d5c3c92c7714f0e7d"
+}
