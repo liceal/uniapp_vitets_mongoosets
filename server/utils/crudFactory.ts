@@ -135,6 +135,7 @@ export interface postListOptions {
   $match?: (req: Request) => PipelineStage.Match["$match"];
   $lookup?: PipelineStage.Lookup["$lookup"];
   $addFields?: PipelineStage.AddFields["$addFields"];
+  $pipeline?: PipelineStage[];
 }
 export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
   return async (req: Request, res: Response) => {
@@ -144,7 +145,12 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
       const limit = body.limit || 10;
       const skip = (page - 1) * limit;
       const noPage = body.noPage;
-      const pipeline: PipelineStage[] = [];
+      let pipeline: PipelineStage[] = [];
+
+      // 查询配置
+      if (options?.$pipeline) {
+        pipeline = pipeline.concat(options?.$pipeline);
+      }
 
       // 过滤条件
       if (options?.$match) {
