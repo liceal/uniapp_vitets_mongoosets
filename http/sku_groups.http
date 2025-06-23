@@ -1,0 +1,28 @@
+@baseUrl = http://localhost:7200/api/sku_groups
+
+### 创建sku组
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name":"sku组12",
+  "value":[
+    {
+      "img":"https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+      "text":"顶配纯原K8-白深蓝【偏小一码】",
+      "is_fire":true
+    },
+    {
+      "img":"https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+      "text":"啊啊啊啊啊【偏小一码】"
+    },
+    {
+      "img":"https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+      "text":"自行车v自行车v【偏小一码】",
+      "disabled":true
+    }
+  ]
+}
+
+### sku组列表
+GET {{baseUrl}}

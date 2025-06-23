@@ -140,6 +140,36 @@ export interface AddressesTypes extends DateTypes {
   username: string;
   phone: string;
   order: number;
-  is_default: Boolean;
-  is_top: Boolean;
+  is_default: boolean;
+  is_top: boolean;
+}
+
+// skus 多个sku组
+export interface skusTypes extends DateTypes {
+  _id: any | ObjectId;
+  goods_id: any | ObjectId; //对应商品id
+  sku_groups_ids: ObjectId[]; //对应组id
+  sku_groups: skuGroupTypes[]; //对应组
+}
+
+// sku 单个sku属性
+export interface skuTypes {
+  img: string;
+  text: string;
+  is_fire: boolean; //是否热款
+  disabled: boolean; //是否关闭
+}
+
+// sku组 里面有多个sku属性
+export interface skuGroupTypes extends DateTypes {
+  _id: any | ObjectId;
+  type: 1 | 2; //1文字 2图片
+  name: string; //组名称
+  values: skuTypes[];
+}
+
+// sku对某个商品创建skus 自动创建sku和sku组
+export interface skuCreateTypes {
+  goods_id: any | ObjectId; //对应商品id
+  sku_groups: skuGroupTypes[];
 }

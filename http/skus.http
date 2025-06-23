@@ -1,0 +1,62 @@
+@baseUrl = http://localhost:7200/api/skus
+
+### 创建skus 对一个商品加商品属性 手动添加sku组
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "goods_id": "6836a7b77c25224250ab6d9b",
+    "sku_groups_ids": [
+        "6858fbb4c68e884f8f642a34",
+        "6858fcdc3fa83d8b15d2375b"
+    ]
+}
+
+### 创建skus 自动创建sku组
+
+POST {{baseUrl}}/create
+Content-Type: application/json
+
+{
+    "goods_id": "6836a7b77c25224250ab6d9b",
+    "sku_groups": [
+        {
+            "type": 1,
+            "name": "颜色",
+            "values": [
+                {
+                    "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+                    "text": "红色"
+                },
+                {
+                    "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+                    "text": "蓝色"
+                },
+                {
+                    "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+                    "text": "白色"
+                }
+            ]
+        },
+        {
+            "type": 1,
+            "name": "大小",
+            "values": [
+                {
+                    "text": "大"
+                },
+                {
+                    "text": "中"
+                },
+                {
+                    "text": "小"
+                }
+            ]
+        }
+    ]
+}
+
+### 查看skus
+
+POST {{baseUrl}}/list
