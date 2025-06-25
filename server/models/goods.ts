@@ -4,7 +4,7 @@
 
 import { MySchema } from "#/utils/mySchema";
 import moment from "moment";
-import mongoose, { SchemaTimestampsConfig } from "mongoose";
+import mongoose, { type SchemaTimestampsConfig } from "mongoose";
 import type { GoodsTypes } from "types/server";
 
 type GoodsDocument = mongoose.Document & GoodsTypes & SchemaTimestampsConfig;
@@ -26,6 +26,11 @@ const goodsSchema = new MySchema<GoodsDocument>(
     shippingFee: { type: Boolean, default: true },
     noReason7d: { type: Boolean, default: true },
     useFirst: { type: Boolean, default: true },
+    sku_group_ids: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "SkuGroups",
+      default: [],
+    },
   },
   {
     softDelete: true,

@@ -11,3 +11,31 @@ export function back() {
     });
   }
 }
+
+export function deepEqual(obj1: any, obj2: any) {
+  // 1. 判断基本类型
+  if (obj1 === obj2) return true;
+
+  // 2. 检查类型是否为对象或数组
+  if (
+    typeof obj1 !== "object" ||
+    typeof obj2 !== "object" ||
+    obj1 === null ||
+    obj2 === null
+  ) {
+    return false;
+  }
+
+  // 3. 检查键数量是否一致
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) return false;
+
+  // 4. 递归比较每个键值
+  for (const key of keys1) {
+    if (!keys2.includes(key)) return false; // 键不同
+    if (!deepEqual(obj1[key], obj2[key])) return false; // 值不同
+  }
+
+  return true;
+}

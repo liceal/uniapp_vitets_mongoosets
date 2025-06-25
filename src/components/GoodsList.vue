@@ -1,7 +1,7 @@
 <template>
   <scroll-view @scrolltolower="lowerBottom" scroll-y>
     <view class="grid grid-cols-2 gap-1 p-1 box-border">
-      <view v-for="goods in goodsList" :key="goods.id" @click="toDetail">
+      <view v-for="goods in goodsList" :key="goods.id" @click="() => toDetail(goods)">
         <Goods v-bind="goods" />
       </view>
     </view>
@@ -39,10 +39,9 @@ async function getGoodsList() {
   goodsList.value = res.data
 }
 
-function toDetail() {
-  console.log(11)
+function toDetail(item: GoodsTypes) {
   uni.navigateTo({
-    url: '/pages/goodsDetail/index'
+    url: `/pages/goodsDetail/index?goods_id=${item.id}`
   })
 }
 

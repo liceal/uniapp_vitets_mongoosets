@@ -1,8 +1,8 @@
-import { extend } from "@dcloudio/uni-app";
 import { ObjectId } from "mongoose";
+import type { SkuGroupTypes, SkuTypes } from "./sku";
 
 // 时间参数 数据创建的更新和创建时间
-interface DateTypes {
+export interface DateTypes {
   createdAt: string; //创建时间
   updatedAt: string; //更新时间
 }
@@ -42,6 +42,14 @@ export interface GoodsTypes extends GoodsAttrs {
   price_type: 0 | 1; //0无 1券后
   sales_type: 0 | 1; //0无 1总售
   shopDetail?: ShopTypes;
+  sku_group_ids: (any | ObjectId)[]; //规格属性组的ids
+}
+
+// 设置商品规格属性 唯一规格的属性
+export interface GoodsAttrsTypes {
+  goods_id: any | ObjectId;
+  attrs: SkuGroupTypes[];
+  skus: SkuTypes[];
 }
 
 // 状态枚举 1全部 10拼团中 20打包中 30待收获 40已完成
@@ -142,34 +150,4 @@ export interface AddressesTypes extends DateTypes {
   order: number;
   is_default: boolean;
   is_top: boolean;
-}
-
-// skus 多个sku组
-export interface skusTypes extends DateTypes {
-  _id: any | ObjectId;
-  goods_id: any | ObjectId; //对应商品id
-  sku_groups_ids: ObjectId[]; //对应组id
-  sku_groups: skuGroupTypes[]; //对应组
-}
-
-// sku 单个sku属性
-export interface skuTypes {
-  img: string;
-  text: string;
-  is_fire: boolean; //是否热款
-  disabled: boolean; //是否关闭
-}
-
-// sku组 里面有多个sku属性
-export interface skuGroupTypes extends DateTypes {
-  _id: any | ObjectId;
-  type: 1 | 2; //1文字 2图片
-  name: string; //组名称
-  values: skuTypes[];
-}
-
-// sku对某个商品创建skus 自动创建sku和sku组
-export interface skuCreateTypes {
-  goods_id: any | ObjectId; //对应商品id
-  sku_groups: skuGroupTypes[];
 }

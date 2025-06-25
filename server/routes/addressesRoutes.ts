@@ -1,6 +1,6 @@
 import { Addresses } from "#/models/addresses";
 import { generateRoutes } from "#/utils/crudFactory";
-import { Request, Response, Router } from "express";
+import { type Request, type Response, Router } from "express";
 
 const router = Router();
 

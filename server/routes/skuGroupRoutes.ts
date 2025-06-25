@@ -1,4 +1,4 @@
-import { SkuGroups } from "#/models/skus";
+import { SkuGroups } from "#/models/sku_groups";
 import { generateRoutes } from "#/utils/crudFactory";
 import { Router } from "express";
 

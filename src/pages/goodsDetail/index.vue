@@ -179,12 +179,11 @@
           <view class="p-2 box-border">
             <!-- 商品 -->
             <view class="flex gap-2 pb-2" style="border-bottom: 1px solid #efefef;">
-              <u-image width="7rem" height="7rem" mode="aspectFit"
-                src="https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80" />
+              <u-image width="7rem" height="7rem" mode="aspectFit" :src="activeSkus?.image || imgList?.[0].image" />
               <view class="flex flex-col gap-1">
                 <view>
-                  <text class="text-red">券后￥1</text>
-                  <text class="text-red text-xs">.95起</text>
+                  <text class="text-red">券后￥{{ activeSkus?.price }}</text>
+                  <!-- <text class="text-red text-xs">.95起</text> -->
                   <text class="text-xs ml-1 text-gray-5">大促价￥2.29-3.78</text>
                 </view>
                 <view class="flex gap-1">
@@ -196,12 +195,14 @@
               </view>
             </view>
             <!-- 规格 -->
-            <view v-for="item in 3" :key="item" class="py-2" style="border-bottom: 1px solid #efefef;">
-              <view>型号</view>
+            <view v-for="attr in goodsAttrs?.attrs" :key="attr._id" class="py-2"
+              style="border-bottom: 1px solid #efefef;">
+              <view>{{ attr.name }}</view>
               <view class="flex gap-1 mt-2 flex-wrap">
-                <text v-for="item1 in 5" :key="item1" class="py-1 px-2 rounded bg-gray-1"
-                  :class="{ 'bg-red': popupForm.skus.includes(`${item1}${item}`) }"
-                  @click="() => skuClick(`${item1}${item}`)">【专享优惠】1包</text>
+                <text v-for="val in attr.values" :key="val._id" class="py-1 px-2 rounded bg-gray-1"
+                  :class="{ 'bg-red': val.is_check }" @click="() => skuClick(attr, val)">{{ val.name }}
+                  {{ val.is_avaliable }}
+                </text>
               </view>
             </view>
           </view>
@@ -213,14 +214,19 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import Layout from '@/components/layout/index.vue'
 import TopView from '@/components/TopView.vue';
-import { onPageScroll } from '@dcloudio/uni-app';
+import { onLoad, onPageScroll } from '@dcloudio/uni-app';
 import GoodsList from '@/components/GoodsList.vue';
 import Comment from './comment.vue'
 import comments from '@/api/comments';
-import type { CommentClassTypes, CommentsListTypes } from 'types/server';
+import type { CommentClassTypes, CommentsListTypes, GoodsAttrsTypes, GoodsTypes } from 'types/server';
+import goods from '@/api/goods';
+import type { SkuGroupTypes, SkuGroupValueTypes, SkuTypes } from 'types/sku';
+import { deepEqual } from '@/utils';
+
+const goods_id = ref('')
 
 const imgList = ref(
   [
@@ -253,28 +259,83 @@ onPageScroll((e) => {
 const popupVisible_sku = ref(false)
 const popupForm = ref({
   number: 1,
-  skus: [] as string[]
+  skus: {} as { [key: string]: string }
 })
+const goodsAttrs = ref<GoodsAttrsTypes>()
+const activeSkus = ref<SkuTypes>()
 const skuStr = computed(() => {
   // 根据sku计算出str
-  if (popupForm.value.skus.length) {
-    return `已选择: ${popupForm.value.skus.join(',')}`
+  // if (popupForm.value.skus.length) {
+  //   return `已选择: ${popupForm.value.skus.join(',')}`
+  // } else {
+  //   return `请选择: 型号 款式`
+  // }
+  // 根据attr的属性 遍历is_check判断是否选择
+  let strArr = [] as string[]
+  goodsAttrs.value?.attrs.forEach(v => {
+    let check = v.values.find(v1 => v1.is_check)
+    if (check) {
+      strArr.push(`${v.name}:${check?.name}`)
+      popupForm.value.skus[v.name] = check.name
+    } else {
+      delete popupForm.value.skus[v.name]
+    }
+  })
+  if (strArr.length) {
+    return strArr.join(' ')
   } else {
     return `请选择: 型号 款式`
   }
 })
 function clickPay() {
+  getSkus()
   popupVisible_sku.value = true
 }
-function skuClick(sku: string) {
-  const index = popupForm.value.skus.indexOf(sku);
-  if (index > -1) {
-    // 如果已存在则删除
-    popupForm.value.skus.splice(index, 1);
+function skuClick(attr: SkuGroupTypes, val: SkuGroupValueTypes) {
+
+  // 直接改变属性值
+  if (val.is_check) {
+    val.is_check = false
   } else {
-    // 如果不存在则添加
-    popupForm.value.skus.push(sku);
+    attr.values.forEach(v => v.is_check = false)
+    val.is_check = true
   }
+
+  nextTick(() => {
+    // 这个属性更改后 获取他的唯一sku属性
+
+    // 获取此属性的唯一sku内容
+    let sku = goodsAttrs.value?.skus.find(v => {
+      return deepEqual(v.attr, popupForm.value.skus)
+    })
+
+    console.log(sku);
+    activeSkus.value = sku
+  })
+}
+function getSkus() {
+  goods.goodsAttrs.post({ goods_id: goods_id.value })
+    .then(res => {
+      goodsAttrs.value = {
+        ...res,
+        attrs: res.attrs.map(v => {
+          v.values.map(v1 => v1.is_check = false)
+          return v
+        })
+      }
+      // 初始化选择的内容
+      // let attrObj = {}
+      // res.attrs.forEach(v => {
+      //   if (v.is_multiple) {
+      //     // 初始这个值为数组
+      //     Object.assign(attrObj, { [v.name]: [] })
+      //   } else {
+      //     // 初始这个值为空字符串
+      //     Object.assign(attrObj, { [v.name]: '' })
+      //   }
+      // })
+      // popupForm.value.skus = attrObj
+    })
 }
 
 // 评论功能
@@ -345,8 +406,13 @@ function clasClick(clas: CommentClassTypes | null) {
 // 款式确认进行购买
 function skuConfirm() {
   // h5
-
+  console.log('确认款式', popupForm.value)
 }
+
+onLoad((options) => {
+  console.log(options);
+  goods_id.value = options?.goods_id
+})
 </script>
 
 <style lang='scss' scoped>

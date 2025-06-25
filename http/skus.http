@@ -6,7 +6,7 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "goods_id": "6836a7b77c25224250ab6d9b",
+    "goods_id": "683e9aa41a9312e115ba11ec",
     "sku_groups_ids": [
         "6858fbb4c68e884f8f642a34",
         "6858fcdc3fa83d8b15d2375b"
@@ -19,38 +19,23 @@ POST {{baseUrl}}/create
 Content-Type: application/json
 
 {
-    "goods_id": "6836a7b77c25224250ab6d9b",
+    "goods_id": "683e9aa41a9312e115ba11ec",
     "sku_groups": [
         {
             "type": 1,
-            "name": "颜色",
+            "name": "啊啊啊",
             "values": [
                 {
                     "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-                    "text": "红色"
+                    "text": "11"
                 },
                 {
                     "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-                    "text": "蓝色"
+                    "text": "22"
                 },
                 {
                     "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-                    "text": "白色"
-                }
-            ]
-        },
-        {
-            "type": 1,
-            "name": "大小",
-            "values": [
-                {
-                    "text": "大"
-                },
-                {
-                    "text": "中"
-                },
-                {
-                    "text": "小"
+                    "text": "33"
                 }
             ]
         }
@@ -60,3 +45,13 @@ Content-Type: application/json
 ### 查看skus
 
 POST {{baseUrl}}/list
+Content-Type: application/json
+
+### 查看指定goods_id skus
+
+POST {{baseUrl}}/get
+Content-Type: application/json
+
+{
+    "goods_id": "6836a7b77c25224250ab6d9b"
+}

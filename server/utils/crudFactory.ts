@@ -1,5 +1,5 @@
-import { Request, Response, Router } from "express";
-import { Aggregate, Document, Model, PipelineStage } from "mongoose";
+import { type Request, type Response, Router } from "express";
+import { Aggregate, Document, Model, type PipelineStage } from "mongoose";
 import { MySchema } from "./mySchema";
 import type { CommentClassTypes } from "types/server";
 

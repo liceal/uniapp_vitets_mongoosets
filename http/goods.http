@@ -1,41 +1,110 @@
 @baseUrl = http://localhost:7200/api/goods
 
 ### 创建商品
+
 POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "name": "【旗舰店】摩可纳咖啡美式静电速溶冻干粉黑咖啡100g+拿铁嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻",
-  "price": 42.99,
-  "pictureUrl": "https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80",
-  "shopId":"684a861ffd173eae470c4f1b"
+    "name": "【旗舰店】摩可纳咖啡美式静电速溶冻干粉黑咖啡100g+拿铁嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻",
+    "price": 42.99,
+    "pictureUrl": "https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80",
+    "shopId": "684a861ffd173eae470c4f1b"
 }
 
 ### 获取所有商品
+
 GET {{baseUrl}}?page=1&limit=3
 
 ### 获取所有商品 分页
+
 POST {{baseUrl}}/list
 Content-Type: application/json
 
 {
-  "page": 1,
-  "limit":10
+    "page": 1,
+    "limit": 10
 }
 
 ### 获取单个商品
+
 GET {{baseUrl}}/68491a1e28e4aebec24032c4
 
 ### 更新商品
-PUT {{baseUrl}}/684a862afd173eae470c4f1d
+
+PUT {{baseUrl}}/68491a1e28e4aebec24032c4
 Content-Type: application/json
 
 {
-  "name": "【摩可纳】咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊"
+    "name": "【摩可纳】咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊"
 }
 
 ### 删除商品
+
 DELETE {{baseUrl}}/6820566ef337a242a000017e
 
 ### 获取索引
+
 GET {{baseUrl}}/getIndexes
+
+### 创建 商品绑定属性组
+
+POST {{baseUrl}}/create_attrs
+Content-Type: application/json
+
+{
+    "goods_id": "68491a1e28e4aebec24032c4",
+    "attrs": [
+        {
+            "name": "颜色",
+            "values": [
+                {
+                    "image": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+                    "name": "红色",
+                    "is_fire": true
+                }
+            ]
+        },
+        {
+            "name": "大小",
+            "values": [
+                {
+                    "name": "大"
+                },
+                {
+                    "name": "小"
+                }
+            ]
+        }
+    ],
+    "skus": [
+        {
+            "attr": {
+                "颜色": "红色",
+                "大小": "大"
+            },
+            "image": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
+            "price": 98,
+            "stock": 5000
+        },
+        {
+            "attr": {
+                "颜色": "红色",
+                "大小": "小"
+            },
+            "image": "https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80",
+            "price": 55,
+            "stock": 10000
+        }
+    ]
+}
+
+### 获取商品的属性组
+
+POST {{baseUrl}}/attrs
+Content-Type: application/json
+
+{
+    "goods_id": "68491a1e28e4aebec24032c4",
+    
+}

@@ -46,7 +46,7 @@ import type { GoodsTypes } from 'types/server';
 //   sales_type: 0,
 //   pictureUrl: "",
 // });
-const props = defineProps<Partial<GoodsTypes>>()
+const props = defineProps<GoodsTypes>()
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 import { MySchema } from "#/utils/mySchema";
-import mongoose, { SchemaTimestampsConfig } from "mongoose";
+import mongoose, { type SchemaTimestampsConfig } from "mongoose";
 import type { OrderTypes } from "types/server";
 
 type OrderDocument = mongoose.Document & OrderTypes & SchemaTimestampsConfig;

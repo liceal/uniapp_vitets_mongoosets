@@ -41,8 +41,8 @@ app.use("/api/order", orderRoutes);
 app.use("/api/comments", commentsRoutes);
 app.use("/api/comments_classes", commentsClassesRoutes);
 app.use("/api/addresses", addressesRoutes);
-app.use("/api/skus", skusRoutes);
-app.use("/api/sku_groups", skuGroupsRoutes);
+app.use("/api/skus", skusRoutes); //单一规格属性
+app.use("/api/sku_groups", skuGroupsRoutes); //规格组
 
 // 启动服务器
 app.listen(PORT, () => {
