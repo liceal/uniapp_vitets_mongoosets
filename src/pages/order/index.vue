@@ -75,7 +75,7 @@ function tabsChange(index: number) {
 }
 // swiper-item左右移动，通知tabs的滑块跟随移动
 function transition(e: any) {
-  console.log(e);
+  // console.log(e);
 
   let dx = e.detail.dx;
   tabsSwiper.value.setDx(dx);
