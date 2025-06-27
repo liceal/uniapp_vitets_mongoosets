@@ -19,8 +19,8 @@
         <text class="line-clamp-2 text-sm">{{ props.goodsName }}</text>
         <text class="line-clamp-1 text-xs text-gray">{{ props.goodsSkuStr }}</text>
         <view class="flex gap-1 text-xs">
-          <view class="text-white bg-green-6 px-1" v-if="props.shippingFee">退货包运费保障中</view>
-          <view class="text-white bg-green-6 px-1" v-if="props.noReason7d">7天无理由退货</view>
+          <Tag v-if="props.shippingFee">退货包运费保障中</Tag>
+          <Tag v-if="props.shippingFee">7天无理由退货</Tag>
         </view>
       </view>
       <view class="text-right pl-2">
@@ -62,6 +62,7 @@
 
 <script setup lang='ts'>
 import type { OrderTypes } from 'types/server';
+import Tag from '@/components/Tag.vue';
 
 const props = defineProps<OrderTypes>()
 

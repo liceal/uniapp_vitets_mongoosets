@@ -407,6 +407,9 @@ function clasClick(clas: CommentClassTypes | null) {
 function skuConfirm() {
   // h5
   console.log('确认款式', popupForm.value)
+  uni.navigateTo({
+    url: `/pages/order/orderPre?preOrder=YXD123123`
+  })
 }
 
 onLoad((options) => {

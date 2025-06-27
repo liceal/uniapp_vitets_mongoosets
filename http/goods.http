@@ -105,6 +105,5 @@ POST {{baseUrl}}/attrs
 Content-Type: application/json
 
 {
-    "goods_id": "68491a1e28e4aebec24032c4",
-    
+    "goods_id": "68491a1e28e4aebec24032c4"
 }

@@ -56,6 +56,13 @@
         "navigationBarTitleText": "订单详情",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/order/orderPre",
+      "style": {
+        "navigationBarTitleText": "预下单",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {

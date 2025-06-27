@@ -1,13 +1,7 @@
 <template>
   <Layout>
     <template #header>
-      <view class="flex justify-between items-center relative border-b-solid border-b-gray1 p-2">
-        <view class="absolute w-full text-center left-0">
-          我的订单
-        </view>
-        <u-icon name="arrow-left" @click="back" />
-        <u-icon name="search" />
-      </view>
+      <Header class="bg-white" title="我的订单" show-search />
       <view>
         <u-tabs-swiper ref="tabsSwiper" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
           swiperWidth="750"></u-tabs-swiper>
@@ -45,6 +39,7 @@ import { back } from '@/utils';
 import order from '@/api/order';
 import type { OrderStatus, OrderTypes } from 'types/server';
 import { onLoad } from '@dcloudio/uni-app';
+import Header from '@/components/Header.vue';
 
 const list = ref([
   { name: '全部' },

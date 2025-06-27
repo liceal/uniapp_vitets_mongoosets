@@ -60,24 +60,7 @@
       </view>
     </template>
     <template #footer>
-      <view class="flex gap-2">
-        <view class="flex-1 text-end">
-          <view>
-            实付款
-            <text class="text-red-5">
-              <text>￥</text>
-              <text class="text-1.2rem font-bold">22</text>
-            </text>
-          </view>
-          <view class="text-red-5">
-            <text class="font-bold">确认收货后付款￥</text>
-            <text class="text-0.8rem">79</text>
-          </view>
-        </view>
-        <view class="bg-red-5 text-white w-7rem flex justify-center items-center text-1.5em">
-          去支付
-        </view>
-      </view>
+      <FooterPay :price_receive="19.13" />
     </template>
   </Layout>
 </template>
@@ -86,6 +69,7 @@
 import Layout from '@/components/layout/index.vue'
 import OrderGoods from './orderGoods.vue';
 import { back } from '@/utils';
+import FooterPay from '@/components/FooterPay.vue';
 </script>
 
 <style lang='scss' scoped></style>

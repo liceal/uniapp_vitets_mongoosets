@@ -125,20 +125,61 @@ router.post("/create_attrs", async (req: Request, res: Response) => {
 // 获取商品的属性规格组
 router.post("/attrs", async (req: Request, res: Response) => {
   const { goods_id } = req.body;
-  const goods = await Goods.findById(goods_id)
-    .select("sku_group_ids")
-    .populate("sku_group_ids");
 
-  // 查找这个商品使用的唯一规格属性
-  const skus = await Skus.find({ goods_id: goods_id });
+  // if (!goods_id || !mongoose.Types.ObjectId.isValid(goods_id)) {
+  //   res.status(400).json({ message: "无效的商品ID" });
+  //   return;
+  // }
 
-  const doc = {
-    goods_id,
-    attrs: goods?.sku_group_ids || [],
-    skus,
-  };
+  // const goods = await Goods.findById(goods_id)
+  //   .select("sku_group_ids")
+  //   .populate("sku_group_ids");
 
-  res.status(200).json(doc);
+  // // 查找这个商品使用的唯一规格属性
+  // const skus = await Skus.find({ goods_id: goods_id });
+
+  // const doc = {
+  //   goods_id,
+  //   attrs: goods?.sku_group_ids || [],
+  //   skus,
+  // };
+
+  // res.status(200).json(doc);
+
+  const result = await Goods.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(goods_id) } },
+    {
+      $lookup: {
+        from: "skugroups",
+        localField: "sku_group_ids",
+        foreignField: "_id",
+        as: "attrs",
+      },
+    },
+    {
+      $lookup: {
+        from: "skus",
+        localField: "_id",
+        foreignField: "goods_id",
+        as: "skus",
+      },
+    },
+    {
+      $project: {
+        goods_id: "$_id",
+        attrs: 1,
+        skus: 1,
+        _id: 0,
+      },
+    },
+  ]);
+
+  if (!result.length) {
+    res.status(404).json({ message: "商品未找到" });
+    return;
+  }
+
+  res.status(200).json(result[0]);
 });
 
 export const goodsRoutes = router;
