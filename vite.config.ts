@@ -46,7 +46,7 @@ export default defineConfig(async ({ mode }) => {
           target: env.VITE_GEN_PROXY_PATH, // 目标服务器地址
           changeOrigin: true, // 是否改变源
           rewrite: function (path) {
-            console.log(`请求地址：${this.target}${path}`);
+            console.log(`请求地址：${this.target}  ${path}`);
 
             return path.replace(/^\/api/, "");
           }, // 重写路径
