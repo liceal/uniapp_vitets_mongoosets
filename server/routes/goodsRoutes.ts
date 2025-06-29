@@ -23,6 +23,7 @@ generateRoutes(router, Goods, {
         //   select: "_id name pictureUrl",
         // })
         .populate({
+          localField: "shopId",
           path: "shopDetail",
           select: "-__v",
         })

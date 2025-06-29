@@ -1,5 +1,5 @@
 import moment from "moment";
-import mongoose, { SchemaTimestampsConfig } from "mongoose";
+import mongoose, { type SchemaTimestampsConfig } from "mongoose";
 import type { ShopTypes } from "types/server";
 
 type ShopDocument = mongoose.Document & ShopTypes & SchemaTimestampsConfig;
