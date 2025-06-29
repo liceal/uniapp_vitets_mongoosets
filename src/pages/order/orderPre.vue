@@ -1,12 +1,12 @@
 <!-- 预下单 -->
 <template>
-  <Layout is-custom-nav-bar>
+  <Layout ref="layout" is-custom-nav-bar>
     <template #header>
       <Header class="bg-white" />
     </template>
     <template #body>
       <!-- 用户地址 -->
-      <view class="flex justify-center items-center bg-white p-2 gap-2">
+      <view class="flex justify-center items-center bg-white p-2 gap-2" @click="editAddress">
         <u-icon name="map" class="text-gray" size="40" />
         <view class="flex-1">
           <view class="py-1">
@@ -89,6 +89,9 @@
     <template #footer>
       <FooterPay :price_actual="11.23" :price_receive="22.12" @pay-click="payClick" />
     </template>
+    <template #popup>
+      <Address @itemClick="addressItemClick" />
+    </template>
   </Layout>
 </template>
 
@@ -106,6 +109,7 @@ import type { AddressesTypes, GoodsTypes } from 'types/server';
 import type { SkuTypes } from 'types/sku';
 import addresses from '@/api/addresses';
 import order from '@/api/order';
+import Address from '@/pages/address/index.vue'
 
 const goods_id = ref<string>()
 const sku_id = ref<string>()
@@ -147,17 +151,36 @@ function getAddressDefault() {
 
 // 购买生成订单
 function payClick() {
+  uni.showLoading({ title: '生成订单中' })
   order.CRUD.post({
     goodsId: goods_id.value,
     addressId: addressDefault.value?._id,
     number: number.value
-  }).then(res => {
-    console.log('订单创建成功，跳到订单详情页');
-    uni.navigateTo({
-      url: '/pages/order/orderDetail?id=' + res.id
-    })
   })
+    .then(res => {
+      console.log('订单创建成功，跳到订单详情页');
+      uni.navigateTo({
+        url: '/pages/order/orderDetail?id=' + res.id
+      })
+    })
+    .finally(() => {
+      uni.hideLoading()
+    })
 }
+
+const layout = ref<InstanceType<typeof Layout>>();
+// 修改地址
+function editAddress() {
+  layout.value?.openPopup()
+}
+
+// 点击了某个地址
+function addressItemClick(item: AddressesTypes) {
+  // 回写数据
+  layout.value?.closePopup();
+  addressDefault.value = item
+}
+
 
 </script>
 
