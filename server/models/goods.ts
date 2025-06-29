@@ -52,4 +52,4 @@ goodsSchema.virtual("sales_str").get(function (this: GoodsTypes) {
   return `${this.name}只要${this.price}元~`;
 });
 
-export const Goods = mongoose.model<GoodsDocument>("Goods", goodsSchema);
+export const Goods = mongoose.model<GoodsDocument>("goods", goodsSchema);
