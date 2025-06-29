@@ -56,4 +56,11 @@ export default {
       return await http.delete(`${this.url}/${id}`);
     },
   },
+  default: {
+    url: "/addresses/default",
+    name: "默认地址",
+    post: async function (): Promise<AddressesTypes> {
+      return await http.post(this.url);
+    },
+  },
 };

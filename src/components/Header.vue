@@ -4,7 +4,7 @@
       <view class="absolute w-full text-center left-0">
         {{ props.title }}
       </view>
-      <u-icon v-if="props.showBack" name="arrow-left" @click="back" size="40" />
+      <u-icon v-if="props.showBack" name="arrow-left" @click="() => back(props.backUrl)" size="40" />
       <u-icon v-if="props.showSearch" name="search" size="40" />
     </view>
   </view>
@@ -25,6 +25,10 @@ const props = defineProps({
   showSearch: {
     type: Boolean,
     default: false
+  },
+  backUrl: {
+    type: String,
+    default: ''
   }
 })
 </script>

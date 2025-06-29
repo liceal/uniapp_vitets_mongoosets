@@ -1,7 +1,19 @@
 /**
  * 后退，如果有上一页则后退 否则到主页
  */
-export function back() {
+export function back(url?: string) {
+  // 有些地址要用switch 否则用navigateTo
+  if (url) {
+    // 判断是否是tabbar页面
+    const isTabBar = ["/pages/index/index", "/pages/mine/index"].includes(url);
+
+    if (isTabBar) {
+      uni.switchTab({ url });
+    } else {
+      uni.navigateTo({ url });
+    }
+    return;
+  }
   const pages = getCurrentPages();
   if (pages.length > 1) {
     uni.navigateBack();
@@ -38,4 +50,24 @@ export function deepEqual(obj1: any, obj2: any) {
   }
 
   return true;
+}
+
+/**
+ * 复制文本
+ * @param data 复制的内容
+ */
+export function copy(data: string) {
+  // 复制文本到剪贴板
+  uni.setClipboardData({
+    data: data,
+    success: () => {
+      uni.showToast({
+        title: "复制成功",
+        icon: "none",
+      });
+    },
+    fail: (err) => {
+      console.error("复制失败", err);
+    },
+  });
 }

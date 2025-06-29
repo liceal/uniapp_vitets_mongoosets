@@ -1,5 +1,6 @@
 import { ObjectId } from "mongoose";
 import type { SkuGroupTypes, SkuTypes } from "./sku";
+import type { AddressesDocument } from "#/models/addresses";
 
 // 时间参数 数据创建的更新和创建时间
 export interface DateTypes {
@@ -57,7 +58,9 @@ type OrderStatus = 1 | 10 | 20 | 30 | 40 | 50;
 export interface OrderTypes extends GoodsAttrs {
   id: any | ObjectId; //主键
   shopId: any | ObjectId; //订单id
+  shopDetail: ShopTypes; //订单详细信息
   goodsId: any | ObjectId; //商品id
+  goodsDetail: GoodsTypes; //商品详细信息
   createdAt: string; //创建时间
   updatedAt: string; //更新时间
   shopName: string; //店铺名称
@@ -70,6 +73,7 @@ export interface OrderTypes extends GoodsAttrs {
   goodsImgUrl: string; //商品图片
   status: OrderStatus; //状态
   statusName: "待付款" | "拼团中" | "打包中" | "待收货" | "已完成";
+  address: AddressesTypes | AddressesDocument; //地址详情
 }
 
 // 用户

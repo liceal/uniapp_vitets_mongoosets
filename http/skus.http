@@ -13,45 +13,10 @@ Content-Type: application/json
     ]
 }
 
-### 创建skus 自动创建sku组
-
-POST {{baseUrl}}/create
-Content-Type: application/json
-
-{
-    "goods_id": "683e9aa41a9312e115ba11ec",
-    "sku_groups": [
-        {
-            "type": 1,
-            "name": "啊啊啊",
-            "values": [
-                {
-                    "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-                    "text": "11"
-                },
-                {
-                    "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-                    "text": "22"
-                },
-                {
-                    "img": "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-                    "text": "33"
-                }
-            ]
-        }
-    ]
-}
-
 ### 查看skus
 
 POST {{baseUrl}}/list
 Content-Type: application/json
 
-### 查看指定goods_id skus
-
-POST {{baseUrl}}/get
-Content-Type: application/json
-
-{
-    "goods_id": "6836a7b77c25224250ab6d9b"
-}
+### 根据sku_id查看指定的sku详情
+GET {{baseUrl}}/685a7bdeb63ebafa19d911ab

@@ -1,14 +1,23 @@
 @baseUrl = http://localhost:7200/api/order
 
+###查看订单 包含详情
+GET {{baseUrl}}/684aa6ccd9fa8c201cd59ff7
+Content-Type: application/json
+
+{
+  "hasDetail":true
+}
+
 ###查看订单
-GET {{baseUrl}}/684a862afd173eae470c4f1d
+GET {{baseUrl}}/6860e44ece451d59b84c7bae
 
 ### 创建订单
 POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "goodsId":"684a862afd173eae470c4f1d",
+  "goodsId":"68491a1e28e4aebec24032c4",
+  "addressId":"6853d57d5c3c92c7714f0e7d",
   "number":2
 }
 

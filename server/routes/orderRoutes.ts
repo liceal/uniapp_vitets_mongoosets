@@ -1,14 +1,16 @@
+import { Addresses } from "#/models/addresses";
 import { Goods } from "#/models/goods";
 import { Order } from "#/models/order";
 import { generateRoutes } from "#/utils/crudFactory";
-import { Request, Router } from "express";
+import { type Request, Router } from "express";
 import type { OrderTypes } from "types/server";
 
 const router = Router();
 
+// 创建订单
 async function createOrder(req: Request): Promise<Object | null> {
   try {
-    const { goodsId, number } = req.body;
+    const { goodsId, addressId, number } = req.body;
 
     const goods = await Goods.findById(goodsId).populate({
       path: "shopDetail",
@@ -22,6 +24,12 @@ async function createOrder(req: Request): Promise<Object | null> {
       throw new Error("店铺不存在");
     }
 
+    // 查找地址
+    const address = await Addresses.findById(addressId);
+    if (!address) {
+      throw new Error("地址不存在");
+    }
+
     const newOrder: Partial<OrderTypes> = {
       goodsId: goods.id,
       shopId: goods.shopDetail.id,
@@ -33,6 +41,7 @@ async function createOrder(req: Request): Promise<Object | null> {
       goodsNumber: number,
       goodsTotalPrice: goods.price * number,
       goodsImgUrl: goods.pictureUrl,
+      address,
     };
 
     return Order.create(newOrder);
@@ -44,6 +53,24 @@ async function createOrder(req: Request): Promise<Object | null> {
 }
 
 const curdRouter = generateRoutes(router, Order, {
+  getOne(req: Request) {
+    let doc = Order.findById(req.params.id);
+    if (req.body?.hasDetail) {
+      doc
+        .populate({
+          localField: "shopId",
+          path: "shopDetail",
+          select: "-__v",
+        })
+        .populate({
+          localField: "goodsId",
+          path: "goodsDetail",
+          select: "-__v",
+        });
+    }
+
+    return doc;
+  },
   createOne: createOrder,
   postList: {
     $match: (req) => {

@@ -17,7 +17,8 @@
         <text>默认</text>
       </view>
       <view class="flex gap-1">
-        <u-button size="medium" @click="copy">复制</u-button>
+        <u-button size="medium"
+          @click="() => copy(`${props.username} ${props.phone} ${props.address_full}`)">复制</u-button>
         <u-button size="medium" @click="edit">修改</u-button>
       </view>
     </view>
@@ -25,6 +26,7 @@
 </template>
 
 <script setup lang='ts'>
+import { copy } from '@/utils';
 import type { AddressesTypes } from 'types/server';
 
 const emits = defineEmits(['top', 'setDefault', 'edit', 'delete'])
@@ -37,22 +39,6 @@ async function onTop() {
 
 function defaultClick() {
   emits('setDefault')
-}
-
-function copy() {
-  // 复制文本到剪贴板
-  uni.setClipboardData({
-    data: `${props.username} ${props.phone} ${props.address_full}`,
-    success: () => {
-      uni.showToast({
-        title: '复制成功',
-        icon: 'none'
-      });
-    },
-    fail: (err) => {
-      console.error('复制失败', err);
-    }
-  });
 }
 
 function edit() {

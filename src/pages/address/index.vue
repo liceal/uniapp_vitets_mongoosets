@@ -4,7 +4,7 @@
       <view class="flex flex-col gap-2 w-full">
         <AddressItem v-for="(item, i) in addressesList" :key="item._id" class="w-full" v-bind="item"
           @top="() => onTop(item, i)" @set-default="() => setDefault(item)" @edit="() => addressEdit(item, i)"
-          @delete="() => addressDel(item, i)" />
+          @delete="() => addressDel(item, i)" @click="() => addressClick(item)" />
       </view>
       <view class="mt-2 p-2 flex flex-col justify-center items-center gap-2">
         <u-button type="primary" @click="openAddDialog" class="w-full">
@@ -342,9 +342,17 @@ function addressDel(item: AddressesTypes, index: number) {
 // onReady(() => {
 //   addFormRef.value.setRules(rules)
 // })
+
+// 点击地址
+function addressClick(item: AddressesTypes) {
+  emits('itemClick', item)
+}
+
 onMounted(() => {
   getAddressesList()
 })
+
+const emits = defineEmits(['itemClick'])
 </script>
 
 <style lang='scss' scoped></style>

@@ -323,18 +323,6 @@ function getSkus() {
           return v
         })
       }
-      // 初始化选择的内容
-      // let attrObj = {}
-      // res.attrs.forEach(v => {
-      //   if (v.is_multiple) {
-      //     // 初始这个值为数组
-      //     Object.assign(attrObj, { [v.name]: [] })
-      //   } else {
-      //     // 初始这个值为空字符串
-      //     Object.assign(attrObj, { [v.name]: '' })
-      //   }
-      // })
-      // popupForm.value.skus = attrObj
     })
 }
 
@@ -407,9 +395,12 @@ function clasClick(clas: CommentClassTypes | null) {
 function skuConfirm() {
   // h5
   console.log('确认款式', popupForm.value)
-  uni.navigateTo({
-    url: `/pages/order/orderPre?preOrder=YXD123123`
-  })
+  if (activeSkus.value?._id) {
+    // 要先选择sku
+    uni.navigateTo({
+      url: `/pages/order/orderPre?goods_id=${goods_id.value}&sku_id=${activeSkus.value?._id}`
+    })
+  }
 }
 
 onLoad((options) => {

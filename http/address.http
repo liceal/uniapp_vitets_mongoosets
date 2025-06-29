@@ -50,3 +50,10 @@ Content-Type: application/json
 {
   "id":"6853d57d5c3c92c7714f0e7d"
 }
+
+### 获取某一项
+
+GET {{baseUrl}}/6855083791af37efd3822b98
+
+### 获取默认的收货地址
+POST {{baseUrl}}/default

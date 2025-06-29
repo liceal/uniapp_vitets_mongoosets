@@ -17,7 +17,7 @@
     <u-popup v-model="popupVisible" mode="bottom" z-index="199" :customStyle="{ height: '100vh' }">
       <view class="h-100vh bg-white box-border flex flex-col" :style="cpHeader">
         <view class="p-2 bg-white">
-          <u-icon name="close" @click="closePopup" />
+          <u-icon name="arrow-down" @click="closePopup" />
         </view>
         <scroll-view @scrolltolower="onScrolltolowerPopup" scroll-y class="flex-1 overflow-auto">
           <slot name="popup" />

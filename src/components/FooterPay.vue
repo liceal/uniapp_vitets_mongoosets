@@ -10,7 +10,8 @@
         <Price :price="props.price_receive" />
       </view>
     </view>
-    <view class="bg-red-6 text-white w-7rem flex justify-center items-center text-1.5em active:bg-red-5">
+    <view class="bg-red-6 text-white w-7rem flex justify-center items-center text-1.5em active:bg-red-5"
+      @click="payClick">
       去支付
     </view>
   </view>
@@ -18,6 +19,8 @@
 
 <script setup lang='ts'>
 import Price from './Price.vue';
+
+const emits = defineEmits(['payClick'])
 
 const props = defineProps({
   price_actual: {
@@ -29,6 +32,10 @@ const props = defineProps({
     default: 0
   }
 })
+
+function payClick() {
+  emits('payClick')
+}
 </script>
 
 <style lang='scss' scoped></style>

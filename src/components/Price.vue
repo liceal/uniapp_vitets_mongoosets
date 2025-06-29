@@ -4,8 +4,7 @@ import { computed } from 'vue'
 const props = defineProps({
   price: {
     type: Number,
-    required: true,
-    validator: (value: number) => value >= 0
+    default: 0
   },
   // 是否显示元和小数部分
   showYuan: {
@@ -29,6 +28,9 @@ const props = defineProps({
 
 // 拆分价格为元和角分
 const priceParts = computed(() => {
+  if (props.price <= 0) {
+    return { yuan: 0, decimal: 0 }
+  }
   const yuan = Math.floor(props.price)
   const decimal = Math.round((props.price - yuan) * 100)
   return { yuan, decimal }

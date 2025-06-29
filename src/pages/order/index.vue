@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <template #header>
-      <Header class="bg-white" title="我的订单" show-search />
+      <Header class="bg-white" title="我的订单" show-search back-url="/pages/mine/index" />
       <view>
         <u-tabs-swiper ref="tabsSwiper" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
           swiperWidth="750"></u-tabs-swiper>

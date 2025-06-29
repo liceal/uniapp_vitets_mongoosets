@@ -1,11 +1,11 @@
 import { MySchema } from "#/utils/mySchema";
-import mongoose, { Query, SchemaTimestampsConfig } from "mongoose";
+import mongoose, { Query, type SchemaTimestampsConfig } from "mongoose";
 import type { AddressesTypes } from "types/server";
 
-type AddressesDocument = mongoose.Document &
+export type AddressesDocument = mongoose.Document &
   SchemaTimestampsConfig &
   AddressesTypes;
-const addressesSchema = new MySchema<AddressesDocument>({
+export const addressesSchema = new MySchema<AddressesDocument>({
   username: {
     type: String,
     required: true,

@@ -6,6 +6,7 @@ const router = Router();
 
 generateRoutes(router, Addresses);
 
+// 置顶
 router.post("/top", async (req: Request, res: Response) => {
   const { id } = req.body;
   if (!id) {
@@ -34,6 +35,7 @@ router.post("/top", async (req: Request, res: Response) => {
   res.status(200).json(address);
 });
 
+// 设置默认
 router.post("/set_default", async (req: Request, res: Response) => {
   const { id } = req.body;
   if (!id) {
@@ -79,6 +81,18 @@ router.post("/set_default", async (req: Request, res: Response) => {
   } finally {
     session.endSession();
   }
+});
+
+// 获取默认的
+router.post("/default", async (req: Request, res: Response) => {
+  const address_default = await Addresses.findOne({ is_default: true });
+
+  if (!address_default) {
+    res.status(404).json({ message: "未找到对应记录" });
+    return;
+  }
+
+  res.status(200).json(address_default);
 });
 
 export const addressesRoutes = router;

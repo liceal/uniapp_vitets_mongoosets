@@ -1,5 +1,5 @@
 import http from "@/utils/http";
-import type { GoodsAttrsTypes } from "types/server";
+import type { GoodsAttrsTypes, GoodsTypes } from "types/server";
 
 export default {
   goodsList: {
@@ -14,6 +14,13 @@ export default {
     name: "商品规格属性",
     post: async function (data?: any): Promise<GoodsAttrsTypes> {
       return await http.post(this.url, data);
+    },
+  },
+  goods: {
+    url: "/goods",
+    name: "商品",
+    get: async function (id: string): Promise<GoodsTypes> {
+      return await http.get(`${this.url}/${id}`);
     },
   },
 };
