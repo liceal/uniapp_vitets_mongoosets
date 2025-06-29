@@ -1,10 +1,14 @@
 <!-- 包含头中低的布局 -->
 <template>
-  <view class="layout-container" :class="{ 'safe-area-inset-bottom': !props.showTabbar }" :style="cpHeader">
+  <view class="layout-container" :class="{ 'safe-area-inset-bottom': !props.showTabbar }">
+    <view :style="cpHeader">
+      <!-- 顶部占位 -->
+    </view>
     <view>
       <slot name="header" />
     </view>
-    <scroll-view @scrolltolower="onScrolltolower" scroll-y class="layout-body">
+    <scroll-view @scrolltolower="onScrolltolower" scroll-y class="layout-body"
+      :class="bgGray ? 'bg-gray-1' : 'bg-white'">
       <slot name="body" />
     </scroll-view>
     <view class="layout-footer">
@@ -15,7 +19,10 @@
     </view>
 
     <u-popup v-model="popupVisible" mode="bottom" z-index="199" :customStyle="{ height: '100vh' }">
-      <view class="h-100vh bg-white box-border flex flex-col" :style="cpHeader">
+      <view class="h-100vh bg-white box-border flex flex-col">
+        <view :style="cpHeader" @click="closePopup">
+          <!-- 顶部占位 -->
+        </view>
         <view class="p-2 bg-white" @click="closePopup">
           <u-icon name="arrow-down" />
         </view>
@@ -64,12 +71,14 @@ const safeDistanceStore = useSafeDistanceStore();
 const cpHeader = computed<CSSProperties>(() => {
   if (props.isCustomNavBar) {
     return {
-      paddingTop: `${safeDistanceStore.topSafeAreaHeight}px`,
-      background: props.bgGray ? '#efefef' : 'white'
+      height: `${safeDistanceStore.topSafeAreaHeight}px`,
+      background: 'white'
+      // background: props.bgGray ? '#efefef' : 'white'
     }
   } else {
     return {
-      background: props.bgGray ? '#efefef' : 'white'
+      background: 'white'
+      // background: props.bgGray ? '#efefef' : 'white'
     }
   }
 })

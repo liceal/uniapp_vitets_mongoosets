@@ -4,7 +4,7 @@
       <view class="iconfont-n icon-to-top !text-[1.5rem]" :class="{ 'rotate-180': props.is_top }" @click="onTop" />
       <view class="iconfont-n icon-cuo !text-[1.5rem]" @click="onDel" />
     </view>
-    <view class="px-2 pb-2 flex flex-col gap-1 text-[1rem]">
+    <view class="px-2 pb-2 flex flex-col gap-1 text-[1rem]" @click="onCheck">
       <view>{{ props.username }}, {{ props.phone }}</view>
       <view>{{ props.address_full }}</view>
     </view>
@@ -29,7 +29,7 @@
 import { copy } from '@/utils';
 import type { AddressesTypes } from 'types/server';
 
-const emits = defineEmits(['top', 'setDefault', 'edit', 'delete'])
+const emits = defineEmits(['top', 'setDefault', 'edit', 'delete', 'check'])
 
 const props = defineProps<AddressesTypes>()
 
@@ -37,7 +37,8 @@ async function onTop() {
   emits('top')
 }
 
-function defaultClick() {
+function defaultClick(e: Event) {
+  e.stopPropagation()
   emits('setDefault')
 }
 
@@ -47,6 +48,10 @@ function edit() {
 
 function onDel() {
   emits('delete')
+}
+
+function onCheck() {
+  emits('check')
 }
 </script>
 

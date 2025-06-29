@@ -1,5 +1,5 @@
 <template>
-  <Layout ref="layout">
+  <Layout ref="layout" isCustomNavBar>
     <template #header>
       <view class="relative text-center bg-white h-2rem flex justify-center items-center text-1.2rem">
         <u-icon name="arrow-left" class="absolute left-0 text-gray" size="50"
@@ -31,7 +31,7 @@
                 {{ orderInfo?.address.address }}
               </view>
             </view>
-            <u-button size="mini" type="primary" plain @click="editAddress">修改</u-button>
+            <u-button size="mini" type="primary" plain ripple @click="editAddress">修改</u-button>
           </view>
         </view>
 

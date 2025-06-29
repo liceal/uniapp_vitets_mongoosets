@@ -4,7 +4,7 @@
       <view class="flex flex-col gap-2 w-full">
         <AddressItem v-for="(item, i) in addressesList" :key="item._id" class="w-full" v-bind="item"
           @top="() => onTop(item, i)" @set-default="() => setDefault(item)" @edit="() => addressEdit(item, i)"
-          @delete="() => addressDel(item, i)" @click="() => addressClick(item)" />
+          @delete="() => addressDel(item, i)" @check="() => addressClick(item)" />
       </view>
       <view class="mt-2 p-2 flex flex-col justify-center items-center gap-2">
         <u-button type="primary" @click="openAddDialog" class="w-full">
@@ -143,6 +143,11 @@ async function onTop(item: AddressesTypes, index: number) {
 
 // 默认地址
 async function setDefault(item: AddressesTypes) {
+  // 如果已经是默认则不做操作
+  if (item.is_default) {
+    return
+  }
+
   // 请求接口
   uni.showLoading()
   addresses.setDefault

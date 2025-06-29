@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout isCustomNavBar>
     <template #header>
       <Header class="bg-white" title="我的订单" show-search back-url="/pages/mine/index" />
       <view>
