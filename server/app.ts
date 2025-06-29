@@ -32,6 +32,12 @@ mongoose
 // 中间件
 app.use(express.json());
 
+// 请求日志
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.originalUrl}`);
+  next();
+});
+
 // 路由
 app.use("/api/test", testRoutes);
 app.use("/api/user", userRoutes);
