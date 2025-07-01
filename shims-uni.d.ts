@@ -17,3 +17,27 @@ declare global {
     }
   }
 }
+
+// map
+interface MapMarker {
+  id: number;
+  longitude: number;
+  latitude: number;
+  iconPath: string;
+  width: number;
+  height: number;
+}
+
+interface MapPolyline {
+  points: Array<{ longitude: number; latitude: number }>;
+  color: string;
+  width: number;
+}
+
+interface MapTypes {
+  longitude?: number;
+  latitude?: number;
+  scale?: number;
+  markers?: MapMarker[];
+  polyline?: MapPolyline[];
+}
