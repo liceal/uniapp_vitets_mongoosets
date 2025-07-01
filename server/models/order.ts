@@ -5,7 +5,7 @@ import { addressesSchema } from "./addresses";
 
 type OrderDocument = mongoose.Document & OrderTypes & SchemaTimestampsConfig;
 
-const orderSchema = new MySchema<OrderDocument>({
+export const orderSchema = new MySchema<OrderDocument>({
   shopId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "shops",
@@ -13,6 +13,11 @@ const orderSchema = new MySchema<OrderDocument>({
   goodsId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "goods",
+  },
+  expressId: {
+    //物流单
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Expresses",
   },
   shopName: { type: String, required: true },
   shopImgUrl: { type: String, required: true },

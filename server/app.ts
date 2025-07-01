@@ -11,6 +11,7 @@ import { commentsClassesRoutes } from "./routes/commentClassesRoutes";
 import { addressesRoutes } from "./routes/addressesRoutes";
 import { skusRoutes } from "./routes/skusRoutes";
 import { skuGroupsRoutes } from "./routes/skuGroupRoutes";
+import { expressesRouter } from "./routes/ExpressesRoutes";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use("/api/comments_classes", commentsClassesRoutes);
 app.use("/api/addresses", addressesRoutes);
 app.use("/api/skus", skusRoutes); //单一规格属性
 app.use("/api/sku_groups", skuGroupsRoutes); //规格组
+app.use("/api/expresses", expressesRouter); //物流
 
 // 启动服务器
 app.listen(PORT, () => {

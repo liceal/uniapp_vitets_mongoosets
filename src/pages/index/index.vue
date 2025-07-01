@@ -8,7 +8,7 @@
     <l-tabbar />
   </SafeView> -->
   <!-- </view> -->
-  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar isCustomNavBar>
+  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar isCustomNavBar topSafe>
     <template #header>
       <Search />
     </template>

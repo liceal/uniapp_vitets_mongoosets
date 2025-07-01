@@ -1,12 +1,12 @@
 <template>
-  <Layout :bgGray="false" isCustomNavBar>
+  <Layout :bgGray="false" isCustomNavBar topVirtual>
     <template #body>
 
       <!-- 顶部操作 -->
-      <TopView />
+      <!-- <TopView /> -->
 
       <!-- 商品 -->
-      <u-swiper :list="imgList" img-mode="aspectFit" class="swiper" height="600">
+      <u-swiper :list="imgList" img-mode="aspectFit" class="swiper" height="700">
       </u-swiper>
 
       <!-- 价格 -->
@@ -214,7 +214,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import Layout from '@/components/layout/index.vue'
 import TopView from '@/components/TopView.vue';
 import { onLoad, onPageScroll } from '@dcloudio/uni-app';
@@ -406,6 +406,22 @@ function skuConfirm() {
 onLoad((options) => {
   console.log(options);
   goods_id.value = options?.goods_id
+})
+
+onMounted(() => {
+  // 监听页面滚动事件
+  onPageScroll(e => {
+    console.log(e);
+
+  });
+
+});
+
+defineOptions({
+  onPageScroll(e) {
+    console.log(e);
+
+  }
 })
 </script>
 

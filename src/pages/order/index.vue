@@ -1,5 +1,5 @@
 <template>
-  <Layout isCustomNavBar>
+  <Layout ref="layout" isCustomNavBar top-safe>
     <template #header>
       <Header class="bg-white" title="我的订单" show-search back-url="/pages/mine/index" />
       <view>
@@ -13,7 +13,7 @@
           <scroll-view scroll-y class="h-full" @scrolltolower="lowerBottom">
             <view class="bg-gray-1 flex flex-col gap-1">
               <view v-for="i in item" :key="i.id as any" class="bg-white">
-                <OrderItem v-bind="i" />
+                <OrderItem v-bind="i" @clickLogistics="() => clickLogistics(i)" />
               </view>
             </view>
             <u-divider v-if="isFetch">
@@ -113,6 +113,14 @@ async function lowerBottom(e: any) {
     await getOrderList(nowStatus.value)
     isFetch.value = false
   }
+}
+
+// 查看物流
+const layout = ref<InstanceType<typeof Layout>>()
+function clickLogistics(item: OrderTypes) {
+  uni.navigateTo({
+    url: `/pages/logistics/index?order_id=${item.id}`
+  })
 }
 
 onMounted(() => {

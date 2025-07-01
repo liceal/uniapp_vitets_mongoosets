@@ -1,14 +1,17 @@
 <!-- 包含头中低的布局 -->
 <template>
   <view class="layout-container" :class="{ 'safe-area-inset-bottom': !props.showTabbar }">
-    <view :style="cpHeader">
-      <!-- 顶部占位 -->
+    <view :style="cpHeaderStyle" v-if="props.topSafe">
     </view>
     <view>
       <slot name="header" />
     </view>
-    <scroll-view @scrolltolower="onScrolltolower" scroll-y class="layout-body"
+    <scroll-view @scrolltolower="onScrolltolower" @scroll="onScroll" scroll-y class="layout-body"
       :class="bgGray ? 'bg-gray-1' : 'bg-white'">
+      <!-- 顶部虚拟位 -->
+      <TopView ref="topViewRef" v-if="props.topVirtual" :title="props.topVirtualTitle" />
+      <!-- body 顶部透明安全距离 -->
+      <view v-if="props.topBodySafe" :style="{ height: `${safeDistanceStore.topSafeAreaHeight}px` }"></view>
       <slot name="body" />
     </scroll-view>
     <view class="layout-footer">
@@ -18,9 +21,9 @@
       <LTabBar />
     </view>
 
-    <u-popup v-model="popupVisible" mode="bottom" z-index="199" :customStyle="{ height: '100vh' }">
-      <view class="h-100vh bg-white box-border flex flex-col">
-        <view :style="cpHeader" @click="closePopup">
+    <u-popup v-model="popupVisible" mode="bottom" z-index="199">
+      <view class="bg-white box-border flex flex-col" :style="{ height: props.popupHeight }">
+        <view :style="cpHeaderStyle" @click="closePopup">
           <!-- 顶部占位 -->
         </view>
         <view class="p-2 bg-white" @click="closePopup">
@@ -38,6 +41,7 @@
 import LTabBar from '@/components/LTabBar.vue';
 import { useSafeDistanceStore } from '@/stores/safeDistance';
 import { computed, ref, type CSSProperties } from 'vue';
+import TopView from '../TopView.vue';
 
 const emits = defineEmits(['bodyScrollToLower', 'popupScrollToLower'])
 
@@ -64,11 +68,34 @@ const props = defineProps({
   isCustomNavBar: {
     type: Boolean,
     default: false
+  },
+  popupHeight: {
+    type: String,
+    default: "100vh"
+  },
+  // 是否要顶部安全距离
+  topSafe: {
+    type: Boolean,
+    default: false
+  },
+  // 是否要顶部虚拟占位
+  topVirtual: {
+    type: Boolean,
+    default: false
+  },
+  topVirtualTitle: {
+    type: String,
+    default: ''
+  },
+  // body顶部安全距离 透明的
+  topBodySafe: {
+    type: Boolean,
+    default: false
   }
 })
 
 const safeDistanceStore = useSafeDistanceStore();
-const cpHeader = computed<CSSProperties>(() => {
+const cpHeaderStyle = computed<CSSProperties>(() => {
   if (props.isCustomNavBar) {
     return {
       height: `${safeDistanceStore.topSafeAreaHeight}px`,
@@ -90,6 +117,11 @@ function openPopup() {
 }
 function closePopup() {
   popupVisible.value = false
+}
+
+const topViewRef = ref<InstanceType<typeof TopView>>()
+function onScroll(e: any) {
+  topViewRef.value?.onScroll(e)
 }
 
 defineExpose({

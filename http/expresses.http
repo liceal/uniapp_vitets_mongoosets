@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:7200/api/expresses
+
+### 创建物流单
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "order_id":"6860e591ce451d59b84c7bc6"
+}
+
+### 物流单列表
+GET {{baseUrl}}
+
+### 为指定物流添加日志
+POST {{baseUrl}}/add_log
+Content-Type: application/json
+
+{
+  "id":"6863ad7e9b378343b67b8fe2",
+  "status":1,
+  "location":"杭州市",
+  "remark":"订单已确认啊啊啊"
+}
+
+### 更新物流信息
+PUT {{baseUrl}}/6863ad7e9b378343b67b8fe2
+Content-Type: application/json
+
+{
+  "pickup_code":"8-8-6545",
+  "courier":"张三",
+  "courier_phone":"13250894766",
+  "address":"收货地址阿萨的",
+  "collect":"云水苑超市集中点",
+  "express_code":"32132149879856",
+  "express_name":"申通快递"
+}
+
+### 获取指定订单的物流单
+POST {{baseUrl}}/find_one
+Content-Type: application/json
+
+{
+  "order_id":"6860e591ce451d59b84c7bc6"
+}

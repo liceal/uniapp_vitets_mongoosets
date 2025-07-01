@@ -1,5 +1,5 @@
 <template>
-  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar ref="layoutRef" isCustomNavBar>
+  <Layout @bodyScrollToLower="bodyScrollToLower" showTabbar ref="layoutRef" isCustomNavBar topBodySafe>
     <template #body>
 
       <!-- 登录 用户 -->

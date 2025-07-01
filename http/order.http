@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ###查看订单
-GET {{baseUrl}}/6860e44ece451d59b84c7bae
+GET {{baseUrl}}/6860e591ce451d59b84c7bc6
 
 ### 创建订单
 POST {{baseUrl}}

@@ -46,7 +46,7 @@
     <view class="flex justify-end items-center p-1 gap-1">
       <text class="mr-2">更多</text>
       <u-button class="m-0" type="info">申请售后</u-button>
-      <u-button class="m-0" type="info">查看物流</u-button>
+      <u-button class="m-0" type="info" @click="clickLogistics">查看物流</u-button>
       <u-button class="m-0" type="primary">确认收获</u-button>
     </view>
 
@@ -64,6 +64,8 @@
 import type { OrderTypes } from 'types/server';
 import Tag from '@/components/Tag.vue';
 
+const emits = defineEmits(['clickLogistics'])
+
 const props = defineProps<OrderTypes>()
 
 
@@ -71,6 +73,10 @@ function toDetail() {
   uni.navigateTo({
     url: `/pages/order/orderDetail?id=${props.id}`
   })
+}
+
+function clickLogistics() {
+  emits('clickLogistics')
 }
 </script>
 

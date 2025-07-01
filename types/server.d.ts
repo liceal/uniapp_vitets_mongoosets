@@ -61,6 +61,7 @@ export interface OrderTypes extends GoodsAttrs {
   shopDetail: ShopTypes; //订单详细信息
   goodsId: any | ObjectId; //商品id
   goodsDetail: GoodsTypes; //商品详细信息
+  expressId: any | ObjectId; //物流id
   createdAt: string; //创建时间
   updatedAt: string; //更新时间
   shopName: string; //店铺名称
@@ -72,7 +73,7 @@ export interface OrderTypes extends GoodsAttrs {
   goodsTotalPrice: number; //总价
   goodsImgUrl: string; //商品图片
   status: OrderStatus; //状态
-  statusName: "待付款" | "拼团中" | "打包中" | "待收货" | "已完成";
+  statusName: "全部" | "待付款" | "拼团中" | "打包中" | "待收货" | "已完成";
   address: AddressesTypes | AddressesDocument; //地址详情
 }
 
@@ -154,4 +155,54 @@ export interface AddressesTypes extends DateTypes {
   order: number;
   is_default: boolean;
   is_top: boolean;
+}
+
+type ExpressStatusDict = {
+  1: "订单已确认";
+  10: "已下单";
+  20: "已发货";
+  30: "运输中";
+  40: "派送中";
+  50: "待取件";
+  60: "已签收";
+};
+
+// 物流状态 1订单已确认 10已下单 20已发货 30运输中 40派送中 50待取件 60已签收
+type ExpressStatus = keyof ExpressStatusDict;
+// 物流状态名称类型
+type ExpressStatusName = ExpressStatusDict[ExpressStatus];
+// 物流快递信息
+
+export interface ExpressTypes extends DateTypes {
+  _id: any | ObjectId;
+  order_id: any | ObjectId; //订单id
+  status: ExpressStatus;
+  status_name: ExpressStatusName;
+  pickup_code: string; //取件码
+  collect: string; //快递收集点
+  address: string; //具体存放点
+  courier: string; //快递员
+  courier_phone: string; //快递员手机号
+  express_name: string; //快递公司
+  express_code: string; //快递编号
+  express_logs: ExpressLogTypes[]; //物流日志
+  status_dict: ExpressStatusDict;
+  receive_addr: string; //收货地址
+}
+
+// 物流日志
+interface ExpressLogTypes {
+  status: ExpressStatus; //物流状态
+  status_name?: ExpressStatusName; //物流状态中文
+  location: string; //位置
+  remark: string; //信息
+  createdAt: string; //创建时间
+}
+
+// 物流新增日志参数
+export interface ExpressLogReqTypes {
+  id: any | ObjectId; //物流id
+  status: ExpressStatus; //物流状态
+  location: string; //位置
+  remark: string; //信息
 }

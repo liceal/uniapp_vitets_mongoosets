@@ -63,6 +63,13 @@
         "navigationBarTitleText": "预下单",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/logistics/index",
+      "style": {
+        "navigationBarTitleText": "物流",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {

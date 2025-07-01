@@ -56,7 +56,10 @@ export function deepEqual(obj1: any, obj2: any) {
  * 复制文本
  * @param data 复制的内容
  */
-export function copy(data: string) {
+export function copy(data?: string) {
+  if (!data) {
+    return;
+  }
   // 复制文本到剪贴板
   uni.setClipboardData({
     data: data,

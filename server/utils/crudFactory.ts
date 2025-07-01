@@ -130,6 +130,30 @@ export const deleteOne = <T>(Model: Model<T>) => {
   };
 };
 
+// 条件查找单个
+export const postOne = <T>(
+  Model: Model<T>,
+  _postOne?: generateRoutesConfigTypes["postOne"]
+) => {
+  return async (req: Request, res: Response) => {
+    try {
+      let doc;
+      if (_postOne) {
+        doc = await _postOne(req);
+      } else {
+        doc = await Model.findOne(req.body);
+        if (!doc) {
+          res.status(400).json({ message: "未找到对应记录" });
+          return;
+        }
+      }
+      res.status(200).json(doc);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+};
+
 // post 分页列表
 export interface postListOptions {
   $match?: (req: Request) => PipelineStage.Match["$match"];
@@ -286,6 +310,9 @@ type generateRoutesConfigTypes = {
   createOne?: {
     (req: Request): Promise<Object | null>;
   };
+  postOne?: {
+    (req: Request): Promise<Object | null>;
+  };
 };
 
 /*
@@ -302,5 +329,6 @@ export const generateRoutes = <T>(
   router.put("/:id", updateOne(Model));
   router.delete("/:id", deleteOne(Model));
   router.post("/list", postList(Model, config?.postList));
+  router.post("/find_one", postOne(Model, config?.postOne));
   return router;
 };
