@@ -1,7 +1,9 @@
 <!-- 包含头中低的布局 -->
 <template>
-  <view class="layout-container" :class="{ 'safe-area-inset-bottom': !props.showTabbar }">
+  <!-- :class="{ 'safe-area-inset-bottom': !props.showTabbar }" -->
+  <view class="layout-container">
     <view :style="cpHeaderStyle" v-if="props.topSafe">
+      <!-- 顶部占位 -->
     </view>
     <view>
       <slot name="header" />
@@ -20,11 +22,15 @@
     <view class="layout-footer">
       <slot name="footer" />
     </view>
+
     <view class="layout-tabbar" v-if="props.showTabbar">
       <LTabBar />
     </view>
+    <view v-else class="h-[env(safe-area-inset-bottom)]">
+      <!-- 底部占位 -->
+    </view>
 
-    <u-popup v-model="popupVisible" mode="bottom" z-index="199" safe-area-inset-bottom>
+    <u-popup v-model="popupVisible" mode="bottom" z-index="199">
       <view class="bg-white box-border flex flex-col" :style="{ height: props.popupHeight }">
         <view v-if="props.popupHeight === '100vh'" :style="cpPopupTopStyle" @click="closePopup">
           <!-- 顶部占位 -->
@@ -35,6 +41,9 @@
         <scroll-view @scrolltolower="onScrolltolowerPopup" scroll-y class="flex-1 overflow-auto">
           <slot name="popup" />
         </scroll-view>
+        <view class="h-[env(safe-area-inset-bottom)]">
+          <!-- 底部占位 -->
+        </view>
       </view>
     </u-popup>
   </view>
