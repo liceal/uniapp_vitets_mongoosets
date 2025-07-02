@@ -1,6 +1,6 @@
 <!-- 预下单 -->
 <template>
-  <Layout ref="layout" is-custom-nav-bar>
+  <Layout ref="layout" is-custom-nav-bar top-safe>
     <template #header>
       <Header class="bg-white" />
     </template>
@@ -90,7 +90,7 @@
       <FooterPay :price_actual="11.23" :price_receive="22.12" @pay-click="payClick" />
     </template>
     <template #popup>
-      <Address @itemClick="addressItemClick" />
+      <Address @itemClick="addressItemClick" :bodyScroll="false" />
     </template>
   </Layout>
 </template>

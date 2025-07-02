@@ -6,14 +6,17 @@
     <view>
       <slot name="header" />
     </view>
-    <scroll-view @scrolltolower="onScrolltolower" @scroll="onScroll" scroll-y class="layout-body"
-      :class="bgGray ? 'bg-gray-1' : 'bg-white'">
+    <!-- 两种body 一个自动大小 一个放scroll里面自适应 -->
+    <scroll-view v-if="props.bodyScroll" @scrolltolower="onScrolltolower" @scroll="onScroll" scroll-y
+      class="layout-body" :class="bgGray ? 'bg-gray-1' : 'bg-white'">
       <!-- 顶部虚拟位 -->
       <TopView ref="topViewRef" v-if="props.topVirtual" :title="props.topVirtualTitle" />
       <!-- body 顶部透明安全距离 -->
       <view v-if="props.topBodySafe" :style="{ height: `${safeDistanceStore.topSafeAreaHeight}px` }"></view>
       <slot name="body" />
     </scroll-view>
+    <slot name="body" v-else />
+
     <view class="layout-footer">
       <slot name="footer" />
     </view>
@@ -21,9 +24,9 @@
       <LTabBar />
     </view>
 
-    <u-popup v-model="popupVisible" mode="bottom" z-index="199">
+    <u-popup v-model="popupVisible" mode="bottom" z-index="199" safe-area-inset-bottom>
       <view class="bg-white box-border flex flex-col" :style="{ height: props.popupHeight }">
-        <view :style="cpHeaderStyle" @click="closePopup">
+        <view v-if="props.popupHeight === '100vh'" :style="cpPopupTopStyle" @click="closePopup">
           <!-- 顶部占位 -->
         </view>
         <view class="p-2 bg-white" @click="closePopup">
@@ -91,11 +94,31 @@ const props = defineProps({
   topBodySafe: {
     type: Boolean,
     default: false
+  },
+  // body是否进行滚动条处理，如果不处理就是自动大小，如果一个layout页面 放在了layout的popup里面 要去掉bodyScroll
+  bodyScroll: {
+    type: Boolean,
+    default: true
   }
 })
 
 const safeDistanceStore = useSafeDistanceStore();
 const cpHeaderStyle = computed<CSSProperties>(() => {
+  if (props.isCustomNavBar) {
+    return {
+      height: `${safeDistanceStore.topSafeAreaHeight}px`,
+      background: 'white'
+      // background: props.bgGray ? '#efefef' : 'white'
+    }
+  } else {
+    return {
+      background: 'white'
+      // background: props.bgGray ? '#efefef' : 'white'
+    }
+  }
+})
+
+const cpPopupTopStyle = computed<CSSProperties>(() => {
   if (props.isCustomNavBar) {
     return {
       height: `${safeDistanceStore.topSafeAreaHeight}px`,

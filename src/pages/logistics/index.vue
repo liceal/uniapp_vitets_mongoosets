@@ -61,7 +61,7 @@ function getExpress() {
 </script>
 
 <template>
-  <Layout isCustomNavBar topVirtual topVirtualTitle="待取件">
+  <Layout isCustomNavBar topVirtual :topVirtualTitle="express?.status_name">
     <template #body>
       <view class="h-20vh">
         <!-- <map v-bind="mapAttrs" /> -->
@@ -107,11 +107,11 @@ function getExpress() {
           <u-icon name="car" size="40" class="text-gray px-2" />
           <view class="flex-1">
             <view class="flex">
-              <view class="line-clamp-1 flex-1">
-                订单编号：{{ express?.order_id }}
+              <view class="flex-1 !text-nowrap line-clamp-1">
+                订单编号: {{ express?.order_id }}
               </view>
               <view class="px-2">
-                <u-button size="mini">复制</u-button>
+                <u-button size="mini" @click="() => copy(express?.order_id)">复制</u-button>
               </view>
             </view>
             <view>

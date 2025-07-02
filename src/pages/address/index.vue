@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout :bodyScroll="props.bodyScroll" top-safe>
     <template #body>
       <view class="flex flex-col gap-2 w-full">
         <AddressItem v-for="(item, i) in addressesList" :key="item._id" class="w-full" v-bind="item"
@@ -63,13 +63,15 @@
             </template>
           </u-field>
           <u-button type="primary" @click="addSave">保存</u-button>
-          <u-select v-model="addressSelectVisible" mode="mutil-column-auto" :list="list" label-name="label"
-            value-name="value" child-name="children" @confirm="addressSelectConfirm"></u-select>
         </view>
       </u-popup>
 
+      <!-- 选择地区 -->
+      <u-select v-model="addressSelectVisible" mode="mutil-column-auto" :list="list" label-name="label"
+        value-name="value" child-name="children" @confirm="addressSelectConfirm"></u-select>
+
       <!-- 选择位置 -->
-      <u-popup v-model="locationVisible" mode="bottom" :mask="false" z-index="200">
+      <u-popup v-model="locationVisible" mode="bottom" :mask="false" z-index="200" safe-area-inset-bottom>
         <view class="flex flex-col">
           <view class="text-center text-gray">
             请点击选择地址
@@ -100,7 +102,13 @@ import AddressItem from './addressItem.vue';
 import { onMounted, ref } from 'vue';
 import addresses from '@/api/addresses';
 import type { AddressesTypes } from 'types/server';
-import { onReady } from '@dcloudio/uni-app';
+
+const props = defineProps({
+  bodyScroll: {
+    type: Boolean,
+    default: true
+  }
+})
 
 const addressesList = ref<AddressesTypes[]>([])
 async function getAddressesList() {
