@@ -9,6 +9,13 @@
       }
     },
     {
+      "path": "pages/chat/index",
+      "style": {
+        "navigationBarTitleText": "聊天室"
+        // "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/mine/index",
       "style": {
         "navigationBarTitleText": "我的",
@@ -70,6 +77,13 @@
         "navigationBarTitleText": "物流",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/chat/chat",
+      "style": {
+        "navigationBarTitleText": "聊天室"
+        // "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {
@@ -81,6 +95,12 @@
         "text": "首页"
         // "iconPath": "home"
         // "selectedIconPath": "home"
+      },
+      {
+        "pagePath": "pages/chat/index",
+        "text": "聊天室"
+        // "iconPath": "static/tabbar/mine.png",
+        // "selectedIconPath": "static/tabbar/mine-active.png"
       },
       {
         "pagePath": "pages/mine/index",

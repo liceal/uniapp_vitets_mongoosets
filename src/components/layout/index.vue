@@ -1,7 +1,7 @@
 <!-- 包含头中低的布局 -->
 <template>
   <!-- :class="{ 'safe-area-inset-bottom': !props.showTabbar }" -->
-  <view class="layout-container">
+  <view class="layout-container" :style="cpContainerStyle">
     <view :style="cpHeaderStyle" v-if="props.topSafe">
       <!-- 顶部占位 -->
     </view>
@@ -10,11 +10,12 @@
     </view>
     <!-- 两种body 一个自动大小 一个放scroll里面自适应 -->
     <scroll-view v-if="props.bodyScroll" @scrolltolower="onScrolltolower" @scroll="onScroll" scroll-y
-      class="layout-body" :class="bgGray ? 'bg-gray-1' : 'bg-white'">
+      class="layout-body" :class="bgGray ? 'bg-gray-1' : 'bg-white'" @click="bodyClick">
       <!-- 顶部虚拟位 -->
       <TopView ref="topViewRef" v-if="props.topVirtual" :title="props.topVirtualTitle" />
       <!-- body 顶部透明安全距离 -->
-      <view v-if="props.topBodySafe" :style="{ height: `${safeDistanceStore.topSafeAreaHeight}px` }"></view>
+      <view v-if="props.topBodySafe" class="bg-white" :style="{ height: `${safeDistanceStore.topSafeAreaHeight}px` }">
+      </view>
       <slot name="body" />
     </scroll-view>
     <slot name="body" v-else />
@@ -55,7 +56,7 @@ import { useSafeDistanceStore } from '@/stores/safeDistance';
 import { computed, ref, type CSSProperties } from 'vue';
 import TopView from '../TopView.vue';
 
-const emits = defineEmits(['bodyScrollToLower', 'popupScrollToLower'])
+const emits = defineEmits(['bodyScrollToLower', 'popupScrollToLower', 'bodyClick'])
 
 function onScrolltolower(e: any) {
   // console.log('layout 到底了', e);
@@ -142,6 +143,25 @@ const cpPopupTopStyle = computed<CSSProperties>(() => {
   }
 })
 
+const cpContainerStyle = computed<CSSProperties>(() => {
+  if (props.isCustomNavBar) {
+    return {
+      height: '100vh'
+    }
+  } else {
+    // 使用条件编译指令动态设置高度
+    let heightValue = 'calc(100vh)';
+    // #ifdef WEB
+    heightValue = 'calc(100vh - 44px)';
+    // #else
+    heightValue = 'calc(100vh)';
+    // #endif
+    return {
+      height: heightValue
+    };
+  }
+})
+
 // 关于弹窗的
 const popupVisible = ref(false)
 function openPopup() {
@@ -156,6 +176,10 @@ function onScroll(e: any) {
   topViewRef.value?.onScroll(e)
 }
 
+function bodyClick(e: any) {
+  emits('bodyClick', e)
+}
+
 defineExpose({
   openPopup,
   closePopup
@@ -166,7 +190,7 @@ defineExpose({
 .layout-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  // height: 100vh;
   box-sizing: border-box;
 
 

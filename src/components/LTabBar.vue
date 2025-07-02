@@ -17,6 +17,13 @@ const pageList = reactive([
     midButton: true
   },
   {
+    text: "聊天",
+    iconPath: 'chat',
+    selectedIconPath: 'chat-fill',
+    pagePath: "/pages/chat/index",
+    midButton: true
+  },
+  {
     text: "我的",
     iconPath: 'account',
     selectedIconPath: 'account-fill',
