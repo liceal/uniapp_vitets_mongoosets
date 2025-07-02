@@ -1,5 +1,5 @@
 <template>
-  <scroll-view @scrolltolower="lowerBottom" scroll-y>
+  <scroll-view @scrolltolower="lowerBottom" scroll-y class="pb-4">
     <view class="grid grid-cols-2 gap-1 p-1 box-border">
       <view v-for="goods in goodsList" :key="goods.id" @click="() => toDetail(goods)">
         <Goods v-bind="goods" />
