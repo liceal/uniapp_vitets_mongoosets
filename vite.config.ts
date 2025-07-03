@@ -51,6 +51,11 @@ export default defineConfig(async ({ mode }) => {
             return path.replace(/^\/api/, "");
           }, // 重写路径
         },
+        "/ws": {
+          target: "ws://192.168.1.11:7200",
+          ws: true,
+          changeOrigin: true,
+        },
       },
     },
   };

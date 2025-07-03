@@ -10,7 +10,7 @@ type UserDocument = mongoose.Document & UserTypes & UserMethodsTypes;
 
 const userSchema = new mongoose.Schema<UserDocument>({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   email: { type: String, required: true, unique: true },
   avatar: {
     type: String,
@@ -38,4 +38,4 @@ userSchema.methods.generateAuthToken = function (this: UserDocument) {
   return token;
 };
 
-export const User = mongoose.model<UserDocument>("User", userSchema);
+export const User = mongoose.model<UserDocument>("users", userSchema);

@@ -1,6 +1,7 @@
 import { ObjectId } from "mongoose";
 import type { SkuGroupTypes, SkuTypes } from "./sku";
 import type { AddressesDocument } from "#/models/addresses";
+import type { ChatMessageDocument } from "#/models/chatRooms";
 
 // 时间参数 数据创建的更新和创建时间
 export interface DateTypes {
@@ -79,8 +80,9 @@ export interface OrderTypes extends GoodsAttrs {
 
 // 用户
 export interface UserTypes {
+  _id: any | ObjectId;
   username: string;
-  password: string;
+  password?: string;
   email: string;
   avatar: string;
 }
@@ -201,8 +203,26 @@ interface ExpressLogTypes {
 
 // 物流新增日志参数
 export interface ExpressLogReqTypes {
-  id: any | ObjectId; //物流id
+  _id: any | ObjectId; //物流id
   status: ExpressStatus; //物流状态
   location: string; //位置
   remark: string; //信息
+}
+
+// 聊天室
+export interface ChatRoomTypes extends DateTypes {
+  _id: any | ObjectId;
+  title: string; //标题
+  shop_id: any | ObjectId; //商家id
+  shop_detail: ShopTypes; //商家详情
+  user_id: any | ObjectId; //用户id
+  user_detail: UserTypes; //用户详情
+  messages: ChatMessageTypes[]; //聊天内容
+}
+
+// 聊天信息
+export interface ChatMessageTypes {
+  sender: "shop" | "user"; //商家或者用户
+  message: string; //消息
+  createdAt: string; //创建时间
 }

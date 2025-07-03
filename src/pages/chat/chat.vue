@@ -1,9 +1,33 @@
 <script setup lang='ts'>
+import chat_room from '@/api/chat_room'
 import Layout from '@/components/layout/index.vue'
-import gsap from 'gsap'
-import { ref, watch } from 'vue'
+import { useUserStore } from '@/stores'
+import { onLoad } from '@dcloudio/uni-app'
+import moment from 'moment'
+import type { ChatMessageTypes, ChatRoomTypes, UserTypes } from 'types/server'
+import { onMounted, ref, watch } from 'vue'
 
 const chatTitle = ref('初始聊天室标题')
+const chatRoomDetail = ref<ChatRoomTypes>()
+const userStore = useUserStore()
+
+onLoad((options) => {
+  let { chat_room_id } = options as { chat_room_id: string }
+  if (chat_room_id) {
+    chat_room.crud
+      .get(chat_room_id)
+      .then(res => {
+        chatRoomDetail.value = res
+
+        // 连接ws
+        // 如果登录了 则连接ws
+        const userInfo = userStore.getUserInfo()
+        if (userInfo) {
+          connectWs(userInfo)
+        }
+      })
+  }
+})
 
 // 监听 chatTitle 的变化，当值改变时更新标题
 watch(chatTitle,
@@ -27,37 +51,22 @@ function clickShowHandle() {
   showHandle.value = !showHandle.value
 }
 
-const msgList = ref([
-  {
-    type: "time",
-    time_str: "星期五 09:55"
-  },
-  {
-    type: "message",
-    avatar: "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-    message: "我是用户啊啊啊啊",
-    user_type: 'user',
-  },
-  {
-    type: "message",
-    avatar: "https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg",
-    message: "- 不会自动断电呢，充满是会进入一个涓流状态的，不是快充状态，这也是一个过充保护的哈~",
-    user_type: 'shop',
-  },
-])
-
 const message = ref('')
 function msgSend(e: any) {
   uni.showToast({
     title: message.value
   })
-  console.log(e, message.value);
-  msgList.value.push({
-    type: 'message',
-    avatar: 'https://img.pddpic.com/gaudit-image/2025-03-11/924d53c675061bdcc7722c0ce56bb7df.jpeg',
+  console.log(e);
+  chatRoomDetail.value?.messages.push({
     message: message.value,
-    user_type: 'user',
+    sender: 'user',
+    createdAt: moment().format('YYYY-MM-DD HH:mm:ss')
   })
+
+  socket?.send({
+    data: message.value
+  })
+
   message.value = ''
 }
 
@@ -65,35 +74,69 @@ function bodyClick(e: any) {
   showHandle.value = false
 }
 
+
+let socket: UniApp.SocketTask | null = null
+// let socket = ref()
+// 测试连接websocket
+function connectWs(userInfo: UserTypes) {
+  let path = import.meta.env.VITE_WS_PROXY_PATH
+  socket = uni.connectSocket({
+    url: `${path}/?user_id=${userInfo._id}&room_id=${chatRoomDetail.value?._id}`,
+    success: () => { console.log('正在连接'); },
+    fail: (err) => { console.error('连接失败', err); },
+    complete: (e) => {
+      console.log(e);
+    }
+  })
+
+  socket.onOpen(() => {
+    console.log('连接成功');
+  })
+
+  socket.onClose(() => {
+    console.log('连接关闭');
+  })
+
+  socket.onMessage((e) => {
+    console.log('收到消息', e);
+    if (e.data === '__SendSuccess__') {
+      // 发送信息成功的回调
+      uni.showToast({
+        title: "消息发送成功"
+      })
+    }
+  })
+
+  socket.send({ data: 'halo' })
+
+}
 </script>
 
 <template>
   <Layout @body-click="bodyClick">
     <template #body>
       <view class="flex flex-col gap-4 pt-4">
-        <template v-for="(item, k) in msgList" :key="k">
-          <view v-if="item.type === 'time'" class="text-gray text-xs py-2 text-center">
-            {{ item.time_str }}
-          </view>
-          <template v-if="item.type === 'message'">
-            <!-- 商户在左侧 -->
-            <template v-if="item.user_type === 'shop'">
-              <view class="flex">
-                <u-image :src="item.avatar" height="3rem" width="3rem" class="px-2" />
-                <view class="flex-1 bg-white border-rounded p-2 mr-5rem arrow-left">
-                  {{ item.message }}
-                </view>
+        <template v-for="(item, k) in chatRoomDetail?.messages" :key="k">
+          <!-- <view v-if="item.type === 'time'" class="text-gray text-xs py-2 text-center">
+            {{ item.createdAt }}
+          </view> -->
+          <!-- 商户在左侧 -->
+          <template v-if="item.sender === 'shop'">
+            <view class="flex">
+              <u-image :src="chatRoomDetail?.shop_detail.pictureUrl" height="3rem" width="3rem" class="px-2" />
+              <view class="flex-1 bg-white border-rounded p-2 mr-5rem arrow-left">
+                {{ item.message }}
               </view>
-            </template>
-            <!-- 用户在右侧 -->
-            <template v-if="item.user_type === 'user'">
-              <view class="flex">
-                <view class="flex-1 bg-white border-rounded p-2 ml-5rem arrow-right">
-                  {{ item.message }}
-                </view>
-                <u-image :src="item.avatar" height="3rem" width="3rem" class="px-2" />
+            </view>
+          </template>
+          <!-- 用户在右侧 -->
+          <template v-if="item.sender === 'user'">
+            <view class="flex">
+              <view class="flex-1 bg-white border-rounded p-2 ml-5rem arrow-right">
+                {{ item.message }}
               </view>
-            </template>
+              <u-image :src="chatRoomDetail?.user_detail.avatar" height="3rem" width="3rem" class="px-2" />
+            </view>
           </template>
         </template>
       </view>

@@ -164,7 +164,10 @@ function toOrder(item: any, index: number) {
 }
 
 function loginClick() {
-  layoutRef.value?.openPopup()
+  // layoutRef.value?.openPopup()
+  uni.navigateTo({
+    url: '/pages/login/index'
+  })
 }
 
 function loginSuccess() {

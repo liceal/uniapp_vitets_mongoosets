@@ -13,6 +13,23 @@ export const useUserStore = defineStore("userStore", {
     },
     async logout() {
       this.userInfo = {};
+      uni.removeStorageSync("token");
+      uni.removeStorageSync("userInfo");
+    },
+    getUserInfo(): UserTypes | null {
+      // 判断是否登录 没登录跳到登录页面
+      const userInfo = uni.getStorageSync("userInfo") as UserTypes | any;
+      if (!userInfo?._id) {
+        uni.showToast({
+          title: "请先登录",
+        });
+        uni.navigateTo({
+          url: "/pages/login/index",
+        });
+        return null;
+      } else {
+        return userInfo;
+      }
     },
   },
 });

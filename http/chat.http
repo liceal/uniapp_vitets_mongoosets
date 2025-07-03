@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:7200/api/chat_rooms
+
+### 聊天室列表
+POST {{baseUrl}}/list
+Content-Type: application/json
+
+{
+  "noPage":1
+}
+
+### 创建聊天室
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "user_id": "684e3fe79b1b37f83d7bba6f",
+  "shop_id": "684a861ffd173eae470c4f1b"
+}
+
+### 查看某个聊天室
+GET {{baseUrl}}/68664ba857da1ae21344ba38

@@ -22,9 +22,13 @@ POST {{baseUrl}}/list
 Content-Type: application/json
 
 {
-    "page": 1,
-    "limit": 10
+    "noPage":1
 }
+
+# {
+#     "page": 1,
+#     "limit": 10
+# }
 
 ### 获取单个商品
 

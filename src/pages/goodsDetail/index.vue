@@ -159,7 +159,7 @@
             <u-icon name="heart" size="40" />
             <text class="leading-none">收藏</text>
           </view>
-          <view class="flex flex-col justify-center items-center">
+          <view class="flex flex-col justify-center items-center" @click="chatClick">
             <u-icon name="chat" size="40" />
             <text class="leading-none">客服</text>
           </view>
@@ -225,9 +225,20 @@ import type { CommentClassTypes, CommentsListTypes, GoodsAttrsTypes, GoodsTypes 
 import goods from '@/api/goods';
 import type { SkuGroupTypes, SkuGroupValueTypes, SkuTypes } from 'types/sku';
 import { deepEqual } from '@/utils';
+import chat_room from '@/api/chat_room';
+import { useUserStore } from '@/stores';
 
+const popupVisible = ref(false);
+function goodsServerClick() {
+  popupVisible.value = true;
+}
+const scrollTop = ref(0);
+onPageScroll((e) => {
+  scrollTop.value = e.scrollTop;
+})
+
+// 商品信息
 const goods_id = ref('')
-
 const imgList = ref(
   [
     {
@@ -244,16 +255,15 @@ const imgList = ref(
     },
   ]
 )
-
-const popupVisible = ref(false);
-function goodsServerClick() {
-  popupVisible.value = true;
+const goodsDetail = ref<GoodsTypes>()
+function getGoodsDetail() {
+  goods.goods
+    .get(goods_id.value)
+    .then(res => {
+      goodsDetail.value = res
+    })
 }
 
-const scrollTop = ref(0);
-onPageScroll((e) => {
-  scrollTop.value = e.scrollTop;
-})
 
 // sku功能
 const popupVisible_sku = ref(false)
@@ -403,26 +413,34 @@ function skuConfirm() {
   }
 }
 
+
+const userStore = useUserStore()
+// 客服点击
+function chatClick() {
+  const userInfo = userStore.getUserInfo()
+  if (userInfo) {
+    chat_room.crud
+      .post({
+        user_id: userInfo?._id,
+        shop_id: goodsDetail.value?.shopDetail?.id,
+      })
+      .then(res => {
+        uni.navigateTo({
+          url: `/pages/chat/chat?chat_room_id=${res._id}`
+        })
+      })
+  }
+}
+
 onLoad((options) => {
   console.log(options);
   goods_id.value = options?.goods_id
+  // 获取商品详情
+  getGoodsDetail()
 })
 
 onMounted(() => {
-  // 监听页面滚动事件
-  onPageScroll(e => {
-    console.log(e);
-
-  });
-
 });
-
-defineOptions({
-  onPageScroll(e) {
-    console.log(e);
-
-  }
-})
 </script>
 
 <style lang='scss' scoped>
