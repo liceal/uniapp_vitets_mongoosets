@@ -69,6 +69,7 @@ export const getAll = <T>(
         pageSize: limit,
       });
     } catch (error: any) {
+      console.error(error);
       res.status(500).json({ message: error.message });
     }
   };
@@ -92,6 +93,7 @@ export const getOne = <T>(
       }
       res.status(200).json(doc);
     } catch (error: any) {
+      console.error(error);
       res.status(500).json({ message: error.message });
     }
   };
@@ -110,6 +112,7 @@ export const updateOne = <T>(Model: Model<T>) => {
       }
       res.status(200).json(doc);
     } catch (error: any) {
+      console.error(error);
       res.status(400).json({ message: error.message });
     }
   };
@@ -125,6 +128,7 @@ export const deleteOne = <T>(Model: Model<T>) => {
       }
       res.status(200).json({ message: "记录删除成功" });
     } catch (error: any) {
+      console.error(error);
       res.status(500).json({ message: error.message });
     }
   };
@@ -149,6 +153,7 @@ export const postOne = <T>(
       }
       res.status(200).json(doc);
     } catch (error: any) {
+      console.error(error);
       res.status(500).json({ message: error.message });
     }
   };
@@ -247,7 +252,12 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
           },
         ]);
       }
-      const docs = docsArray[0] || {};
+      let docs;
+      if (noPage) {
+        docs = docsArray || [];
+      } else {
+        docs = docsArray[0] || [];
+      }
       // 格式化时间
       if (docs.data) {
         docs.data = docs.data.map((item: any) => {
