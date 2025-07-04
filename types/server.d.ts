@@ -79,12 +79,13 @@ export interface OrderTypes extends GoodsAttrs {
 }
 
 // 用户
-export interface UserTypes {
+export interface UserTypes extends DateTypes {
   _id: any | ObjectId;
   username: string;
   password?: string;
   email: string;
   avatar: string;
+  shop_id: string | ObjectId;
 }
 
 // 验证码入参
@@ -222,7 +223,9 @@ export interface ChatRoomTypes extends DateTypes {
 
 // 聊天信息
 export interface ChatMessageTypes {
-  sender: "shop" | "user"; //商家或者用户
+  // sender: "shop" | "user"; //商家或者用户
+  user_id: any; //用户id
+  user_detail?: UserTypes; //用户详情
   message: string; //消息
   createdAt: string; //创建时间
 }

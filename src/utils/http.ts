@@ -28,6 +28,7 @@ const http = axios.create({
 http.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     config.headers["Content-Type"] = "application/json; charset=utf-8";
+    config.headers["authorization"] = uni.getStorageSync("token");
 
     // 可以在这里添加token等
     return config;
@@ -42,6 +43,15 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse["data"] => {
     // console.log("http", response);
+    if (response.status === 401) {
+      uni.showToast({
+        title: "请先登录",
+      });
+      uni.navigateTo({
+        url: "/pages/login/index",
+      });
+      return Promise.reject(response);
+    }
     if (response.status === 400) {
       uni.showModal({
         title: "请求错误",

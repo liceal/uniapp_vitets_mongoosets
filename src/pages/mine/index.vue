@@ -3,7 +3,7 @@
     <template #body>
 
       <!-- 登录 用户 -->
-      <template v-if="userInfo.username">
+      <template v-if="userInfo">
         <view class="bg-white p-2 flex items-center gap-2">
           <u-avatar :src="userInfo.avatar" size="80" />
           用户：{{ userInfo.username }}
@@ -153,8 +153,8 @@ const handleItems = ref([
   },
 ])
 
-const userInfo = computed<UserTypes>(() => {
-  return userStore.userInfo
+const userInfo = computed<UserTypes | null>(() => {
+  return userStore.userInfo as UserTypes
 })
 
 function toOrder(item: any, index: number) {

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { type SchemaTimestampsConfig } from "mongoose";
 import jwt from "jsonwebtoken";
 import type { UserTypes } from "types/server";
 
@@ -6,7 +6,10 @@ type UserMethodsTypes = {
   generateAuthToken: () => string;
 };
 
-type UserDocument = mongoose.Document & UserTypes & UserMethodsTypes;
+export type UserDocument = mongoose.Document &
+  SchemaTimestampsConfig &
+  UserTypes &
+  UserMethodsTypes;
 
 const userSchema = new mongoose.Schema<UserDocument>({
   username: { type: String, required: true, unique: true },
@@ -17,6 +20,11 @@ const userSchema = new mongoose.Schema<UserDocument>({
     required: true,
     default:
       "https://img-3.pddpic.com/garner-api-new/8b60a95aca982f998eba3ff449d600a1.jpeg?imageView2/2/w/1300/q/80",
+  },
+  shop_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "shops", //这里关联了shops表 用populate("shopId")可以查询到shopId对应的店铺信息
+    index: true,
   },
 });
 

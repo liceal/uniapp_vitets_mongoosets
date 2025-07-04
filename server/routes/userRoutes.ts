@@ -17,7 +17,7 @@ router.get("/captcha/list", CaptchaControlles.captchaList);
 
 generateRoutes(router, User);
 
-router.get("/validate", UserControlles.protect, (req, res) => {
+router.get("/validate", UserControlles.login_validator, (req, res) => {
   res.status(200).json("登录验证成功");
 });
 

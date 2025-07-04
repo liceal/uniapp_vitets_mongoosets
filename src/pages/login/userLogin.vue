@@ -82,9 +82,7 @@ async function login() {
       duration: 2000
     });
 
-    uni.setStorageSync('token', res.token)
-    uni.setStorageSync('userInfo', res.data)
-    userStore.setUserInfo(res.data)
+    userStore.setUserInfo(res.data, res.token)
 
     emits('loginSuccess')
   } catch (e) {

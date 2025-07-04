@@ -13,10 +13,9 @@ import { skusRoutes } from "./routes/skusRoutes";
 import { skuGroupsRoutes } from "./routes/skuGroupRoutes";
 import { expressesRouter } from "./routes/ExpressesRoutes";
 import { createServer, IncomingMessage } from "http";
-import { Server } from "socket.io";
-import { WebSocketServer } from "ws";
 import { chatRoomsRoutes } from "./routes/chatRoomsRoutes";
 import { chatRoomsConnect } from "./models/chatRooms";
+import { login_validator } from "./controllers/user";
 
 dotenv.config();
 
@@ -57,7 +56,7 @@ app.use("/api/addresses", addressesRoutes);
 app.use("/api/skus", skusRoutes); //单一规格属性
 app.use("/api/sku_groups", skuGroupsRoutes); //规格组
 app.use("/api/expresses", expressesRouter); //物流
-app.use("/api/chat_rooms", chatRoomsRoutes); //聊天
+app.use("/api/chat_rooms", login_validator, chatRoomsRoutes); //聊天
 
 // 启动服务器
 // app.listen(PORT, () => {
@@ -70,9 +69,7 @@ app.use("/api/chat_rooms", chatRoomsRoutes); //聊天
 // 创建HTTP服务器
 export const httpServer = createServer(app);
 
-export const wsMap = new Map<string, WebSocket>();
-
-chatRoomsConnect(httpServer, wsMap);
+chatRoomsConnect(httpServer);
 
 httpServer.listen(PORT, () => {
   console.log(`服务器运行在 http://localhost:${PORT}`);

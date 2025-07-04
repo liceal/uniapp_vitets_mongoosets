@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
-import { jwtMsg, User } from "../models/user";
+import type { NextFunction, Request, Response } from "express";
+import { type jwtMsg, User } from "../models/user";
 import svgCaptcha from "svg-captcha";
 import NodeCache from "node-cache";
 import { Captcha } from "#/models/captcha";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import type {
   CaptchaReqTypes,
   CaptchaResTypes,
@@ -124,7 +124,7 @@ const captchaList_chache = async (req: Request, res: Response) => {
 
 // token校验用户 并且给头上放用户信息
 const userCache = new NodeCache({ stdTTL: 300 }); //缓存5分钟
-export const protect = async (
+export const login_validator = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -193,6 +193,6 @@ export default {
   captcha_cache,
   login,
   captchaList_chache,
-  protect,
+  login_validator,
   captcha_validator,
 };

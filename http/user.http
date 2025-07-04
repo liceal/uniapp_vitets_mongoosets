@@ -42,3 +42,11 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODRlM2ZlNzli
 
 ### 用户列表
 POST {{baseUrl}}/list
+
+### 更新用户
+PUT {{baseUrl}}/684e80c5fa4bd8efeb82fd1f
+Content-Type: application/json
+
+{
+  "shop_id":"6836a7b77c25224250ab6d9b"
+}

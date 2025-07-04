@@ -5,14 +5,28 @@ const pinia = createPinia();
 
 export const useUserStore = defineStore("userStore", {
   state: () => ({
-    userInfo: {} as UserTypes | any,
+    _userInfo: null as UserTypes | null,
   }),
+  getters: {
+    userInfo(state): UserTypes {
+      if (state._userInfo) {
+        return state._userInfo as UserTypes;
+      } else {
+        state._userInfo = uni.getStorageSync("userInfo") as UserTypes | null;
+        return state._userInfo as UserTypes;
+      }
+    },
+  },
   actions: {
-    setUserInfo(userInfo: UserTypes | any) {
-      this.userInfo = userInfo;
+    setUserInfo(userInfo: UserTypes | any, token?: string) {
+      this._userInfo = userInfo;
+      uni.setStorageSync("userInfo", userInfo);
+      if (token) {
+        uni.setStorageSync("token", token);
+      }
     },
     async logout() {
-      this.userInfo = {};
+      this._userInfo = null;
       uni.removeStorageSync("token");
       uni.removeStorageSync("userInfo");
     },

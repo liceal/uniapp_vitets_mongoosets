@@ -24,5 +24,8 @@ export default {
     get: async function (id: string): Promise<ChatRoomTypes> {
       return await http.get(`${this.url}/${id}`);
     },
+    delete: async function (id: string): Promise<ChatRoomTypes> {
+      return await http.delete(`${this.url}/${id}`);
+    },
   },
 };
