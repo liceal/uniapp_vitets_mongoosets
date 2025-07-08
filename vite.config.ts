@@ -52,7 +52,7 @@ export default defineConfig(async ({ mode }) => {
           }, // 重写路径
         },
         "/ws": {
-          target: "ws://192.168.1.11:7200",
+          target: env.VITE_WS_PROXY_PATH,
           ws: true,
           changeOrigin: true,
         },
