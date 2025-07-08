@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Shop } from "../models/shop";
 
 // 创建店铺

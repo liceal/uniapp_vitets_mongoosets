@@ -14,10 +14,17 @@ import { skuGroupsRoutes } from "./routes/skuGroupRoutes";
 import { expressesRouter } from "./routes/ExpressesRoutes";
 import { createServer, IncomingMessage } from "http";
 import { chatRoomsRoutes } from "./routes/chatRoomsRoutes";
-import { chatRoomsConnect } from "./models/chatRooms";
 import { login_validator } from "./controllers/user";
+import { chatRoomsConnect } from "./controllers/chatRoom";
 
-dotenv.config();
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+
+console.log(envFile);
+
+dotenv.config({ path: envFile });
 
 const app = express();
 const PORT = process.env.PORT_SERVER;
@@ -69,6 +76,7 @@ app.use("/api/chat_rooms", login_validator, chatRoomsRoutes); //聊天
 // 创建HTTP服务器
 export const httpServer = createServer(app);
 
+// 开启一个聊天室的ws服务
 chatRoomsConnect(httpServer);
 
 httpServer.listen(PORT, () => {

@@ -2,16 +2,18 @@
 import chat_room from '@/api/chat_room'
 import Layout from '@/components/layout/index.vue'
 import { useUserStore } from '@/stores'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onUnload } from '@dcloudio/uni-app'
 import moment from 'moment'
-import type { ChatMessageTypes, ChatRoomTypes, UserTypes } from 'types/server'
-import { onMounted, ref, watch } from 'vue'
+import type { ChatMessageTypes, ChatRoomTypes, ChatWSReturn, UserTypes } from 'types/server'
+import { nextTick, onMounted, ref, watch } from 'vue'
 
 const chatTitle = ref('')
 const chatRoomDetail = ref<ChatRoomTypes>()
 const userStore = useUserStore()
 const message = ref('')
 const showHandle = ref(false)
+let socket: UniApp.SocketTask | null = null
+const layoutRef = ref<InstanceType<typeof Layout>>()
 
 onLoad((options) => {
   let { chat_room_id } = options as { chat_room_id: string }
@@ -22,6 +24,8 @@ onLoad((options) => {
         chatRoomDetail.value = res
         chatTitle.value = res.title
 
+        layoutRef.value?.bodyScrollToBottom()
+
         // 连接ws
         // 如果登录了 则连接ws
         const userInfo = userStore.getUserInfo()
@@ -30,6 +34,10 @@ onLoad((options) => {
         }
       })
   }
+})
+
+onUnload(() => {
+  socket?.close({})
 })
 
 // 监听 chatTitle 的变化，当值改变时更新标题
@@ -55,17 +63,22 @@ function msgSend(e: any) {
     title: message.value
   })
   console.log(e);
-  // chatRoomDetail.value?.messages.push({
-  //   message: message.value,
-  //   user_id: userStore.userInfo?._id,
-  //   createdAt: moment().format('YYYY-MM-DD HH:mm:ss')
-  // })
+  uni.showLoading()
+
+  chatRoomDetail.value?.messages.push({
+    message: message.value,
+    user_id: userStore.userInfo?._id,
+    user_detail: userStore.userInfo,
+    createdAt: moment().format('YYYY-MM-DD HH:mm:ss')
+  })
 
   socket?.send({
     data: message.value
   })
+  uni.hideLoading()
+  message.value = ''
 
-  uni.showLoading()
+  layoutRef.value?.bodyScrollToBottom()
 }
 
 function bodyClick(e: any) {
@@ -73,14 +86,13 @@ function bodyClick(e: any) {
 }
 
 // socket连接
-let socket: UniApp.SocketTask | null = null
-// let socket = ref()
 // 测试连接websocket
 function connectWs(userInfo: UserTypes) {
 
   let path = import.meta.env.VITE_WS_PROXY_PATH
   socket = uni.connectSocket({
-    url: `${path}/?user_id=${userInfo._id}&room_id=${chatRoomDetail.value?._id}`,
+    url: `${path}/?room_id=${chatRoomDetail.value?._id}&token=${uni.getStorageSync("token")}`,
+
     success: () => { console.log('正在连接'); },
     fail: (err) => { console.error('连接失败', err); },
     complete: (e) => {
@@ -99,51 +111,36 @@ function connectWs(userInfo: UserTypes) {
   socket.onMessage((e: { data: string }) => {
     uni.hideLoading()
     console.log('收到消息', e);
-    if (e.data === '__SendSuccess__') {
-      // 发送信息成功的回调
+    let res = JSON.parse(e.data) as ChatWSReturn
+
+    if (res.type === 'init') {
+      // 初始化有人进入
       uni.showToast({
-        title: "消息发送成功"
+        title: res.message
       })
-
-      chatRoomDetail.value?.messages.push({
-        message: message.value,
-        user_id: userStore.userInfo?._id,
-        user_detail: userStore.userInfo,
-        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-
+    } else if (res.type === 'new_user') {
+      uni.showToast({
+        title: res.message
       })
-      message.value = ''
+    } else if (res.type === 'error') {
+      uni.showToast({
+        icon: 'error',
+        title: res.message
+      })
     } else {
-      // 否则是json数据 进行解析
-      let data = JSON.parse(e.data) as { type: 'success' | 'error', message: string, user_id: string, user_detail: UserTypes }
-      console.log(data);
-      if (data.type === 'error') {
-        uni.showToast({
-          icon: 'error',
-          title: data.message
-        })
-      } else if (data.type === 'success') {
-        uni.showToast({
-          icon: 'success',
-          title: data.message
-        })
-      } else if (data.type === 'receive') {
-        // 收到对方消息
-        chatRoomDetail.value?.messages.push({
-          message: data.message,
-          user_id: data.user_id,
-          createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-          user_detail: data.user_detail
-        })
-      }
+      uni.showToast({ title: res.message })
+      // 插入消息
+      chatRoomDetail.value?.messages.push({
+        message: res.message || '',
+        user_id: res.user?._id,
+        user_detail: res.user,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss')
+      })
+      
+      layoutRef.value?.bodyScrollToBottom()
     }
   })
 }
-
-// 判断是本人消息还是对方消息，判断userid是不是自己
-// function isMyMsg(item: ChatMessageTypes) {
-//   return item.user_id === userStore.userInfo?._id
-// }
 
 // 判断信息在左侧还是右侧，我的信息在左侧 对方的信息在右侧
 function isMe(item: ChatMessageTypes) {
@@ -153,7 +150,7 @@ function isMe(item: ChatMessageTypes) {
 </script>
 
 <template>
-  <Layout @body-click="bodyClick">
+  <Layout ref="layoutRef" @body-click="bodyClick">
     <template #body>
       <view class="flex flex-col gap-4 pt-4">
 

@@ -1,5 +1,5 @@
 import { Captcha } from "#/models/captcha";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 // 创建验证码
 const createCaptcha = async (req: Request, res: Response) => {

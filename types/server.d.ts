@@ -229,3 +229,15 @@ export interface ChatMessageTypes {
   message: string; //消息
   createdAt: string; //创建时间
 }
+
+// 聊天室ws返回信息
+export interface ChatWSReturn {
+  type: "accept" | "error" | "init" | "new_user";
+  user?: UserTypes;
+  message?: string;
+}
+
+//聊天室ws入参
+// export interface ChatWSParams {
+//   message?: string;
+// }

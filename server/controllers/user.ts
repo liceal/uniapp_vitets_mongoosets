@@ -1,8 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { type jwtMsg, User } from "../models/user";
+import { type jwtMsg, User, type UserDocument } from "../models/user";
 import svgCaptcha from "svg-captcha";
 import NodeCache from "node-cache";
-import { Captcha } from "#/models/captcha";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import type {
   CaptchaReqTypes,
@@ -123,7 +122,34 @@ const captchaList_chache = async (req: Request, res: Response) => {
 };
 
 // token校验用户 并且给头上放用户信息
-const userCache = new NodeCache({ stdTTL: 300 }); //缓存5分钟
+export const userCache = new NodeCache({ stdTTL: 300 }); //缓存5分钟
+
+// 根据token获取用户信息，优先从缓存里面取
+export async function getUserInfo(token: string): Promise<UserDocument | null> {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload &
+    jwtMsg;
+  console.log("jwt解析内容", decoded);
+  if (decoded.userId) {
+    // 先去缓存里找
+    const cachedUser = userCache.get(decoded.userId) as UserDocument;
+    if (cachedUser) {
+      console.log("返回缓存用户");
+
+      return cachedUser;
+    } else {
+      const user = await User.findById(decoded.userId);
+      if (user) {
+        console.log("返回查找的用户并且缓存");
+        userCache.set(decoded.userId, user);
+        return user;
+      } else {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
 export const login_validator = async (
   req: Request,
   res: Response,
@@ -135,24 +161,13 @@ export const login_validator = async (
       res.status(401).json({ message: "未提供token，请先登录" });
       return;
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload &
-      jwtMsg;
-    console.log("jwt解析内容", decoded);
-    if (decoded.userId) {
-      // 先去缓存里找
-      const cachedUser = userCache.get(decoded.userId);
-      if (cachedUser) {
-        req.user = cachedUser;
-        next();
-      } else {
-        const user = await User.findById(decoded.userId);
-        if (!user) {
-          res.status(401).json({ message: "token找不到用户" });
-          return;
-        }
-        req.user = user;
-        next();
-      }
+
+    const user = await getUserInfo(token);
+    if (user) {
+      req.user = user;
+      next();
+    } else {
+      res.status(401).json({ message: "token找不到用户" });
     }
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {

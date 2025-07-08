@@ -10,7 +10,7 @@
     </view>
     <!-- 两种body 一个自动大小 一个放scroll里面自适应 -->
     <scroll-view v-if="props.bodyScroll" @scrolltolower="onScrolltolower" @scroll="onScroll" scroll-y
-      class="layout-body" :class="bgGray ? 'bg-gray-1' : 'bg-white'" @click="bodyClick">
+      class="layout-body" :class="bgGray ? 'bg-gray-1' : 'bg-white'" @click="bodyClick" :scroll-top="bodyScrollTop">
       <!-- 顶部虚拟位 -->
       <TopView ref="topViewRef" v-if="props.topVirtual" :title="props.topVirtualTitle" />
       <!-- body 顶部透明安全距离 -->
@@ -171,9 +171,15 @@ function closePopup() {
   popupVisible.value = false
 }
 
+const bodyScrollTop = ref()
 const topViewRef = ref<InstanceType<typeof TopView>>()
 function onScroll(e: any) {
   topViewRef.value?.onScroll(e)
+  bodyScrollTop.value = e.detail.scrollTop
+}
+
+function bodyScrollToBottom() {
+  bodyScrollTop.value += 9999999
 }
 
 function bodyClick(e: any) {
@@ -182,7 +188,8 @@ function bodyClick(e: any) {
 
 defineExpose({
   openPopup,
-  closePopup
+  closePopup,
+  bodyScrollToBottom
 })
 </script>
 

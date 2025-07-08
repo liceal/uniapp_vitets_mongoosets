@@ -1,8 +1,10 @@
 @baseUrl = http://localhost:7200/api/chat_rooms
+@wsURl=ws://192.168.1.11:7200
 
 ### 聊天室列表
 POST {{baseUrl}}/list
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODRlM2ZlNzliMWIzN2Y4M2Q3YmJhNmYiLCJpYXQiOjE3NTE4NzY4MjUsImV4cCI6MTc1NDQ2ODgyNX0.LmDPbwCWEKUktlth092CQQ2W53tMLR9CmTH3GVEZthw
 
 {
   "noPage":1
@@ -11,6 +13,7 @@ Content-Type: application/json
 ### 创建聊天室
 POST {{baseUrl}}
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODRlM2ZlNzliMWIzN2Y4M2Q3YmJhNmYiLCJpYXQiOjE3NTE4NzY4MjUsImV4cCI6MTc1NDQ2ODgyNX0.LmDPbwCWEKUktlth092CQQ2W53tMLR9CmTH3GVEZthw
 
 {
   "user_id": "684e3fe79b1b37f83d7bba6f",
@@ -18,4 +21,5 @@ Content-Type: application/json
 }
 
 ### 查看某个聊天室
-GET {{baseUrl}}/68664ba857da1ae21344ba38
+GET {{baseUrl}}/68678fbe0db278932197a3c0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODRlM2ZlNzliMWIzN2Y4M2Q3YmJhNmYiLCJpYXQiOjE3NTE4NzY4MjUsImV4cCI6MTc1NDQ2ODgyNX0.LmDPbwCWEKUktlth092CQQ2W53tMLR9CmTH3GVEZthw
