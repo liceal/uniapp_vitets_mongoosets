@@ -255,12 +255,7 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
       let docs;
       if (noPage) {
         docs = docsArray || [];
-      } else {
-        docs = docsArray[0].data || [];
-      }
-      // 格式化时间
-      if (docs) {
-        docs = docs.map((item: any) => {
+        docs.map((item: any) => {
           if (item.createdAt) {
             item.createdAt = MySchema.formatDate(item.createdAt);
           }
@@ -269,6 +264,20 @@ export const postList = <T>(Model: Model<T>, options?: postListOptions) => {
           }
           return item;
         });
+      } else {
+        docs = docsArray[0] || [];
+        // 格式化时间
+        if (docs.data) {
+          docs.data = docs.data.map((item: any) => {
+            if (item.createdAt) {
+              item.createdAt = MySchema.formatDate(item.createdAt);
+            }
+            if (item.updatedAt) {
+              item.updatedAt = MySchema.formatDate(item.updatedAt);
+            }
+            return item;
+          });
+        }
       }
       res.status(200).json(docs);
     } catch (error: any) {
