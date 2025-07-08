@@ -1,10 +1,11 @@
 <script setup lang='ts'>
 import chat_room from '@/api/chat_room';
 import Layout from '@/components/layout/index.vue'
+import { onShow } from '@dcloudio/uni-app';
 import type { ChatRoomTypes } from 'types/server';
 import { onMounted, ref } from 'vue';
 
-onMounted(() => {
+onShow(() => {
   getChatRooms()
 })
 
