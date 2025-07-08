@@ -136,7 +136,7 @@ function connectWs(userInfo: UserTypes) {
         user_detail: res.user,
         createdAt: moment().format('YYYY-MM-DD HH:mm:ss')
       })
-      
+
       layoutRef.value?.bodyScrollToBottom()
     }
   })

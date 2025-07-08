@@ -172,14 +172,15 @@ function closePopup() {
 }
 
 const bodyScrollTop = ref()
+const nowScrollTop = ref()
 const topViewRef = ref<InstanceType<typeof TopView>>()
 function onScroll(e: any) {
   topViewRef.value?.onScroll(e)
-  bodyScrollTop.value = e.detail.scrollTop
+  nowScrollTop.value = e.detail.scrollTop
 }
 
 function bodyScrollToBottom() {
-  bodyScrollTop.value += 9999999
+  bodyScrollTop.value = nowScrollTop.value + 999999
 }
 
 function bodyClick(e: any) {
