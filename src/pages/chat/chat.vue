@@ -24,8 +24,10 @@ onLoad((options) => {
         chatRoomDetail.value = res
         chatTitle.value = res.title
 
-        layoutRef.value?.bodyScrollToBottom()
 
+        setTimeout(() => {
+          layoutRef.value?.bodyScrollToBottom()
+        })
         // 连接ws
         // 如果登录了 则连接ws
         const userInfo = userStore.getUserInfo()
