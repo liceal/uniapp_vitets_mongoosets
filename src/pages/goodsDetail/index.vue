@@ -200,7 +200,9 @@
               <view>{{ attr.name }}</view>
               <view class="flex gap-1 mt-2 flex-wrap">
                 <text v-for="val in attr.values" :key="val._id" class="py-1 px-2 rounded bg-gray-1"
-                  :class="{ 'bg-red': val.is_check }" @click="() => skuClick(attr, val)">{{ val.name }}
+                  :class="{ 'bg-red': val.is_check, 'text-gray': !val.is_avaliable }"
+                  @click="() => skuClick(attr, val)">{{
+                    val.name }}
                   {{ val.is_avaliable }}
                 </text>
               </view>
@@ -302,6 +304,7 @@ function clickPay() {
   popupVisible_sku.value = true
 }
 function skuClick(attr: SkuGroupTypes, val: SkuGroupValueTypes) {
+  if (!val.is_avaliable) return
 
   // 直接改变属性值
   if (val.is_check) {
