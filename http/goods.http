@@ -22,13 +22,9 @@ POST {{baseUrl}}/list
 Content-Type: application/json
 
 {
-    "noPage":1
+    "page": 1,
+    "limit": 10
 }
-
-# {
-#     "page": 1,
-#     "limit": 10
-# }
 
 ### 获取单个商品
 
@@ -36,11 +32,15 @@ GET {{baseUrl}}/68491a1e28e4aebec24032c4
 
 ### 更新商品
 
-PUT {{baseUrl}}/68491a1e28e4aebec24032c4
+PUT {{baseUrl}}/6836a7b77c25224250ab6d9b
 Content-Type: application/json
 
 {
-    "name": "【摩可纳】咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊咖啡啊"
+    "sku_group_ids":[
+        "685a7bdeb63ebafa19d911a5",
+        "685a7bdeb63ebafa19d911a7",
+        "6881a675a7bde0827bdf430a"
+    ]
 }
 
 ### 删除商品
@@ -57,7 +57,7 @@ POST {{baseUrl}}/create_attrs
 Content-Type: application/json
 
 {
-    "goods_id": "68491a1e28e4aebec24032c4",
+    "goods_id": "6836a7b77c25224250ab6d9b",
     "attrs": [
         {
             "name": "颜色",

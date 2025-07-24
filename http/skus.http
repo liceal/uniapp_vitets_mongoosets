@@ -1,3 +1,5 @@
+### 弃用 目前商品用sku_groups
+
 @baseUrl = http://localhost:7200/api/skus
 
 ### 创建skus 对一个商品加商品属性 手动添加sku组
@@ -6,10 +8,11 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "goods_id": "683e9aa41a9312e115ba11ec",
+    "goods_id": "6836a7b77c25224250ab6d9b",
     "sku_groups_ids": [
-        "6858fbb4c68e884f8f642a34",
-        "6858fcdc3fa83d8b15d2375b"
+        "6881a675a7bde0827bdf430a",
+        "685a7bdeb63ebafa19d911a7",
+        "685a7bdeb63ebafa19d911a5"
     ]
 }
 
