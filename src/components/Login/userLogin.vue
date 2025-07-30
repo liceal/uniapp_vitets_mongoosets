@@ -107,6 +107,9 @@ function toRegister() {
 }
 
 function register() {
+  uni.showLoading({
+    title: '注册中'
+  })
   user.create
     .post(registerForm.value)
     .then(res => {
@@ -126,6 +129,9 @@ function register() {
     })
     .catch(e => {
       getCaptcha()
+    })
+    .finally(() => {
+      uni.hideLoading()
     })
 }
 

@@ -2,8 +2,8 @@
   <view>
     <template v-if="type === 'login'">
       <view class="bg-white">
-        <u-input v-model="form.username" right-icon="account-fill" placeholder="用户名称" class="!px-2 flex" />
-        <u-input v-model="form.password" type="password" placeholder="密码" class="!px-2 flex" />
+        <u-input v-model="form.username" right-icon="account-fill" placeholder="用户名称:zs" class="!px-2 flex" />
+        <u-input v-model="form.password" type="password" placeholder="密码:123456" class="!px-2 flex" />
         <view class="flex w-full">
           <u-input v-model="form.captchaText" placeholder="验证码" class="!px-2 flex flex-1 h-full" />
           <img :src="captcha?.captchaBase64" alt="验证码获取失败" mode="aspectFit" class="!h-50px !w-100px"
@@ -107,6 +107,9 @@ function toRegister() {
 }
 
 function register() {
+  uni.showLoading({
+    title: '注册中'
+  })
   user.create
     .post(registerForm.value)
     .then(res => {
@@ -126,6 +129,9 @@ function register() {
     })
     .catch(e => {
       getCaptcha()
+    })
+    .finally(()=>{
+      uni.hideLoading()
     })
 }
 
