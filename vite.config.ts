@@ -1,28 +1,12 @@
 import { defineConfig, loadEnv } from "vite";
 import uni from "@dcloudio/vite-plugin-uni";
-/** 此路径根据自己项目路径修改；默认为 uniapp 插件市场导入路径；*/
-// import viteVueUnocss, { unocss } from "./js_sdk/a-hua-unocss";
-// import Unocss from "unocss/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   const Unocss = await import("unocss/vite").then((i) => i.default);
   return {
-    plugins: [
-      uni(),
-      Unocss(),
-      // viteVueUnocss({
-      //   /** 预设数组；默认[unocss()] */
-      //   presets: [
-      //     /**
-      //      * 默认预设；
-      //      * text-24、uno-text-24、xx-text-24
-      //      */
-      //     unocss(),
-      //   ],
-      // }),
-    ],
+    plugins: [uni(), Unocss()],
     // css: {
     // preprocessorOptions: {
     //   scss: {

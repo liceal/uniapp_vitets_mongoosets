@@ -1,6 +1,3 @@
-# 注意点
+# LIVE
 
-- vite 里面@use 引入的文件 如果没有使用 则不会打包进去
-  至少使用他的变量 则文件才会打包进入
-
-- 引入类型需要 type {name} 方式 不然会找不到
+https://pdd.linxianao.com/
